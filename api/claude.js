@@ -22,9 +22,10 @@ export default async function handler(req, res) {
       body: JSON.stringify(req.body)
     });
 
-    const data = await response.json();
-    return res.status(200).json(data);
+    const text = await response.text();
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).send(text);
   } catch (error) {
-    return res.status(500).json({ error: 'Erro ao conectar com a IA' });
+    return res.status(500).json({ error: String(error) });
   }
 }
