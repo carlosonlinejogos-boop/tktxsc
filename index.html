@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TKTX SC — Assistente Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:#080808;color:#f0f0f0;font-family:'DM Sans',sans-serif;font-size:14px;}
+:root{--blue:#2563eb;--bd:#1d4ed8;--bg:#080808;--s1:#111;--s2:#1a1a1a;--br:#222;--br2:#2a2a2a;--t1:#f0f0f0;--t2:#9ca3af;--t3:#4b5563;--green:#16a34a;--red:#dc2626;}
+.land-nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:0.5px solid #1a1a1a;background:#0a0a0a;position:sticky;top:0;z-index:100;}
+.land-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#fff;}
+.land-logo span{color:var(--blue);}
+.btn-entrar{padding:8px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.plan-card{background:#111;border:0.5px solid #333;border-radius:12px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:10px;transition:border-color 0.15s;}
+.plan-card:hover,.plan-card.pop{border:1.5px solid var(--blue);background:#1a1f2e;}
+.auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem;background:#080808;background-image:radial-gradient(ellipse at 20% 50%,#1a2744 0%,transparent 60%);}
+.auth-box{width:100%;max-width:400px;}
+.wm{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:6px;color:#fff;text-align:center;line-height:1;}
+.wm span{color:var(--blue);}
+.sub{font-size:11px;letter-spacing:6px;color:#4b5563;text-align:center;margin-top:4px;text-transform:uppercase;}
+.auth-card{background:#111;border:0.5px solid #2a2a2a;border-radius:16px;padding:2rem;margin-top:2rem;}
+.auth-card h2{font-size:16px;font-weight:500;margin-bottom:4px;}
+.auth-card p{font-size:13px;color:#6b7280;margin-bottom:1.5rem;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:12px;color:#9ca3af;margin-bottom:5px;}
+.field input{width:100%;background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:8px;padding:10px 14px;font-size:14px;color:#f0f0f0;font-family:'DM Sans',sans-serif;outline:none;}
+.btn-auth{width:100%;padding:12px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.auth-err{background:#1c0a0a;border:0.5px solid #dc262655;border-radius:8px;padding:10px 14px;font-size:13px;color:#f87171;margin-top:1rem;display:none;}
+.auth-link{text-align:center;margin-top:1rem;font-size:13px;color:#4b5563;}
+.auth-link span{color:var(--blue);cursor:pointer;}
+.modal-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:flex-end;justify-content:center;}
+.modal-box{background:#111;border:0.5px solid #333;border-radius:20px 20px 0 0;padding:1.5rem;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;animation:su 0.25s ease;}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+#page-app{min-height:100vh;display:flex;flex-direction:column;}
+.topbar{background:#0a0a0a;border-bottom:0.5px solid #222;padding:0 1.5rem;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.tl{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:#fff;}
+.tl span{color:var(--blue);}
+.btn-out{font-size:12px;padding:5px 12px;border:0.5px solid #2a2a2a;border-radius:6px;background:transparent;color:#9ca3af;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.app-body{display:flex;flex:1;}
+.sidebar{width:200px;background:#111;border-right:0.5px solid #222;padding:1.25rem 0;flex-shrink:0;}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 1.25rem;font-size:13px;color:#9ca3af;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;}
+.ni:hover{color:#f0f0f0;background:#1a1a1a;}
+.ni.active{color:#fff;background:#1a1a1a;border-left-color:var(--blue);}
+.ns{font-size:10px;letter-spacing:2px;color:#4b5563;padding:1rem 1.25rem 0.5rem;text-transform:uppercase;}
+.mc{flex:1;padding:1.5rem;overflow-y:auto;max-width:720px;}
+.panel{display:none;}.panel.active{display:block;}
+.card{background:#111;border:0.5px solid #222;border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+.ct{font-size:14px;font-weight:500;color:#f0f0f0;margin-bottom:1rem;}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;margin-left:6px;letter-spacing:1px;vertical-align:middle;}
+.bb{background:var(--blue);color:#fff;}.bg{background:var(--green);color:#fff;}
+.fl{font-size:12px;color:#6b7280;margin-bottom:5px;display:block;}
+select,textarea,input[type=text],input[type=number],input[type=password]{width:100%;background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:8px;padding:8px 12px;font-size:13px;color:#f0f0f0;font-family:'DM Sans',sans-serif;outline:none;}
+select option{background:#1a1a1a;}
+textarea{resize:vertical;min-height:75px;}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.fw{margin-bottom:12px;}
+.btnp{width:100%;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.btnp:disabled{background:#334155;color:#64748b;cursor:not-allowed;}
+.rc{background:#0d0d0d;border:0.5px solid #2563eb33;border-left:3px solid var(--blue);border-radius:12px;padding:1.25rem;margin-top:1rem;}
+.rl{font-size:10px;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;font-weight:500;}
+.rb{font-size:13px;line-height:1.8;color:#d1d5db;white-space:pre-wrap;}
+.load{color:#4b5563;font-style:italic;}
+.cbtn{font-size:11px;padding:5px 12px;border:0.5px solid #2a2a2a;border-radius:6px;background:transparent;color:#6b7280;cursor:pointer;margin-top:10px;font-family:'DM Sans',sans-serif;}
+.tbanner{background:#0f1f0f;border:0.5px solid #16a34a33;border-radius:8px;padding:10px 14px;margin-bottom:1rem;display:flex;justify-content:space-between;font-size:12px;}
+.ks{border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:13px;}
+.ks.ok{background:#052e16;border:0.5px solid #16a34a33;color:#4ade80;}
+.ks.bloq{background:#1c0a0a;border:0.5px solid #dc262633;color:#f87171;}
+.ks .st{font-weight:500;margin-bottom:2px;}.ks .ss{font-size:12px;opacity:0.8;}
+.chips{display:flex;gap:8px;margin-bottom:14px;}
+.chip{flex:1;padding:10px;border-radius:8px;text-align:center;font-size:12px;font-weight:500;}
+.chip.u{background:#1a1a1a;border:0.5px solid #2a2a2a;color:#4b5563;}
+.chip.a{background:#0a1f0a;border:0.5px solid #16a34a33;color:#4ade80;}
+.kg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.kc{background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:8px;padding:14px;cursor:pointer;transition:all 0.15s;}
+.kc:hover{border-color:var(--blue);}
+.kc.sel{border:1.5px solid var(--blue);background:#1a1f2e;}
+.kc.dis{opacity:0.4;cursor:not-allowed;pointer-events:none;}
+.pr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.pc{background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:8px;padding:14px;cursor:pointer;text-align:center;transition:all 0.15s;}
+.pc:hover,.pc.sel{border:1.5px solid var(--blue);background:#1a1f2e;}
+.pc.dis{opacity:0.4;pointer-events:none;}
+.succ{background:#052e16;border:0.5px solid #16a34a44;border-left:3px solid var(--green);border-radius:12px;padding:1.25rem;margin-top:1rem;}
+.rifa-card{background:#0d0d0d;border:0.5px solid #1e1e1e;border-radius:16px;overflow:hidden;margin-bottom:1rem;}
+.rifa-banner{background:linear-gradient(135deg,#0f1f3d 0%,#1a1f2e 50%,#0a0a0a 100%);padding:1.5rem;text-align:center;border-bottom:0.5px solid #1e2a3d;position:relative;}
+.rifa-ass-badge{position:absolute;top:12px;right:12px;background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 #2563eb55}50%{box-shadow:0 0 0 6px transparent}}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px;}
+.admin-table th{text-align:left;padding:8px 12px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4b5563;border-bottom:0.5px solid #222;}
+.admin-table td{padding:12px;border-bottom:0.5px solid #222;color:#9ca3af;vertical-align:middle;}
+.sp{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+.sp.aguardando{background:#1a1200;color:#fbbf24;border:0.5px solid #fbbf2433;}
+.sp.confirmado{background:#052e16;color:#4ade80;border:0.5px solid #4ade8033;}
+.bok{padding:5px 14px;background:var(--green);color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.es{text-align:center;padding:3rem;color:#4b5563;font-size:13px;}
+.ac{background:#111;border:0.5px solid #222;border-radius:10px;padding:1rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.chat-wrap{background:#0d0d0d;border:0.5px solid #222;border-radius:12px;padding:1rem;min-height:320px;max-height:420px;overflow-y:auto;margin-bottom:12px;display:flex;flex-direction:column;gap:10px;}
+.msg{max-width:82%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.65;}
+.msg.u{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:3px;}
+.msg.a{background:#1a1a1a;color:#d1d5db;align-self:flex-start;border-bottom-left-radius:3px;border:0.5px solid #2a2a2a;}
+.mn{font-size:10px;color:var(--blue);letter-spacing:1px;margin-bottom:4px;font-weight:500;}
+.ty{color:#4b5563;font-style:italic;font-size:12px;align-self:flex-start;padding:4px 8px;}
+.cr{display:flex;gap:8px;}
+.ci{flex:1;background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:8px;padding:10px 14px;font-size:13px;color:#f0f0f0;font-family:'DM Sans',sans-serif;outline:none;}
+.cs{padding:10px 18px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0a0a0a;border-top:0.5px solid #222;z-index:200;padding:6px 0 10px;}
+.mni{display:flex;justify-content:space-around;align-items:center;}
+.mi{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 6px;cursor:pointer;flex:1;min-width:0;}
+.mi:active{background:#1a1a1a;}
+.mi.active .mii{color:var(--blue);}.mi.active .mil{color:var(--blue);font-weight:500;}
+.mii{font-size:24px;}.mil{font-size:11px;color:#6b7280;text-align:center;white-space:nowrap;}
+@media(max-width:600px){.sidebar{display:none;}.mnav{display:block;}.mc{padding:1rem;padding-bottom:85px;}.r2,.kg,.pr{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="page-landing">
+  <div class="land-nav">
+    <div class="land-logo">TKTX<span>SC</span></div>
+    <button class="btn-entrar" onclick="showLogin()">Entrar</button>
+  </div>
+  <div style="text-align:center;padding:2.5rem 1.5rem 1.5rem;background:linear-gradient(180deg,#0f1f3d 0%,#080808 100%);">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:6px;color:var(--blue);margin-bottom:8px;">EXCLUSIVO PARA TATUADORES</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;color:#fff;line-height:1.1;margin-bottom:8px;">TKTX<span style="color:var(--blue);">SC</span><br>ASSISTENTE PRO</div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:1.5rem;">Ferramentas para tatuar com mais profissionalismo</div>
+    <div style="max-width:400px;margin:0 auto 1.5rem;">
+      <div class="plan-card" onclick="assinarPlano('mensal')">
+        <div><div style="font-size:10px;color:#4b5563;letter-spacing:1px;margin-bottom:4px;">MENSAL</div><div style="font-size:20px;font-weight:500;color:#fff;">R$ 39,90<span style="font-size:12px;color:#6b7280;">/mês</span></div><div style="font-size:11px;color:#6b7280;">R$ 1,33/dia · cobrança mensal</div></div>
+        <div style="background:#1a1a1a;border:0.5px solid #333;border-radius:8px;padding:6px 14px;font-size:12px;color:#9ca3af;">Assinar →</div>
+      </div>
+      <div class="plan-card pop" onclick="assinarPlano('semestral')" style="position:relative;">
+        <div style="position:absolute;top:-9px;left:16px;background:var(--blue);color:#fff;font-size:9px;font-weight:500;padding:2px 10px;border-radius:10px;">⭐ MAIS POPULAR</div>
+        <div><div style="font-size:10px;color:#93c5fd;letter-spacing:1px;margin-bottom:4px;">SEMESTRAL</div><div style="font-size:20px;font-weight:500;color:#fff;">R$ 35,90<span style="font-size:12px;color:#6b7280;">/mês</span></div><div style="font-size:11px;color:#6b7280;">R$ 215,40 à vista · economize R$ 24</div></div>
+        <div style="background:var(--blue);border-radius:8px;padding:6px 14px;font-size:12px;color:#fff;font-weight:500;">Assinar →</div>
+      </div>
+      <div class="plan-card" onclick="assinarPlano('anual')" style="border-color:#4ade8033;">
+        <div><div style="font-size:10px;color:#4ade80;letter-spacing:1px;margin-bottom:4px;">ANUAL — MELHOR PREÇO</div><div style="font-size:20px;font-weight:500;color:#fff;">R$ 29,90<span style="font-size:12px;color:#6b7280;">/mês</span></div><div style="font-size:11px;color:#6b7280;">R$ 358,80 à vista · economize R$ 120</div></div>
+        <div style="background:#0a1f0a;border:0.5px solid #4ade8033;border-radius:8px;padding:6px 14px;font-size:12px;color:#4ade80;">Assinar →</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:#6b7280;text-align:center;margin:0 auto 14px;max-width:400px;line-height:1.6;">💡 <b>Mensal:</b> renovação a cada 30 dias · <b>Semestral e Anual:</b> pagamento único à vista (Pix ou cartão)</div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="showRegister()" style="background:transparent;border:0.5px solid #2563eb44;color:var(--blue);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;border-radius:6px;padding:8px 16px;">🆓 Testar grátis 2 dias</button>
+      <button onclick="showLogin()" style="background:transparent;border:none;color:#6b7280;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">Já tenho acesso →</button>
+    </div>
+  </div>
+  <div style="padding:1.5rem 1.5rem 0.5rem;">
+    <div style="max-width:500px;margin:0 auto;background:linear-gradient(135deg,#fbbf24 0%,#f59e0b 100%);border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:14px;box-shadow:0 8px 24px rgba(251,191,36,0.2);">
+      <div style="font-size:42px;line-height:1;">🎁</div>
+      <div style="flex:1;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:#000;font-weight:500;margin-bottom:2px;">BÔNUS DE BOAS-VINDAS</div>
+        <div style="font-size:15px;font-weight:500;color:#000;line-height:1.3;">Assine e ganhe <b>+1 pomada GRÁTIS</b> no seu primeiro pedido de kit!</div>
+        <div style="font-size:10px;color:#78350f;margin-top:4px;">⚠️ Válido apenas com a compra do kit. Frete por conta do cliente.</div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:1.5rem;background:#0a0a0a;border-top:0.5px solid #1a1a1a;">
+    <div style="font-size:10px;color:var(--blue);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;text-align:center;">📦 Kit mensal exclusivo assinante</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:500px;margin:0 auto;">
+      <div style="background:#111;border:0.5px solid #222;border-radius:10px;padding:12px;"><div style="font-size:12px;color:#6b7280;margin-bottom:4px;">01 unidade</div><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#4b5563;text-decoration:line-through;">R$ 50</span><span style="font-size:18px;font-weight:500;color:#fff;">R$ 40</span></div></div>
+      <div style="background:#111;border:0.5px solid #222;border-radius:10px;padding:12px;"><div style="font-size:12px;color:#6b7280;margin-bottom:4px;">05 unidades</div><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#4b5563;text-decoration:line-through;">R$ 225</span><span style="font-size:18px;font-weight:500;color:#fff;">R$ 175</span></div></div>
+      <div style="background:#1a1f2e;border:0.5px solid #2563eb44;border-radius:10px;padding:12px;"><div style="font-size:12px;color:#93c5fd;margin-bottom:4px;">10 unidades ⭐</div><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#4b5563;text-decoration:line-through;">R$ 350</span><span style="font-size:18px;font-weight:500;color:var(--blue);">R$ 300</span></div></div>
+      <div style="background:#111;border:0.5px solid #222;border-radius:10px;padding:12px;"><div style="font-size:12px;color:#6b7280;margin-bottom:4px;">25 unidades</div><div style="display:flex;align-items:center;gap:6px;"><span style="font-size:12px;color:#4b5563;text-decoration:line-through;">R$ 812</span><span style="font-size:18px;font-weight:500;color:#fff;">R$ 725</span></div></div>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:11px;color:#4b5563;">2 pedidos por mês • intervalo de 15 dias • frete por conta do cliente</div>
+  </div>
+  <div style="padding:1.5rem;">
+    <div style="font-size:10px;color:#4b5563;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;text-align:center;">O que você tem acesso</div>
+    <div style="max-width:500px;margin:0 auto;">
+      <div style="display:flex;align-items:center;gap:12px;background:#111;border:0.5px solid #222;border-radius:10px;padding:12px 14px;margin-bottom:8px;"><span style="font-size:22px;">🩹</span><div><div style="font-size:13px;color:#e5e7eb;font-weight:500;">Pós-tatuagem para o cliente em segundos</div><div style="font-size:11px;color:#4b5563;">Gere e envie as instruções pelo WhatsApp</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;background:#111;border:0.5px solid #222;border-radius:10px;padding:12px 14px;margin-bottom:8px;"><span style="font-size:22px;">💰</span><div><div style="font-size:13px;color:#e5e7eb;font-weight:500;">Calcule seu orçamento na hora</div><div style="font-size:11px;color:#4b5563;">Sugestão de valor por estilo e região</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;background:#111;border:0.5px solid #222;border-radius:10px;padding:12px 14px;margin-bottom:8px;"><span style="font-size:22px;">✏️</span><div><div style="font-size:13px;color:#e5e7eb;font-weight:500;">Roteiro da tatuagem</div><div style="font-size:11px;color:#4b5563;">Descreva o projeto e receba um roteiro detalhado</div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;background:#111;border:0.5px solid #222;border-radius:10px;padding:12px 14px;margin-bottom:8px;"><span style="font-size:22px;">🧑‍💼</span><div><div style="font-size:13px;color:#e5e7eb;font-weight:500;">Atendente TKTX SC 24h</div><div style="font-size:11px;color:#4b5563;">Tire dúvidas sobre TKTX e tatuagem a qualquer hora</div></div></div>
+    </div>
+  </div>
+  <div style="padding:0 1.5rem 2rem;">
+    <div style="font-size:10px;color:#4b5563;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;text-align:center;">🎯 Rifa ativa</div>
+    <div id="landing-rifa" style="max-width:500px;margin:0 auto;"></div>
+  </div>
+</div>
+
+<!-- MODAL RIFA -->
+<div class="modal-bg" id="modal-rifa" onclick="fecharModal(event)">
+  <div class="modal-box" style="position:relative;">
+    <button onclick="fecharModal()" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:#6b7280;font-size:20px;cursor:pointer;">✕</button>
+    <div style="width:40px;height:4px;background:#333;border-radius:2px;margin:0 auto 1.25rem;"></div>
+    <div style="font-size:16px;font-weight:500;color:#fff;margin-bottom:4px;">Participar da Rifa 🎯</div>
+    <div style="font-size:12px;color:#6b7280;margin-bottom:1.25rem;">Preencha seus dados e envie pelo WhatsApp</div>
+    <div id="modal-info" style="background:#1a1f2e;border:0.5px solid #2563eb33;border-radius:10px;padding:12px;margin-bottom:1.25rem;text-align:center;"></div>
+    <div class="field"><label>Seu nome completo</label><input type="text" id="m-nome" placeholder="Ex: João Silva"/></div>
+    <div class="field"><label>Seu WhatsApp (com DDD)</label><input type="text" id="m-tel" placeholder="Ex: 47999999999"/></div>
+    <div style="margin-bottom:1rem;">
+      <label class="fl" style="margin-bottom:10px;display:block;">Quantas cotas?</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="dm(-5)" style="height:44px;padding:0 10px;background:#1a1a1a;border:0.5px solid #333;border-radius:10px;color:#9ca3af;font-size:12px;cursor:pointer;">-5</button>
+        <button onclick="dm(-1)" style="width:44px;height:44px;background:#1a1a1a;border:0.5px solid #333;border-radius:10px;color:#fff;font-size:22px;cursor:pointer;flex-shrink:0;">−</button>
+        <div style="flex:1;background:#1a1f2e;border:1.5px solid #2563eb44;border-radius:10px;padding:6px;text-align:center;">
+          <input type="number" id="m-cotas" min="1" value="1" style="width:100%;background:transparent;border:none;text-align:center;font-size:26px;font-weight:500;color:#fff;font-family:'DM Sans',sans-serif;outline:none;" oninput="am()"/>
+          <div style="font-size:10px;color:#6b7280;">cotas</div>
+        </div>
+        <button onclick="dm(1)" style="width:44px;height:44px;background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:22px;cursor:pointer;flex-shrink:0;">+</button>
+        <button onclick="dm(5)" style="height:44px;padding:0 10px;background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:12px;cursor:pointer;">+5</button>
+      </div>
+    </div>
+    <div style="background:#1a1f2e;border:0.5px solid #2563eb33;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">
+      <div style="font-size:12px;color:#6b7280;">Total a pagar</div>
+      <div style="font-size:22px;font-weight:500;color:#fff;" id="m-total">R$ —</div>
+    </div>
+    <button class="btnp" onclick="enviarModal()">📲 Enviar pedido pelo WhatsApp</button>
+    <div style="text-align:center;font-size:11px;color:#4b5563;margin-top:10px;">Após o envio, aguarde a chave Pix da TKTX SC</div>
+  </div>
+</div>
+
+<!-- MODAL PLANOS -->
+<div class="modal-bg" id="modal-planos" onclick="fecharPlanos(event)">
+  <div class="modal-box" style="position:relative;">
+    <button onclick="fecharPlanos()" style="position:absolute;top:1rem;right:1rem;background:transparent;border:none;color:#6b7280;font-size:20px;cursor:pointer;">✕</button>
+    <div style="width:40px;height:4px;background:#333;border-radius:2px;margin:0 auto 1.25rem;"></div>
+    <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#fff;margin-bottom:4px;">VIRAR ASSINANTE</div>
+    <div style="text-align:center;font-size:12px;color:#6b7280;margin-bottom:1.5rem;">Escolha o melhor plano para você</div>
+    <div onclick="assinarPlano('mensal')" class="plan-card" style="margin-bottom:10px;">
+      <div><div style="font-size:10px;color:#4b5563;letter-spacing:1px;margin-bottom:4px;">MENSAL</div><div style="font-size:20px;font-weight:500;color:#fff;">R$ 39,90<span style="font-size:12px;color:#6b7280;">/mês</span></div><div style="font-size:11px;color:#6b7280;">Cobrança mensal</div></div>
+      <div style="background:#1a1a1a;border:0.5px solid #333;border-radius:8px;padding:6px 14px;font-size:12px;color:#9ca3af;">Assinar →</div>
+    </div>
+    <div onclick="assinarPlano('semestral')" class="plan-card pop" style="position:relative;margin-bottom:10px;">
+      <div style="position:absolute;top:-9px;left:16px;background:var(--blue);color:#fff;font-size:9px;font-weight:500;padding:2px 10px;border-radius:10px;">⭐ MAIS POPULAR</div>
+      <div><div style="font-size:10px;color:#93c5fd;letter-spacing:1px;margin-bottom:4px;">SEMESTRAL</div><div style="font-size:20px;font-weight:500;color:#fff;">R$ 35,90<span style="font-size:12px;color:#6b7280;">/mês</span></div><div style="font-size:11px;color:#6b7280;">R$ 215,40 à vista · economize R$ 24</div></div>
+      <div style="background:var(--blue);border-radius:8px;padding:6px 14px;font-size:12px;color:#fff;font-weight:500;">Assinar →</div>
+    </div>
+    <div onclick="assinarPlano('anual')" class="plan-card" style="margin-bottom:10px;border-color:#4ade8033;">
+      <div><div style="font-size:10px;color:#4ade80;letter-spacing:1px;margin-bottom:4px;">ANUAL — MELHOR PREÇO</div><div style="font-size:20px;font-weight:500;color:#fff;">R$ 29,90<span style="font-size:12px;color:#6b7280;">/mês</span></div><div style="font-size:11px;color:#6b7280;">R$ 358,80 à vista · economize R$ 120</div></div>
+      <div style="background:#0a1f0a;border:0.5px solid #4ade8033;border-radius:8px;padding:6px 14px;font-size:12px;color:#4ade80;">Assinar →</div>
+    </div>
+    <div style="font-size:10px;color:#6b7280;text-align:center;margin-top:14px;line-height:1.5;">💡 Mensal: cobrança mensal · Semestral e Anual: pagamento único à vista</div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="page-login" style="display:none;">
+  <div class="auth-page"><div class="auth-box">
+    <div class="wm">TKTX<span>SC</span></div><div class="sub">Oficial</div>
+    <div class="auth-card">
+      <h2>Bem-vindo de volta</h2><p>Acesso exclusivo para tatuadores parceiros</p>
+      <div class="field"><label>Usuário</label><input type="text" id="inp-user" placeholder="seu usuário" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <div class="field"><label>Senha</label><input type="password" id="inp-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+      <button class="btn-auth" onclick="doLogin()">Entrar</button>
+      <div class="auth-err" id="login-err">Usuário ou senha incorretos.</div>
+      <div style="text-align:center;margin-top:12px;"><span onclick="esqueciSenha()" style="font-size:12px;color:#6b7280;cursor:pointer;">Esqueci minha senha 🔐</span></div>
+    </div>
+    <div class="auth-link" style="margin-top:1rem;">Não tem conta? <span onclick="showRegister()">Criar conta grátis (2 dias)</span></div>
+    <div class="auth-link"><span onclick="showLanding()" style="color:#4b5563;">← Voltar</span></div>
+  </div></div>
+</div>
+
+<!-- CADASTRO -->
+<div id="page-register" style="display:none;">
+  <div class="auth-page"><div class="auth-box">
+    <div class="wm">TKTX<span>SC</span></div><div class="sub">Oficial</div>
+    <div class="auth-card">
+      <h2>Criar conta grátis</h2><p>2 dias grátis para experimentar as ferramentas</p>
+      <div class="field"><label>Nome completo</label><input type="text" id="reg-nome" placeholder="Ex: João Silva"/></div>
+      <div class="field"><label>Escolha seu usuário (4-15 caracteres, sem espaços)</label><input type="text" id="reg-user" placeholder="Ex: joaosilva" maxlength="15" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9_]/g,'')"/></div>
+      <div class="field"><label>WhatsApp (com DDD)</label><input type="text" id="reg-tel" placeholder="Ex: 47999999999"/></div>
+      <div class="field"><label>Senha (mín. 6 caracteres)</label><input type="password" id="reg-senha" placeholder="••••••••"/></div>
+      <button class="btn-auth" onclick="fazerCadastro()">Criar minha conta</button>
+      <div class="auth-err" id="reg-err">Erro ao cadastrar.</div>
+      <div style="background:#1a1f2e;border:0.5px solid #2563eb22;border-radius:8px;padding:10px 12px;margin-top:12px;font-size:12px;color:#6b7280;line-height:1.6;">✅ 2 dias grátis • ✅ Ferramentas de IA • 🔒 Kit e rifa só para assinantes</div>
+    </div>
+    <div class="auth-link" style="margin-top:1rem;">Já tem conta? <span onclick="showLogin()">Entrar</span></div>
+    <div class="auth-link"><span onclick="showLanding()" style="color:#4b5563;">← Voltar</span></div>
+  </div></div>
+</div>
+
+<!-- APP -->
+<div id="page-app" style="display:none;">
+  <div class="topbar">
+    <div class="tl">TKTX<span>SC</span></div>
+    <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:12px;color:#9ca3af;" id="topbar-user"></span><button class="btn-out" onclick="doLogout()">Sair</button></div>
+  </div>
+  <div class="app-body">
+    <div class="sidebar">
+      <div class="ns">Comprar</div>
+      <div class="ni" onclick="sp('pedido')">🛒 Pedido</div>
+      <div class="ni" onclick="sp('kit')">📦 Kit Mensal</div>
+      <div class="ns">Benefícios</div>
+      <div class="ni" onclick="sp('rifa')">🎯 Rifa</div>
+      <div class="ns">Ferramentas IA</div>
+      <div class="ni" onclick="sp('ia')">🤖 Hub de Ferramentas</div>
+      <div id="nav-admin" style="display:none;">
+        <div class="ns">Admin</div>
+        <div class="ni" onclick="sp('ped')">📋 Pedidos Kit</div>
+        <div class="ni" onclick="sp('ped-loja')">🛒 Pedidos Loja</div>
+        <div class="ni" onclick="sp('ass')">👥 Assinantes</div>
+        <div class="ni" onclick="sp('adm-rifa')">🎯 Rifa Admin</div>
+      </div>
+    </div>
+    <div class="mc">
+      <div id="tbanner"></div>
+      <div class="panel active" id="panel-ia">
+        <div class="card"><div class="ct">🤖 Ferramentas IA</div>
+          <div style="font-size:12px;color:#6b7280;margin-bottom:1.25rem;">Recursos de inteligência artificial para o seu dia a dia como tatuador.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div onclick="sp('pos')" style="background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:12px;padding:18px 14px;cursor:pointer;transition:all 0.15s;text-align:center;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='#2a2a2a'">
+              <div style="font-size:34px;margin-bottom:8px;">🩹</div>
+              <div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-bottom:4px;">Pós-Tatuagem</div>
+              <div style="font-size:10px;color:#6b7280;line-height:1.4;">Cuidados pro cliente em segundos</div>
+            </div>
+            <div onclick="sp('orc')" style="background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:12px;padding:18px 14px;cursor:pointer;transition:all 0.15s;text-align:center;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='#2a2a2a'">
+              <div style="font-size:34px;margin-bottom:8px;">💰</div>
+              <div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-bottom:4px;">Orçamento</div>
+              <div style="font-size:10px;color:#6b7280;line-height:1.4;">Calcule o valor da tatuagem</div>
+            </div>
+            <div onclick="sp('rot')" style="background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:12px;padding:18px 14px;cursor:pointer;transition:all 0.15s;text-align:center;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='#2a2a2a'">
+              <div style="font-size:34px;margin-bottom:8px;">✏️</div>
+              <div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-bottom:4px;">Roteiro</div>
+              <div style="font-size:10px;color:#6b7280;line-height:1.4;">Roteiro técnico do projeto</div>
+            </div>
+            <div onclick="sp('chat')" style="background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:12px;padding:18px 14px;cursor:pointer;transition:all 0.15s;text-align:center;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='#2a2a2a'">
+              <div style="font-size:34px;margin-bottom:8px;">🧑‍💼</div>
+              <div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-bottom:4px;">Atendente 24h</div>
+              <div style="font-size:10px;color:#6b7280;line-height:1.4;">Tire dúvidas a qualquer hora</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel" id="panel-pos">
+        <button onclick="sp('ia')" style="background:transparent;border:none;color:#6b7280;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;padding:0;">← Voltar às ferramentas</button>
+        <div class="card"><div class="ct">Envie o pós-tatuagem ao cliente em segundos 🩹</div>
+          <div class="r2"><div class="fw"><label class="fl">Estilo</label><select id="c-est"><option value="">Selecione...</option><option>Realismo</option><option>Old School</option><option>Aquarela</option><option>Geométrico</option><option>Minimalista</option><option>Black Work</option><option>Fineline</option><option>Neo Tradicional</option></select></div>
+          <div class="fw"><label class="fl">Região</label><select id="c-reg"><option value="">Selecione...</option><option>Braço / antebraço</option><option>Costela / lateral</option><option>Perna / coxa</option><option>Pescoço</option><option>Mão / pulso</option><option>Pé / tornozelo</option><option>Costas</option><option>Abdômen</option><option>Tórax / peito</option></select></div></div>
+          <div class="r2"><div class="fw"><label class="fl">Tamanho</label><select id="c-tam"><option value="">Selecione...</option><option>Pequena (até 5cm)</option><option>Média (5–15cm)</option><option>Grande (15–30cm)</option><option>Extra grande (30cm+)</option></select></div>
+          <div class="fw"><label class="fl">Usou TKTX?</label><select id="c-tk"><option>Sim</option><option>Não</option></select></div></div>
+          <div class="fw"><label class="fl">Observações (opcional)</label><textarea id="c-obs" placeholder="Ex: pele sensível..."></textarea></div>
+          <button class="btnp" id="btn-pos" onclick="gPos()">Gerar cuidados</button></div>
+        <div class="rc" id="res-pos" style="display:none;"><div class="rl">Resultado</div><div class="rb" id="out-pos"></div><button class="cbtn" onclick="cp('out-pos')">Copiar</button></div>
+      </div>
+      <div class="panel" id="panel-orc">
+        <button onclick="sp('ia')" style="background:transparent;border:none;color:#6b7280;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;padding:0;">← Voltar às ferramentas</button>
+        <div class="card"><div class="ct">Calcular orçamento 💰</div>
+          <div class="r2"><div class="fw"><label class="fl">Estilo</label><select id="o-est"><option value="">Selecione...</option><option>Realismo colorido</option><option>Realismo P&B</option><option>Old School</option><option>Aquarela</option><option>Geométrico</option><option>Minimalista / Fineline</option><option>Black Work</option><option>Lettering</option></select></div>
+          <div class="fw"><label class="fl">Tamanho</label><select id="o-tam"><option value="">Selecione...</option><option>Pequena (até 5cm)</option><option>Média (5–15cm)</option><option>Grande (15–30cm)</option><option>Extra grande (30cm+)</option></select></div></div>
+          <div class="r2"><div class="fw"><label class="fl">Complexidade</label><select id="o-comp"><option>Simples</option><option>Moderada</option><option>Alta</option><option>Muito alta</option></select></div>
+          <div class="fw"><label class="fl">Horas</label><input type="number" id="o-h" placeholder="Ex: 3" min="1" max="40"/></div></div>
+          <div class="fw"><label class="fl">Cidade</label><input type="text" id="o-cid" placeholder="Ex: Florianópolis, SC"/></div>
+          <div class="fw"><label class="fl">Detalhes (opcional)</label><textarea id="o-det" placeholder="Ex: retrato realista..."></textarea></div>
+          <button class="btnp" id="btn-orc" onclick="gOrc()">Calcular orçamento</button></div>
+        <div class="rc" id="res-orc" style="display:none;"><div class="rl">Sugestão de valor</div><div class="rb" id="out-orc"></div><button class="cbtn" onclick="cp('out-orc')">Copiar</button></div>
+      </div>
+      <div class="panel" id="panel-rot">
+        <button onclick="sp('ia')" style="background:transparent;border:none;color:#6b7280;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;padding:0;">← Voltar às ferramentas</button>
+        <div class="card"><div class="ct">Roteiro da Tatuagem ✏️</div>
+          <div class="fw"><label class="fl">O que seu cliente quer</label><textarea id="r-desc" placeholder="Ex: dragão japonês no braço..." style="min-height:100px;"></textarea></div>
+          <div class="r2"><div class="fw"><label class="fl">Estilo</label><select id="r-est"><option value="">Selecione...</option><option>Realismo</option><option>Japonês / Oriental</option><option>Old School</option><option>Aquarela</option><option>Geométrico</option><option>Black Work</option><option>Fineline</option><option>Neo Tradicional</option><option>Tribal</option></select></div>
+          <div class="fw"><label class="fl">Região</label><select id="r-reg"><option value="">Selecione...</option><option>Braço inteiro (sleeve)</option><option>Antebraço</option><option>Costela</option><option>Costas</option><option>Perna</option><option>Tórax</option><option>Pescoço</option><option>Mão</option></select></div></div>
+          <button class="btnp" id="btn-rot" onclick="gRot()">Gerar roteiro</button></div>
+        <div class="rc" id="res-rot" style="display:none;"><div class="rl">Roteiro do projeto</div><div class="rb" id="out-rot"></div><button class="cbtn" onclick="cp('out-rot')">Copiar</button></div>
+      </div>
+      <div class="panel" id="panel-chat">
+        <button onclick="sp('ia')" style="background:transparent;border:none;color:#6b7280;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;padding:0;">← Voltar às ferramentas</button>
+        <div class="card"><div class="ct" style="display:flex;align-items:center;justify-content:space-between;">Atendente TKTX SC <span class="badge bb">24h</span><button onclick="resetChat()" style="background:transparent;border:0.5px solid #2a2a2a;color:#6b7280;font-size:11px;padding:3px 10px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:400;">↻ Nova conversa</button></div>
+          <div class="chat-wrap" id="chat-msgs"><div class="msg a"><div class="mn">Atendente TKTX SC</div>Olá! 👋 Disponível 24h. Pergunte sobre tatuagem, TKTX, técnicas ou qualquer dúvida!</div></div>
+          <div class="cr"><input type="text" class="ci" id="chat-inp" placeholder="Digite sua pergunta..." onkeydown="if(event.key==='Enter')envChat()"/><button class="cs" id="btn-chat" onclick="envChat()">Enviar</button></div>
+        </div>
+      </div>
+      <div class="panel" id="panel-pedido">
+        <div class="card"><div class="ct">🛒 Fazer Pedido</div>
+          <div style="font-size:12px;color:#6b7280;margin-bottom:14px;">Compre pomadas TKTX com entrega em todo o Brasil. Frete calculado pelo Melhor Envio.</div>
+          <div id="ped-form">
+            <div class="fw"><label class="fl">Seu nome completo</label><input type="text" id="ped-nome" placeholder="Ex: João Silva"/></div>
+            <div class="fw"><label class="fl">WhatsApp (com DDD)</label><input type="text" id="ped-tel" placeholder="Ex: 47999999999"/></div>
+            <label class="fl" style="margin-bottom:10px;">Escolha a quantidade</label>
+            <div class="kg" id="ped-grid"></div>
+            <div class="fw"><label class="fl">CEP de entrega</label><input type="text" id="ped-cep" placeholder="00000-000" maxlength="9" oninput="mascaraCep(this)"/></div>
+            <button class="cbtn" id="ped-btn-frete" onclick="calcularFretePed()" style="width:100%;padding:10px;margin-top:0;margin-bottom:14px;font-size:13px;background:#1a1f2e;border:0.5px solid #2563eb44;color:var(--blue);">📦 Calcular frete</button>
+            <div id="ped-frete-area"></div>
+            <label class="fl" style="margin-bottom:10px;">Forma de pagamento</label>
+            <div class="pr">
+              <div class="pc" id="ped-pag-pix" onclick="selPagPed('pix')"><div style="font-size:22px;">💠</div><div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-top:6px;">Pix</div><div style="font-size:11px;color:#4b5563;margin-top:2px;">Pagamento instantâneo</div></div>
+              <div class="pc" id="ped-pag-cartao" onclick="selPagPed('cartao')"><div style="font-size:22px;">💳</div><div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-top:6px;">Cartão</div><div style="font-size:11px;color:#4b5563;margin-top:2px;">Crédito ou débito</div></div>
+            </div>
+            <div id="ped-total-box" style="display:none;background:#1a1f2e;border:0.5px solid #2563eb33;border-radius:10px;padding:12px 16px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-bottom:4px;"><span>Kit:</span><span id="ped-vk">—</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-bottom:8px;"><span>Frete:</span><span id="ped-vf">—</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid #2563eb33;padding-top:8px;"><span style="font-size:13px;color:#9ca3af;">Total:</span><span style="font-size:22px;font-weight:500;color:#fff;" id="ped-vt">—</span></div></div>
+            <button class="btnp" id="btn-ped" onclick="solPedido()">📲 Enviar pedido pelo WhatsApp</button>
+          </div>
+          <div id="ped-suc" style="display:none;"></div>
+        </div>
+      </div>
+      <div class="panel" id="panel-kit">
+        <div class="card"><div class="ct">2 Kits TKTX por Mês <span class="badge bg">EXCLUSIVO ASSINANTE</span></div>
+          <div id="kit-eco"></div>
+          <div id="kit-sb"></div>
+          <div id="kit-form">
+            <div id="kit-chips"></div>
+            <div class="fw"><label class="fl">Seu nome</label><input type="text" id="kit-nome" placeholder="Ex: João Silva"/></div>
+            <label class="fl" style="margin-bottom:10px;">Escolha o kit</label>
+            <div class="kg" id="kit-grid"></div>
+            <div class="fw"><label class="fl">CEP de entrega</label><input type="text" id="kit-cep" placeholder="00000-000" maxlength="9" oninput="mascaraCep(this)"/></div>
+            <button class="cbtn" id="btn-calc-frete" onclick="calcularFrete()" style="width:100%;padding:10px;margin-top:0;margin-bottom:14px;font-size:13px;background:#1a1f2e;border:0.5px solid #2563eb44;color:var(--blue);">📦 Calcular frete</button>
+            <div id="frete-area"></div>
+            <label class="fl" style="margin-bottom:10px;">Forma de pagamento</label>
+            <div class="pr">
+              <div class="pc" id="pag-pix" onclick="selPag('pix')"><div style="font-size:22px;">💠</div><div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-top:6px;">Pix</div><div style="font-size:11px;color:#4b5563;margin-top:2px;">Pagamento instantâneo</div></div>
+              <div class="pc" id="pag-cartao" onclick="selPag('cartao')"><div style="font-size:22px;">💳</div><div style="font-size:13px;font-weight:500;color:#f0f0f0;margin-top:6px;">Cartão</div><div style="font-size:11px;color:#4b5563;margin-top:2px;">Crédito ou débito</div></div>
+            </div>
+            <div id="kit-total-box" style="display:none;background:#1a1f2e;border:0.5px solid #2563eb33;border-radius:10px;padding:12px 16px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-bottom:4px;"><span>Kit:</span><span id="kit-vk">—</span></div><div style="display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-bottom:8px;"><span>Frete:</span><span id="kit-vf">—</span></div><div style="display:flex;justify-content:space-between;align-items:center;border-top:0.5px solid #2563eb33;padding-top:8px;"><span style="font-size:13px;color:#9ca3af;">Total:</span><span style="font-size:22px;font-weight:500;color:#fff;" id="kit-vt">—</span></div></div>
+            <button class="btnp" id="btn-kit" onclick="solKit()">Solicitar kit via WhatsApp</button>
+          </div>
+          <div id="kit-suc" style="display:none;"></div>
+          <div id="kit-hist"></div>
+        </div>
+      </div>
+      <div class="panel" id="panel-rifa"><div id="rifa-app"></div></div>
+      <div class="panel" id="panel-ped">
+        <div class="card"><div class="ct">Pedidos de Kit <span class="badge bb" id="badge-pend"></span></div><div id="tab-ped"><div class="es">Carregando...</div></div></div>
+      </div>
+      <div class="panel" id="panel-ped-loja">
+        <div class="card"><div class="ct">🛒 Pedidos da Loja <span class="badge bb" id="badge-pend-loja"></span></div><div id="tab-ped-loja"><div class="es">Carregando...</div></div></div>
+      </div>
+      <div class="panel" id="panel-ass">
+        <div class="card" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:1rem;margin-bottom:1rem;">
+          <div style="text-align:center;"><div style="font-size:10px;color:#4b5563;letter-spacing:1px;margin-bottom:4px;">ATIVOS</div><div style="font-size:24px;font-weight:500;color:#4ade80;" id="cnt-at">—</div></div>
+          <div style="text-align:center;"><div style="font-size:10px;color:#4b5563;letter-spacing:1px;margin-bottom:4px;">VENCENDO</div><div style="font-size:24px;font-weight:500;color:#fbbf24;" id="cnt-ve">—</div></div>
+          <div style="text-align:center;"><div style="font-size:10px;color:#4b5563;letter-spacing:1px;margin-bottom:4px;">INATIVOS</div><div style="font-size:24px;font-weight:500;color:#f87171;" id="cnt-in">—</div></div>
+        </div>
+        <div class="card"><div class="ct">+ Novo Assinante</div>
+          <div class="r2"><div class="fw"><label class="fl">Nome</label><input type="text" id="add-nome" placeholder="Ex: João Silva"/></div><div class="fw"><label class="fl">WhatsApp</label><input type="text" id="add-tel" placeholder="47999999999"/></div></div>
+          <div class="r2"><div class="fw"><label class="fl">Usuário</label><input type="text" id="add-user" placeholder="Ex: joaosilva"/></div><div class="fw"><label class="fl">Senha</label><input type="text" id="add-senha" placeholder="Ex: tktx123"/></div></div>
+          <div class="fw"><label class="fl">Plano</label><select id="add-plano"><option value="mensal">Mensal — R$ 39,90/mês</option><option value="semestral">Semestral — R$ 35,90/mês</option><option value="anual">Anual — R$ 29,90/mês</option><option value="trial">Trial 2 dias</option></select></div>
+          <button class="btnp" style="max-width:220px;" onclick="criarAss()">Criar acesso</button>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;"><div class="ct" style="margin-bottom:0;">Assinantes</div><input type="text" id="busca" placeholder="Buscar..." style="width:160px;padding:6px 10px;font-size:12px;" oninput="filtAss(this.value)"/></div>
+          <div id="lista-ass"><div class="es">Carregando...</div></div>
+        </div>
+      </div>
+      <div class="panel" id="panel-adm-rifa">
+        <div class="card"><div class="ct">Criar Rifa</div>
+          <div class="r2"><div class="fw"><label class="fl">Prêmio</label><input type="text" id="rp" placeholder="Ex: Kit 10 TKTX Gold"/></div><div class="fw"><label class="fl">Descrição</label><input type="text" id="rd" placeholder="Ex: 10 pomadas + brinde"/></div></div>
+          <div class="r2"><div class="fw"><label class="fl">Total de cotas</label><input type="number" id="rt" placeholder="Ex: 50"/></div><div class="fw"><label class="fl">Valor por cota (R$)</label><input type="number" id="rv" placeholder="Ex: 5"/></div></div>
+          <button class="btnp" onclick="criarRifa()">Criar rifa</button>
+        </div>
+        <div class="card"><div class="ct">Participantes</div><div id="lista-part"><div class="es">Nenhuma rifa ativa.</div></div><button class="btnp" id="btn-sort" style="display:none;margin-top:1rem;" onclick="sortear()">🎯 Realizar Sorteio</button><div id="res-sort"></div></div>
+        <div class="card"><div class="ct">📜 Histórico de Sorteios</div><div id="lista-sorteios"><div class="es">Carregando...</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mnav">
+    <div class="mni" id="mnav-user">
+      <div class="mi active" id="mn-pedido" onclick="sp('pedido')"><span class="mii">🛒</span><span class="mil">Pedido</span></div>
+      <div class="mi" id="mn-kit" onclick="sp('kit')"><span class="mii">📦</span><span class="mil">Kit Mensal</span></div>
+      <div class="mi" id="mn-rifa" onclick="sp('rifa')"><span class="mii">🎯</span><span class="mil">Rifa</span></div>
+      <div class="mi" id="mn-ia" onclick="sp('ia')"><span class="mii">🤖</span><span class="mil">Ferramentas</span></div>
+    </div>
+    <div class="mni" id="mnav-admin" style="display:none;">
+      <div class="mi active" id="mn-ped" onclick="sp('ped');smn('ped')"><span class="mii">📋</span><span class="mil">Kits</span></div>
+      <div class="mi" id="mn-ped-loja" onclick="sp('ped-loja');smn('ped-loja')"><span class="mii">🛒</span><span class="mil">Loja</span></div>
+      <div class="mi" id="mn-ass" onclick="sp('ass');smn('ass')"><span class="mii">👥</span><span class="mil">Assin.</span></div>
+      <div class="mi" id="mn-adm-rifa" onclick="sp('adm-rifa');smn('adm-rifa')"><span class="mii">🎯</span><span class="mil">Rifa</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL='https://ohwvqnmcfbzdmnucvary.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9od3Zxbm1jZmJ6ZG1udWN2YXJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxNDUwMzMsImV4cCI6MjA5MjcyMTAzM30.psjpcHImZ4Z8zhprDI_5nzx7veIzwia46DnUkOFUxQ4';
+const AU='admin',AP='tktxsc2025',WPP='554792444477';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+const kits=[{un:1,l:'01 unidade',p:40,n:50,e:40},{un:5,l:'05 unidades',p:175,n:225,e:35},{un:10,l:'10 unidades',p:300,n:350,e:30},{un:25,l:'25 unidades',p:725,n:812.50,e:29},{un:50,l:'50 unidades',p:1400,n:1500,e:28}];
+const kitsNorm=[{un:1,l:'01 unidade',p:50,e:50},{un:5,l:'05 unidades',p:225,e:45},{un:10,l:'10 unidades',p:350,e:35},{un:25,l:'25 unidades',p:812.50,e:32.50},{un:50,l:'50 unidades',p:1500,e:30},{un:100,l:'100 unidades',p:2800,e:28}];
+let CU=null,IA=false,KS=null,PS=null,CH=[],RA=null,SI=null,MV=0,TA=[],FS=null,KSP=null,PSP=null,FSP=null;
+
+function showLanding(){['page-login','page-register','page-app'].forEach(i=>document.getElementById(i).style.display='none');document.getElementById('page-landing').style.display='block';setTimeout(loadRifaPublic,400);}
+function showLogin(){['page-landing','page-register','page-app'].forEach(i=>document.getElementById(i).style.display='none');document.getElementById('page-login').style.display='block';}
+function showRegister(){['page-landing','page-login','page-app'].forEach(i=>document.getElementById(i).style.display='none');document.getElementById('page-register').style.display='block';}
+function showApp(){['page-landing','page-login','page-register'].forEach(i=>document.getElementById(i).style.display='none');document.getElementById('page-app').style.display='flex';document.getElementById('topbar-user').textContent=CU.nome;if(IA){document.getElementById('nav-admin').style.display='block';document.getElementById('mnav-user').style.display='none';document.getElementById('mnav-admin').style.display='flex';sp('ped');loadPed();}else{document.getElementById('nav-admin').style.display='none';document.getElementById('mnav-user').style.display='flex';document.getElementById('mnav-admin').style.display='none';sp('pedido');renderTBanner();renderKit();}}
+
+function sp(n){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.ni').forEach(i=>i.classList.remove('active'));const el=document.getElementById('panel-'+n);if(el)el.classList.add('active');document.querySelectorAll('.mi').forEach(i=>i.classList.remove('active'));const subIA=['pos','orc','rot','chat'].includes(n);const navKey=subIA?'ia':n;const mn=document.getElementById('mn-'+navKey);if(mn)mn.classList.add('active');try{document.querySelector('.mc').scrollTop=0;}catch(e){}if(n==='ped')loadPed();if(n==='ped-loja')loadPedLoja();if(n==='ass')loadAss();if(n==='adm-rifa'){loadPart();loadSorteios();}if(n==='rifa')loadRifaApp();if(n==='kit')renderKit();if(n==='pedido')renderPedido();}
+function smn(n){const subIA=['pos','orc','rot','chat'].includes(n);const navKey=subIA?'ia':n;document.querySelectorAll('.mi').forEach(i=>i.classList.remove('active'));const el=document.getElementById('mn-'+navKey);if(el)el.classList.add('active');}
+
+function isTrial(){if(!CU||IA)return false;if(CU.assinante_desde||CU.vencimento)return false;return new Date()<new Date(CU.trial_fim);}
+function isAss(){if(!CU||IA)return false;return !!(CU.assinante_desde||CU.vencimento);}
+function validarTel(t){const d=(t||'').replace(/\D/g,'');return d.length>=10&&d.length<=11;}
+function resetChat(){CH=[];const w=document.getElementById('chat-msgs');if(w)w.innerHTML='<div class="msg a"><div class="mn">Atendente TKTX SC</div>Olá! 👋 Disponível 24h. Pergunte sobre tatuagem, TKTX, técnicas ou qualquer dúvida!</div>';}
+function mascaraCep(el){let v=el.value.replace(/\D/g,'').slice(0,8);if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5);el.value=v;}
+function salvarSessao(){try{if(IA){localStorage.setItem('tktx_sess',JSON.stringify({tipo:'admin'}));}else if(CU){localStorage.setItem('tktx_sess',JSON.stringify({tipo:'user',id:CU.id,token:CU.session_token}));}}catch(e){}}
+function limparSessao(){try{localStorage.removeItem('tktx_sess');}catch(e){}}
+async function tentarLoginAuto(){try{const raw=localStorage.getItem('tktx_sess');if(!raw)return false;const s=JSON.parse(raw);if(s.tipo==='admin'){IA=true;CU={nome:'Admin',usuario:'admin'};showApp();return true;}if(s.tipo==='user'&&s.id&&s.token){const {data}=await sb.from('assinantes').select('*').eq('id',s.id).eq('session_token',s.token).eq('ativo',true).single();if(!data){limparSessao();return false;}const agora=new Date();if(!data.vencimento&&!data.assinante_desde&&agora>new Date(data.trial_fim)){limparSessao();return false;}if(data.vencimento&&new Date(data.vencimento)<agora){limparSessao();return false;}CU={...data};IA=false;showApp();startCheck();return true;}}catch(e){console.error('Erro auto-login:',e);limparSessao();}return false;}
+function atualizaTotalKit(){const box=document.getElementById('kit-total-box');if(!box)return;if(KS===null||!FS){box.style.display='none';return;}const k=kits[KS];const total=k.p+FS.preco;box.style.display='block';document.getElementById('kit-vk').textContent='R$ '+k.p.toFixed(2).replace('.',',');document.getElementById('kit-vf').textContent='R$ '+FS.preco.toFixed(2).replace('.',',');document.getElementById('kit-vt').textContent='R$ '+total.toFixed(2).replace('.',',');}
+async function calcularFrete(){const cep=document.getElementById('kit-cep').value.replace(/\D/g,'');const area=document.getElementById('frete-area');const btn=document.getElementById('btn-calc-frete');if(KS===null){alert('Selecione um kit primeiro.');return;}if(cep.length!==8){alert('CEP inválido. Digite os 8 dígitos.');return;}const k=kits[KS];FS=null;atualizaTotalKit();area.innerHTML='<div style="background:#0d0d0d;border:0.5px dashed #2a2a2a;border-radius:10px;padding:14px;text-align:center;color:#6b7280;font-size:13px;margin-bottom:14px;">⏳ Cotando frete...</div>';btn.disabled=true;try{const r=await fetch('/api/frete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cep_destino:cep,unidades:k.un})});const d=await r.json();if(!r.ok||!d.servicos?.length){area.innerHTML='<div style="background:#1c0a0a;border:0.5px solid #dc262633;border-radius:10px;padding:12px 14px;color:#f87171;font-size:13px;margin-bottom:14px;">⚠️ '+(d.error||'Não conseguimos cotar para este CEP. Verifique e tente novamente.')+'</div>';btn.disabled=false;return;}area.innerHTML='<label class="fl" style="margin-bottom:10px;display:block;">📦 Escolha o frete</label><div id="frete-list">'+d.servicos.map((s,i)=>'<div class="frete-opt" data-idx="'+i+'" onclick="selFrete('+i+')" style="background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.15s;"><div><div style="font-size:13px;font-weight:500;color:#f0f0f0;">'+s.nome+'</div><div style="font-size:11px;color:#6b7280;margin-top:2px;">'+(s.empresa?s.empresa+' · ':'')+'até '+s.prazo+' dia'+(s.prazo!==1?'s':'')+' úteis</div></div><div style="font-size:16px;font-weight:500;color:var(--blue);">R$ '+s.preco.toFixed(2).replace('.',',')+'</div></div>').join('')+'</div>';window._fretes=d.servicos;btn.disabled=false;}catch(e){area.innerHTML='<div style="background:#1c0a0a;border:0.5px solid #dc262633;border-radius:10px;padding:12px 14px;color:#f87171;font-size:13px;margin-bottom:14px;">⚠️ Erro de conexão. Tente novamente.</div>';btn.disabled=false;}}
+function selFrete(i){FS=window._fretes?.[i]||null;document.querySelectorAll('.frete-opt').forEach((el,j)=>{if(j===i){el.style.border='1.5px solid var(--blue)';el.style.background='#1a1f2e';}else{el.style.border='0.5px solid #2a2a2a';el.style.background='#1a1a1a';}});atualizaTotalKit();}
+
+async function doLogin(){
+  const u=(document.getElementById('inp-user').value||'').trim(),p=(document.getElementById('inp-pass').value||'').trim();
+  const err=document.getElementById('login-err');err.style.display='none';
+  if(!u||!p){err.textContent='Preencha usuário e senha.';err.style.display='block';return;}
+  if(u.toLowerCase()===AU&&p===AP){IA=true;CU={nome:'Admin',usuario:'admin'};salvarSessao();showApp();return;}
+  const {data}=await sb.from('assinantes').select('*').ilike('usuario',u).eq('ativo',true);
+  const acc=(data||[]).find(a=>a.senha===p);
+  if(!acc){err.innerHTML='Usuário ou senha incorretos. <span onclick="esqueciSenha()" style="color:var(--blue);cursor:pointer;text-decoration:underline;">Esqueci minha senha</span>';err.style.display='block';return;}
+  const data2=acc;
+  const agora=new Date();
+  if(!data2.vencimento&&!data2.assinante_desde&&agora>new Date(data2.trial_fim)){err.textContent='Período de teste expirado. Fale com a TKTX SC! 📲';err.style.display='block';return;}
+  if(data2.vencimento&&new Date(data2.vencimento)<agora){err.textContent='Assinatura vencida. Entre em contato para renovar.';err.style.display='block';return;}
+  const tok=Math.random().toString(36).substring(2)+Date.now();
+  await sb.from('assinantes').update({session_token:tok}).eq('id',data2.id);
+  CU={...data2,session_token:tok};IA=false;
+  await sb.from('acessos').insert({assinante_id:data2.id});
+  salvarSessao();
+  showApp();startCheck();
+}
+function esqueciSenha(){const msg='Olá! 🔐 Esqueci minha senha do TKTX SC Assistente Pro. Pode me ajudar a recuperar?';window.open('https://wa.me/'+WPP+'?text='+encodeURIComponent(msg),'_blank');}
+
+async function fazerCadastro(){
+  const nome=(document.getElementById('reg-nome').value||'').trim();
+  const usuario=(document.getElementById('reg-user').value||'').trim().toLowerCase();
+  const tel=(document.getElementById('reg-tel').value||'').trim();
+  const senha=(document.getElementById('reg-senha').value||'').trim();
+  const err=document.getElementById('reg-err');err.style.display='none';
+  if(!nome||!usuario||!tel||!senha){err.textContent='Preencha todos os campos.';err.style.display='block';return;}
+  if(usuario.length<4){err.textContent='Usuário precisa ter 4+ caracteres.';err.style.display='block';return;}
+  if(!/^[a-z0-9_]+$/.test(usuario)){err.textContent='Usuário só pode ter letras, números e _ (sem espaços).';err.style.display='block';return;}
+  if(usuario==='admin'){err.textContent='Esse usuário não pode ser usado. Escolha outro.';err.style.display='block';return;}
+  if(senha.length<6){err.textContent='Senha precisa ter 6+ caracteres.';err.style.display='block';return;}
+  if(!validarTel(tel)){err.textContent='WhatsApp inválido. Use DDD + número (ex: 47999999999).';err.style.display='block';return;}
+  const {data:exist}=await sb.from('assinantes').select('id').ilike('usuario',usuario).limit(1);
+  if(exist&&exist.length){err.textContent='Esse usuário já está em uso. Escolha outro.';err.style.display='block';return;}
+  const tf=new Date();tf.setDate(tf.getDate()+2);
+  const {error}=await sb.from('assinantes').insert({nome,telefone:tel,usuario,senha,ativo:true,trial_fim:tf.toISOString()});
+  if(error){err.textContent='Erro ao cadastrar. Tente novamente.';err.style.display='block';console.error(error);return;}
+  const {data}=await sb.from('assinantes').select('*').eq('usuario',usuario).single();
+  if(data){const tok=Math.random().toString(36).substring(2)+Date.now();await sb.from('assinantes').update({session_token:tok}).eq('id',data.id);CU={...data,session_token:tok};IA=false;await sb.from('acessos').insert({assinante_id:data.id});salvarSessao();showApp();startCheck();}
+}
+
+function doLogout(msg){CU=null;IA=false;CH=[];limparSessao();if(SI)clearInterval(SI);showLanding();if(msg)setTimeout(()=>alert(msg),300);}
+function startCheck(){if(SI)clearInterval(SI);SI=setInterval(async()=>{if(!CU||IA)return;const {data}=await sb.from('assinantes').select('session_token,ativo,vencimento,trial_fim,assinante_desde').eq('id',CU.id).single();if(!data||!data.ativo){doLogout('Sessão encerrada.');return;}const agora=new Date();if(data.vencimento&&new Date(data.vencimento)<agora){doLogout('Assinatura vencida.');return;}if(!data.vencimento&&!data.assinante_desde&&agora>new Date(data.trial_fim)){doLogout('Período de teste expirado. Fale com a TKTX SC! 📲');return;}if(data.session_token!==CU.session_token){doLogout('Sessão encerrada — outro dispositivo fez login.');}},30000);}
+
+function renovarAss(){const msg='Olá! Quero *renovar* minha assinatura do TKTX SC Assistente Pro.\n\nUsuário: '+CU.usuario+'\nNome: '+CU.nome;window.open('https://wa.me/'+WPP+'?text='+encodeURIComponent(msg),'_blank');}
+function renderTBanner(){if(!CU||IA)return;const w=document.getElementById('tbanner');if(isTrial()){const d=Math.min(2,Math.ceil((new Date(CU.trial_fim)-new Date())/(1000*60*60*24)));w.innerHTML='<div class="tbanner" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;"><div><div style="color:#4ade80;font-weight:500;">⏱ Trial — '+d+' dia'+(d!==1?'s':'')+' restante'+(d!==1?'s':'')+'</div><div style="color:#4b5563;font-size:11px;margin-top:2px;">Vire assinante e desbloqueie Kit Mensal com até 20% off + descontos na Rifa</div></div><button onclick="abrirPlanos()" style="background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;border:none;border-radius:6px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:\'DM Sans\',sans-serif;">💎 Virar Assinante</button></div>';}else if(isAss()&&CU.vencimento){const d=Math.ceil((new Date(CU.vencimento)-new Date())/(1000*60*60*24));if(d>0&&d<=10)w.innerHTML='<div class="tbanner" style="background:#1a1200;border-color:#fbbf2433;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;"><div><div style="color:#fbbf24;font-weight:500;">⚠️ Sua assinatura vence em '+d+' dia'+(d!==1?'s':'')+'</div><div style="color:#4b5563;font-size:11px;margin-top:2px;">Renove para não perder acesso</div></div><button onclick="renovarAss()" style="background:#fbbf24;color:#000;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;font-family:\'DM Sans\',sans-serif;">📲 Renovar agora</button></div>';else w.innerHTML='';}else w.innerHTML='';}
+function abrirPlanos(){document.getElementById('modal-planos').style.display='flex';}
+function fecharPlanos(e){if(e&&e.target!==document.getElementById('modal-planos'))return;document.getElementById('modal-planos').style.display='none';}
+
+async function callAI(prompt,oi,ri,bi){document.getElementById(ri).style.display='block';document.getElementById(oi).innerHTML='<span class="load">Gerando...</span>';document.getElementById(bi).disabled=true;try{const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});const d=await r.json();document.getElementById(oi).innerText=d.content?.map(b=>b.text||'').join('')||'Erro.';}catch(e){document.getElementById(oi).innerText='Erro de conexão.';}document.getElementById(bi).disabled=false;}
+function cp(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>alert('Copiado!'));}
+function gPos(){const e=document.getElementById('c-est').value,r=document.getElementById('c-reg').value,t=document.getElementById('c-tam').value;if(!e||!r||!t){alert('Preencha estilo, região e tamanho.');return;}callAI('Especialista em tatuagem. Guia pós-tatuagem CURTO em português informal com emojis. Estilo:'+e+', Região:'+r+', Tamanho:'+t+', TKTX:'+document.getElementById('c-tk').value+'. Máx 120 palavras.','out-pos','res-pos','btn-pos');}
+function gOrc(){const e=document.getElementById('o-est').value,t=document.getElementById('o-tam').value;if(!e||!t){alert('Preencha estilo e tamanho.');return;}callAI('Consultor de precificação tatuadores Brasil. Estilo:'+e+', Tamanho:'+t+', Complexidade:'+document.getElementById('o-comp').value+', Horas:'+document.getElementById('o-h').value+', Cidade:'+document.getElementById('o-cid').value+'. Responda: 1)Faixa R$ 2)Motivo 1 frase 3)Dica. Máx 60 palavras.','out-orc','res-orc','btn-orc');}
+function gRot(){const d=document.getElementById('r-desc').value.trim();if(!d){alert('Descreva o projeto.');return;}callAI('Designer de tatuagem. Roteiro CURTO com emojis: composição, elementos, cores, dificuldades. Projeto:'+d+', Estilo:'+document.getElementById('r-est').value+', Região:'+document.getElementById('r-reg').value+'. Máx 100 palavras.','out-rot','res-rot','btn-rot');}
+async function envChat(){const inp=document.getElementById('chat-inp'),btn=document.getElementById('btn-chat');const msg=inp.value.trim();if(!msg)return;const w=document.getElementById('chat-msgs');const ud=document.createElement('div');ud.className='msg u';ud.innerText=msg;w.appendChild(ud);inp.value='';btn.disabled=true;const ty=document.createElement('div');ty.className='ty';ty.innerText='Atendente digitando...';w.appendChild(ty);w.scrollTop=w.scrollHeight;CH.push({role:'user',content:msg});try{const r=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:600,system:'Você é o atendente oficial da TKTX SC, disponível 24h. Especialista em tatuagem e pomada TKTX. Responda em português de forma CURTA e amigável. Use emojis. Máx 3-4 linhas.',messages:CH})});const d=await r.json();const reply=d.content?.map(b=>b.text||'').join('')||'Erro.';CH.push({role:'assistant',content:reply});ty.remove();const ad=document.createElement('div');ad.className='msg a';ad.innerHTML='<div class="mn">Atendente TKTX SC</div>'+reply.replace(/\n/g,'<br>');w.appendChild(ad);}catch(e){ty.remove();}w.scrollTop=w.scrollHeight;btn.disabled=false;inp.focus();}
+
+function selPag(t){PS=t;document.getElementById('pag-pix').classList.toggle('sel',t==='pix');document.getElementById('pag-cartao').classList.toggle('sel',t==='cartao');}
+async function renderKit(){if(!CU||IA)return;const sb2=document.getElementById('kit-sb'),chips=document.getElementById('kit-chips'),form=document.getElementById('kit-form'),suc=document.getElementById('kit-suc'),eco=document.getElementById('kit-eco');suc.style.display='none';form.style.display='block';const pn={1:50,5:225,10:350,25:812.50,50:1500};if(isAss()){const {data:confs}=await sb.from('pedidos_kit').select('kit_unidades,kit_preco').eq('assinante_id',CU.id).eq('status','confirmado');const economia=(confs||[]).reduce((s,p)=>s+((pn[p.kit_unidades]||0)-Number(p.kit_preco)),0);if(economia>0){eco.innerHTML='<div style="background:linear-gradient(135deg,#052e16 0%,#0a1f0a 100%);border:0.5px solid #16a34a55;border-left:3px solid var(--green);border-radius:12px;padding:14px 18px;margin-bottom:14px;"><div style="font-size:11px;color:#86efac;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">💰 Sua economia como assinante</div><div style="font-size:26px;font-weight:500;color:#4ade80;line-height:1.1;">R$ '+economia.toFixed(2).replace('.',',')+'</div><div style="font-size:11px;color:#86efac;margin-top:4px;">acumulado em '+(confs.length)+' pedido'+(confs.length!==1?'s':'')+' confirmado'+(confs.length!==1?'s':'')+'</div></div>';}else{eco.innerHTML='<div style="background:#1a1f2e;border:0.5px solid #2563eb33;border-radius:12px;padding:14px 18px;margin-bottom:14px;"><div style="font-size:13px;color:#93c5fd;">💡 Comece a economizar! Sua economia vai aparecer aqui após o primeiro pedido confirmado.</div></div>';}}else{eco.innerHTML='';}if(isTrial()){sb2.innerHTML='<div class="ks bloq"><div class="st">🔒 Exclusivo para assinantes</div><div class="ss">Assine por R$ 0,99/dia e tenha acesso a 2 kits por mês.</div></div>';chips.innerHTML='';document.getElementById('kit-grid').innerHTML=kits.map(k=>'<div class="kc dis"><div style="font-size:14px;font-weight:500;color:#f0f0f0;">'+k.l+'</div><div style="display:flex;gap:6px;margin-top:6px;"><span style="font-size:12px;color:#4b5563;text-decoration:line-through;">R$ '+k.n.toFixed(2).replace('.',',')+'</span><span style="font-size:18px;font-weight:500;color:var(--blue);">R$ '+k.p.toFixed(2).replace('.',',')+'</span></div><div style="font-size:11px;color:#4b5563;margin-top:2px;">🔒 Assinantes</div></div>').join('');document.getElementById('btn-kit').disabled=true;document.getElementById('pag-pix').classList.add('dis');document.getElementById('pag-cartao').classList.add('dis');return;}
+const {data:peds}=await sb.from('pedidos_kit').select('*').eq('assinante_id',CU.id).order('solicitado_em',{ascending:false});
+const ehPrimeiro=!(peds||[]).some(p=>p.status!=='cancelado');
+const brinde=document.getElementById('kit-eco');
+if(ehPrimeiro&&isAss()){brinde.innerHTML+='<div style="background:linear-gradient(135deg,#2d1b00 0%,#1a1200 100%);border:0.5px solid #fbbf2455;border-left:3px solid #fbbf24;border-radius:12px;padding:14px 18px;margin-bottom:14px;"><div style="font-size:11px;color:#fde68a;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">🎁 Brinde de boas-vindas</div><div style="font-size:14px;font-weight:500;color:#fbbf24;line-height:1.4;">Faça seu primeiro pedido de kit e receba +1 pomada GRÁTIS junto!</div><div style="font-size:11px;color:#fde68a;margin-top:6px;line-height:1.5;">⚠️ O brinde só vale com a compra do kit. Frete por conta do cliente.</div></div>';}
+const agora=new Date();const mes=agora.getFullYear()+'-'+agora.getMonth();
+const pm=(peds||[]).filter(p=>{const d=new Date(p.solicitado_em);return d.getFullYear()+'-'+d.getMonth()===mes&&p.status!=='cancelado';});
+const used=pm.length;const ult=(peds||[]).find(p=>p.status!=='cancelado');let dr=0;if(ult){const df=(agora-new Date(ult.solicitado_em))/(1000*60*60*24);dr=df<15?Math.ceil(15-df):0;}
+const bt=dr>0,bm=used>=2,bl=bt||bm;
+chips.innerHTML='<div class="chips"><div class="chip '+(used>=1?'u':'a')+'">'+(used>=1?'Pedido 1 — usado':'Pedido 1 — disponível')+'</div><div class="chip '+(used>=2?'u':'a')+'">'+(used>=2?'Pedido 2 — usado':'Pedido 2 — disponível')+'</div></div><div style="font-size:11px;color:#4b5563;margin-bottom:12px;">2 pedidos por mês • intervalo de 15 dias • frete por conta do cliente</div>';
+if(bm)sb2.innerHTML='<div class="ks bloq"><div class="st">Limite mensal atingido</div><div class="ss">Seus 2 pedidos deste mês já foram utilizados.</div></div>';
+else if(bt)sb2.innerHTML='<div class="ks bloq"><div class="st">Aguardando intervalo</div><div class="ss">Próximo pedido em '+dr+' dia'+(dr>1?'s':'')+'.</div></div>';
+else sb2.innerHTML='<div class="ks ok"><div class="st">Disponível!</div><div class="ss">Escolha seu kit com preço exclusivo de assinante.</div></div>';
+document.getElementById('btn-kit').disabled=bl;
+document.getElementById('kit-grid').innerHTML=kits.map((k,i)=>'<div class="kc'+(bl?' dis':'')+(KS===i?' sel':'')+'" onclick="'+(bl?'':'KS='+i+';FS=null;document.getElementById(\'frete-area\').innerHTML=\'\';renderKit()')+'"><div style="font-size:14px;font-weight:500;color:#f0f0f0;">'+k.l+'</div><div style="display:flex;gap:6px;margin-top:6px;"><span style="font-size:12px;color:#4b5563;text-decoration:line-through;">R$ '+k.n.toFixed(2).replace('.',',')+'</span><span style="font-size:18px;font-weight:500;color:var(--blue);">R$ '+k.p.toFixed(2).replace('.',',')+'</span></div><div style="font-size:11px;color:#4b5563;margin-top:2px;">R$ '+k.e.toFixed(2).replace('.',',')+' por un.</div></div>').join('');
+if(bl){document.getElementById('pag-pix').classList.add('dis');document.getElementById('pag-cartao').classList.add('dis');}else{document.getElementById('pag-pix').classList.remove('dis');document.getElementById('pag-cartao').classList.remove('dis');}
+const hist=document.getElementById('kit-hist');const pedsValidos=(peds||[]).filter(p=>p.status!=='cancelado').slice(0,10);if(pedsValidos.length){hist.innerHTML='<div style="margin-top:1.5rem;padding-top:1.25rem;border-top:0.5px solid #222;"><div style="font-size:11px;color:#4b5563;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">📋 Meus Pedidos</div>'+pedsValidos.map(p=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:0.5px solid #1a1a1a;"><div><div style="font-size:13px;color:#e5e7eb;">'+p.kit_unidades+' un. · R$ '+Number(p.kit_preco).toFixed(2).replace('.',',')+'</div><div style="font-size:11px;color:#6b7280;margin-top:2px;">'+new Date(p.solicitado_em).toLocaleDateString('pt-BR')+' · '+p.pagamento+'</div></div><span class="sp '+p.status+'">'+(p.status==='confirmado'?'✓ '+p.status:p.status)+'</span></div>').join('')+'</div>';}else{hist.innerHTML='';}
+}
+async function solKit(){const nome=document.getElementById('kit-nome').value.trim();const cep=document.getElementById('kit-cep').value.replace(/\D/g,'');if(!nome){alert('Digite seu nome.');return;}if(KS===null){alert('Selecione um kit.');return;}if(cep.length!==8){alert('Digite o CEP de entrega.');return;}if(!FS){alert('Calcule e escolha uma opção de frete.');return;}if(!PS){alert('Selecione forma de pagamento.');return;}const k=kits[KS];const total=k.p+FS.preco;const cepFmt=cep.slice(0,5)+'-'+cep.slice(5);const {data:pedsAnt}=await sb.from('pedidos_kit').select('id,status').eq('assinante_id',CU.id);const ehPrimeiro=!(pedsAnt||[]).some(p=>p.status!=='cancelado');await sb.from('pedidos_kit').insert({assinante_id:CU.id,nome_tatuador:nome,kit_unidades:k.un,kit_preco:k.p,pagamento:PS==='pix'?'Pix':'Cartão',status:'aguardando'});const brindeMsg=ehPrimeiro?'\n\n🎁 *BRINDE DE BOAS-VINDAS:* +1 pomada GRÁTIS junto com este kit (primeiro pedido como assinante)':'';const msg='🔵 *PEDIDO KIT ASSINANTE - TKTX SC*\n\n👤 Tatuador: '+nome+'\n📦 Kit: '+k.l+' — R$ '+k.p.toFixed(2).replace('.',',')+'\n📮 Frete '+FS.nome+' (CEP '+cepFmt+'): R$ '+FS.preco.toFixed(2).replace('.',',')+' — '+FS.prazo+' dia(s) úteis\n💰 *TOTAL: R$ '+total.toFixed(2).replace('.',',')+'*\n💳 Pagamento: '+(PS==='pix'?'Pix':'Cartão')+brindeMsg+'\n\n_Pedido pelo TKTX SC Assistente Pro_';window.open('https://wa.me/'+WPP+'?text='+encodeURIComponent(msg),'_blank');document.getElementById('kit-form').style.display='none';document.getElementById('kit-suc').style.display='block';document.getElementById('kit-suc').innerHTML='<div class="succ"><h3 style="font-size:14px;font-weight:500;color:#4ade80;margin-bottom:6px;">Pedido enviado!'+(ehPrimeiro?' 🎁':'')+'</h3><p style="font-size:13px;color:#86efac;">'+(ehPrimeiro?'Você ganhou +1 pomada de brinde junto com seu kit! ':'')+'Aguarde a confirmação no WhatsApp com a chave Pix. Próximo pedido em 15 dias.</p></div>';KS=null;PS=null;FS=null;}
+
+function renderPedido(){const grid=document.getElementById('ped-grid');if(!grid)return;document.getElementById('ped-form').style.display='block';document.getElementById('ped-suc').style.display='none';if(CU&&!IA){const n=document.getElementById('ped-nome');const t=document.getElementById('ped-tel');if(n&&!n.value)n.value=CU.nome||'';if(t&&!t.value)t.value=CU.telefone||'';}grid.innerHTML=kitsNorm.map((k,i)=>'<div class="kc'+(KSP===i?' sel':'')+'" onclick="selKitPed('+i+')"><div style="font-size:14px;font-weight:500;color:#f0f0f0;">'+k.l+'</div><div style="font-size:18px;font-weight:500;color:var(--blue);margin-top:6px;">R$ '+k.p.toFixed(2).replace('.',',')+'</div><div style="font-size:11px;color:#4b5563;margin-top:2px;">R$ '+k.e.toFixed(2).replace('.',',')+' por un.</div></div>').join('');atualizaTotalPed();}
+function selKitPed(i){KSP=i;FSP=null;document.getElementById('ped-frete-area').innerHTML='';renderPedido();}
+function selPagPed(t){PSP=t;document.getElementById('ped-pag-pix').classList.toggle('sel',t==='pix');document.getElementById('ped-pag-cartao').classList.toggle('sel',t==='cartao');}
+function atualizaTotalPed(){const box=document.getElementById('ped-total-box');if(KSP===null||!FSP){box.style.display='none';return;}const k=kitsNorm[KSP];const total=k.p+FSP.preco;box.style.display='block';document.getElementById('ped-vk').textContent='R$ '+k.p.toFixed(2).replace('.',',');document.getElementById('ped-vf').textContent='R$ '+FSP.preco.toFixed(2).replace('.',',');document.getElementById('ped-vt').textContent='R$ '+total.toFixed(2).replace('.',',');}
+async function calcularFretePed(){const cep=document.getElementById('ped-cep').value.replace(/\D/g,'');const area=document.getElementById('ped-frete-area');const btn=document.getElementById('ped-btn-frete');if(KSP===null){alert('Escolha a quantidade primeiro.');return;}if(cep.length!==8){alert('CEP inválido. Digite os 8 dígitos.');return;}const k=kitsNorm[KSP];FSP=null;atualizaTotalPed();area.innerHTML='<div style="background:#0d0d0d;border:0.5px dashed #2a2a2a;border-radius:10px;padding:14px;text-align:center;color:#6b7280;font-size:13px;margin-bottom:14px;">⏳ Cotando frete...</div>';btn.disabled=true;try{const r=await fetch('/api/frete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cep_destino:cep,unidades:k.un,valor:k.p})});const d=await r.json();if(!r.ok||!d.servicos?.length){area.innerHTML='<div style="background:#1c0a0a;border:0.5px solid #dc262633;border-radius:10px;padding:12px 14px;color:#f87171;font-size:13px;margin-bottom:14px;">⚠️ '+(d.error||'Não conseguimos cotar para este CEP. Verifique e tente novamente.')+'</div>';btn.disabled=false;return;}area.innerHTML='<label class="fl" style="margin-bottom:10px;display:block;">📦 Escolha o frete</label><div id="ped-frete-list">'+d.servicos.map((s,i)=>'<div class="ped-frete-opt" data-idx="'+i+'" onclick="selFretePed('+i+')" style="background:#1a1a1a;border:0.5px solid #2a2a2a;border-radius:8px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all 0.15s;"><div><div style="font-size:13px;font-weight:500;color:#f0f0f0;">'+s.nome+'</div><div style="font-size:11px;color:#6b7280;margin-top:2px;">'+(s.empresa?s.empresa+' · ':'')+'até '+s.prazo+' dia'+(s.prazo!==1?'s':'')+' úteis</div></div><div style="font-size:16px;font-weight:500;color:var(--blue);">R$ '+s.preco.toFixed(2).replace('.',',')+'</div></div>').join('')+'</div>';window._fretesPed=d.servicos;btn.disabled=false;}catch(e){area.innerHTML='<div style="background:#1c0a0a;border:0.5px solid #dc262633;border-radius:10px;padding:12px 14px;color:#f87171;font-size:13px;margin-bottom:14px;">⚠️ Erro de conexão. Tente novamente.</div>';btn.disabled=false;}}
+function selFretePed(i){FSP=window._fretesPed?.[i]||null;document.querySelectorAll('.ped-frete-opt').forEach((el,j)=>{if(j===i){el.style.border='1.5px solid var(--blue)';el.style.background='#1a1f2e';}else{el.style.border='0.5px solid #2a2a2a';el.style.background='#1a1a1a';}});atualizaTotalPed();}
+async function solPedido(){const nome=document.getElementById('ped-nome').value.trim();const tel=document.getElementById('ped-tel').value.trim();const cep=document.getElementById('ped-cep').value.replace(/\D/g,'');if(!nome){alert('Digite seu nome.');return;}if(!validarTel(tel)){alert('WhatsApp inválido. Use DDD + número (ex: 47999999999).');return;}if(KSP===null){alert('Escolha a quantidade.');return;}if(cep.length!==8){alert('Digite o CEP de entrega.');return;}if(!FSP){alert('Calcule e escolha uma opção de frete.');return;}if(!PSP){alert('Selecione forma de pagamento.');return;}const k=kitsNorm[KSP];const total=k.p+FSP.preco;const cepFmt=cep.slice(0,5)+'-'+cep.slice(5);await sb.from('pedidos_loja').insert({nome,telefone:tel,cep:cepFmt,kit_unidades:k.un,kit_preco:k.p,frete_servico:FSP.nome,frete_preco:FSP.preco,pagamento:PSP==='pix'?'Pix':'Cartão',status:'aguardando',assinante_id:CU?.id||null});const msg='🛒 *PEDIDO TKTX SC*\n\n👤 Cliente: '+nome+'\n📱 WhatsApp: '+tel+'\n📦 Kit: '+k.l+' — R$ '+k.p.toFixed(2).replace('.',',')+'\n📮 Frete '+FSP.nome+' (CEP '+cepFmt+'): R$ '+FSP.preco.toFixed(2).replace('.',',')+' — '+FSP.prazo+' dia(s) úteis\n💰 *TOTAL: R$ '+total.toFixed(2).replace('.',',')+'*\n💳 Pagamento: '+(PSP==='pix'?'Pix':'Cartão')+'\n\n_Pedido pelo TKTX SC Assistente Pro_';window.open('https://wa.me/'+WPP+'?text='+encodeURIComponent(msg),'_blank');document.getElementById('ped-form').style.display='none';document.getElementById('ped-suc').style.display='block';document.getElementById('ped-suc').innerHTML='<div class="succ"><h3 style="font-size:14px;font-weight:500;color:#4ade80;margin-bottom:6px;">Pedido enviado!</h3><p style="font-size:13px;color:#86efac;">Aguarde a confirmação no WhatsApp com a chave Pix.</p><button class="cbtn" onclick="KSP=null;PSP=null;FSP=null;renderPedido();" style="margin-top:14px;">+ Fazer outro pedido</button></div>';KSP=null;PSP=null;FSP=null;}
+
+function fecharModal(e){if(e&&e.target!==document.getElementById('modal-rifa'))return;document.getElementById('modal-rifa').style.display='none';}
+function abrirModal(premio,valor,desc){MV=valor;document.getElementById('modal-info').innerHTML='<div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;letter-spacing:2px;color:#fff;">'+premio+'</div><div style="font-size:12px;color:#6b7280;margin-top:4px;">'+desc+'</div><div style="font-size:13px;color:var(--blue);margin-top:6px;">R$ '+valor.toFixed(2).replace('.',',')+' por cota</div>';document.getElementById('m-nome').value='';document.getElementById('m-tel').value='';document.getElementById('m-cotas').value=1;am();document.getElementById('modal-rifa').style.display='flex';}
+function dm(d){const i=document.getElementById('m-cotas');i.value=Math.max(1,parseInt(i.value||1)+d);am();}
+function am(){const c=Math.max(1,parseInt(document.getElementById('m-cotas').value||1));document.getElementById('m-total').textContent='R$ '+(MV*c).toFixed(2).replace('.',',');}
+function enviarModal(){const nome=document.getElementById('m-nome').value.trim(),tel=document.getElementById('m-tel').value.trim(),cotas=parseInt(document.getElementById('m-cotas').value||1);if(!nome){alert('Digite seu nome.');return;}if(!validarTel(tel)){alert('WhatsApp inválido. Use DDD + número (ex: 47999999999).');return;}const total=(MV*cotas).toFixed(2).replace('.',',');const msg='🎯 *PEDIDO RIFA TKTX SC*\n\n👤 Nome: '+nome+'\n📱 WhatsApp: '+tel+'\n🎟️ Cotas: '+cotas+'\n💰 Total: R$ '+total+'\n\n_Aguardando chave Pix_';window.open('https://wa.me/'+WPP+'?text='+encodeURIComponent(msg),'_blank');document.getElementById('modal-rifa').style.display='none';}
+
+function assinarPlano(p){const msgs={mensal:'Olá! Quero assinar o TKTX SC Assistente Pro — *Plano Mensal* (R$ 39,90/mês, cobrança mensal)',semestral:'Olá! Quero assinar o TKTX SC Assistente Pro — *Plano Semestral* (R$ 215,40 à vista, equivale a R$ 35,90/mês)',anual:'Olá! Quero assinar o TKTX SC Assistente Pro — *Plano Anual* (R$ 358,80 à vista, equivale a R$ 29,90/mês)'};window.open('https://wa.me/'+WPP+'?text='+encodeURIComponent(msgs[p]),'_blank');}
+
+function rifaGauge(pct,vendidas,total,faltam,valor){const circ=Math.round((pct/100)*251);return '<div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;"><div style="flex-shrink:0;position:relative;width:90px;height:90px;"><svg viewBox="0 0 90 90" width="90" height="90" style="transform:rotate(-90deg)"><circle cx="45" cy="45" r="40" fill="none" stroke="#1a1a1a" stroke-width="10"/><circle cx="45" cy="45" r="40" fill="none" stroke="var(--blue)" stroke-width="10" stroke-dasharray="'+circ+' 251" stroke-linecap="round"/></svg><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div style="font-size:16px;font-weight:500;color:#fff;">'+pct+'%</div></div></div><div style="flex:1;"><div style="font-size:24px;font-weight:500;color:#fff;line-height:1;">'+pct+'% vendido</div><div style="font-size:11px;color:#6b7280;margin-top:2px;margin-bottom:10px;">'+vendidas+' de '+total+' cotas</div><div style="background:#1a1f2e;border:0.5px solid #2563eb44;border-radius:8px;padding:8px 12px;"><div style="font-size:18px;font-weight:500;color:var(--blue);">R$ '+(faltam*valor).toFixed(2).replace('.',',')+'</div><div style="font-size:10px;color:#6b7280;">faltam ('+faltam+' cotas)</div></div></div></div>';}
+
+async function loadRifaPublic(){try{const {data}=await sb.from('rifas').select('*').eq('ativa',true).order('criado_em',{ascending:false});const w=document.getElementById('landing-rifa');if(!w)return;if(!data?.length){w.innerHTML='<div style="text-align:center;color:#4b5563;font-size:13px;padding:1rem;">Nenhuma rifa ativa no momento.</div>';return;}w.innerHTML=data.map(r=>{const v=r.cotas_vendidas||0,f=r.total_cotas-v,p=Math.round((v/r.total_cotas)*100),val=parseFloat(r.valor_cota);return '<div class="rifa-card"><div class="rifa-banner"><div style="font-size:36px;margin-bottom:8px;">🏆</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:24px;letter-spacing:3px;color:#fff;margin-bottom:4px;">'+r.premio+'</div><div style="font-size:12px;color:#6b7280;">'+(r.descricao||'')+'</div></div><div style="padding:1.25rem;">'+rifaGauge(p,v,r.total_cotas,f,val)+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;"><div style="background:#111;border-radius:8px;padding:10px 12px;"><div style="font-size:10px;color:#4b5563;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Arrecadado</div><div style="font-size:15px;font-weight:500;color:#4ade80;">R$ '+(v*val).toFixed(2).replace('.',',')+'</div></div><div style="background:#111;border-radius:8px;padding:10px 12px;"><div style="font-size:10px;color:#4b5563;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Total cotas</div><div style="font-size:15px;font-weight:500;color:#f0f0f0;">'+r.total_cotas+'</div></div></div></div><div style="background:#111;border-top:0.5px solid #1e1e1e;padding:1.25rem;text-align:center;"><div style="font-size:13px;color:#6b7280;margin-bottom:4px;">R$ '+val.toFixed(2).replace('.',',')+' por cota</div><div style="font-size:12px;color:var(--blue);margin-bottom:12px;">Assinante paga R$ '+(val*0.8).toFixed(2).replace('.',',')+' (-20%)</div><button class="btnp" style="max-width:280px;" onclick="abrirModal(\''+r.premio.replace(/'/g,"\\'")+'\','+val+',\''+(r.descricao||'').replace(/'/g,"\\'")+'\')">🎯 Quero participar</button></div></div>';}).join('<div style="height:1rem;"></div>');}catch(e){console.error(e);}}
+
+async function loadRifaApp(){const {data}=await sb.from('rifas').select('*').eq('ativa',true).order('criado_em',{ascending:false});const w=document.getElementById('rifa-app');if(!data?.length){w.innerHTML='<div class="card"><div class="es">Nenhuma rifa ativa no momento.</div></div>';return;}w.innerHTML=data.map(r=>{const v=r.cotas_vendidas||0,f=r.total_cotas-v,p=Math.round((v/r.total_cotas)*100),val=parseFloat(r.valor_cota),desc=isAss()?0.8:1,vf=(val*desc).toFixed(2).replace('.',',');return '<div class="rifa-card" data-rifa="'+r.id+'"><div class="rifa-banner">'+(isAss()?'<div class="rifa-ass-badge">🎉 20% DESCONTO</div>':'')+'<div style="font-size:36px;margin-bottom:8px;">🏆</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:24px;letter-spacing:3px;color:#fff;margin-bottom:4px;">'+r.premio+'</div><div style="font-size:12px;color:#6b7280;">'+(r.descricao||'')+'</div></div><div style="padding:1.25rem;">'+rifaGauge(p,v,r.total_cotas,f,val)+'</div><div style="background:#111;border-top:0.5px solid #1e1e1e;padding:1.25rem;"><div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;padding:14px 16px;background:#0d0d0d;border-radius:10px;border:0.5px solid #1e1e1e;">'+(isAss()?'<div><div style="font-size:13px;color:#4b5563;text-decoration:line-through;">R$ '+val.toFixed(2).replace('.',',')+'</div><div style="font-size:10px;color:#4b5563;">normal</div></div>':'')+'<div><div style="font-size:24px;font-weight:500;color:#fff;">R$ '+vf+'</div><div style="font-size:10px;color:#6b7280;">por cota</div></div>'+(isAss()?'<div style="background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;margin-left:auto;">-20%</div>':'')+'</div><div style="margin-bottom:1rem;"><label class="fl" style="margin-bottom:10px;display:block;">Quantas cotas?</label><div style="display:flex;align-items:center;gap:8px;"><button onclick="drifa(\''+r.id+'\',-5)" style="height:44px;padding:0 10px;background:#1a1a1a;border:0.5px solid #333;border-radius:10px;color:#9ca3af;font-size:12px;cursor:pointer;">-5</button><button onclick="drifa(\''+r.id+'\',-1)" style="width:44px;height:44px;background:#1a1a1a;border:0.5px solid #333;border-radius:10px;color:#fff;font-size:22px;cursor:pointer;flex-shrink:0;">−</button><div style="flex:1;background:#1a1f2e;border:1.5px solid #2563eb44;border-radius:10px;padding:6px;text-align:center;"><input type="number" id="rn-'+r.id+'" min="1" value="1" style="width:100%;background:transparent;border:none;text-align:center;font-size:24px;font-weight:500;color:#fff;font-family:\'DM Sans\',sans-serif;outline:none;" oninput="arifa(\''+r.id+'\','+val+','+desc+')"/><div style="font-size:10px;color:#6b7280;">cotas</div></div><button onclick="drifa(\''+r.id+'\',1)" style="width:44px;height:44px;background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:22px;cursor:pointer;flex-shrink:0;">+</button><button onclick="drifa(\''+r.id+'\',5)" style="height:44px;padding:0 10px;background:var(--blue);border:none;border-radius:10px;color:#fff;font-size:12px;cursor:pointer;">+5</button></div></div><div style="background:#1a1f2e;border:0.5px solid #2563eb33;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;"><div style="font-size:12px;color:#6b7280;">Total a pagar</div><div style="font-size:20px;font-weight:500;color:#fff;" id="rt-'+r.id+'">R$ '+vf+'</div></div><div class="fw"><label class="fl">Seu nome</label><input type="text" id="rnome-'+r.id+'" placeholder="Ex: João Silva" value="'+(CU?.nome||'').replace(/"/g,'&quot;')+'"/></div><div class="fw"><label class="fl">Seu WhatsApp</label><input type="text" id="rtel-'+r.id+'" placeholder="Ex: 47999999999" value="'+(CU?.telefone||'')+'"/></div><button class="btnp" style="padding:13px;font-size:14px;" onclick="compRifa(\''+r.id+'\',\''+r.premio.replace(/'/g,"\\'")+'\','+val+')">📲 Solicitar cotas via WhatsApp</button></div></div>';}).join('<div style="height:1rem;"></div>');}
+function drifa(rid,d){const i=document.getElementById('rn-'+rid);if(!i)return;i.value=Math.max(1,parseInt(i.value||1)+d);i.dispatchEvent(new Event('input'));}
+function arifa(rid,val,desc){const i=document.getElementById('rn-'+rid);if(!i)return;const c=Math.max(1,parseInt(i.value||1));const el=document.getElementById('rt-'+rid);if(el)el.textContent='R$ '+(val*desc*c).toFixed(2).replace('.',',');}
+function compRifa(rid,premio,val){const nome=document.getElementById('rnome-'+rid)?.value.trim(),tel=document.getElementById('rtel-'+rid)?.value.trim(),cotas=Math.max(1,parseInt(document.getElementById('rn-'+rid)?.value||1));if(!nome){alert('Digite seu nome.');return;}if(!validarTel(tel)){alert('WhatsApp inválido. Use DDD + número (ex: 47999999999).');return;}const v=val*(isAss()?0.8:1);const msg='🎯 *PEDIDO RIFA TKTX SC*\n\n👤 Nome: '+nome+'\n📱 WhatsApp: '+tel+'\n🏆 Prêmio: '+premio+'\n🎟️ Cotas: '+cotas+'\n💰 Total: R$ '+(v*cotas).toFixed(2).replace('.',',')+(isAss()?' (20% desconto assinante)':'')+'\n\n_Aguardando chave Pix_';window.open('https://wa.me/'+WPP+'?text='+encodeURIComponent(msg),'_blank');}
+
+async function loadPed(){const {data}=await sb.from('pedidos_kit').select('*').order('solicitado_em',{ascending:false});const pend=(data||[]).filter(p=>p.status==='aguardando').length;const bp=document.getElementById('badge-pend');if(bp)bp.textContent=pend>0?pend+' pendente'+(pend>1?'s':''):'';const w=document.getElementById('tab-ped');if(!data||!data.length){w.innerHTML='<div class="es">Nenhum pedido ainda.</div>';return;}w.innerHTML='<table class="admin-table"><thead><tr><th>Tatuador</th><th>Kit</th><th>Valor</th><th>Pgto</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody>'+data.map(p=>'<tr><td>'+p.nome_tatuador+'</td><td>'+p.kit_unidades+' un.</td><td>R$ '+Number(p.kit_preco).toFixed(2).replace('.',',')+'</td><td>'+p.pagamento+'</td><td>'+new Date(p.solicitado_em).toLocaleDateString('pt-BR')+'</td><td><span class="sp '+p.status+'">'+p.status+'</span></td><td>'+(p.status==='aguardando'?'<button class="bok" onclick="confPed(\''+p.id+'\')">OK</button>':'')+'</td></tr>').join('')+'</tbody></table>';}
+async function confPed(id){await sb.from('pedidos_kit').update({status:'confirmado',confirmado_em:new Date().toISOString()}).eq('id',id);loadPed();}
+async function loadPedLoja(){const {data}=await sb.from('pedidos_loja').select('*').order('solicitado_em',{ascending:false});const pend=(data||[]).filter(p=>p.status==='aguardando').length;const bp=document.getElementById('badge-pend-loja');if(bp)bp.textContent=pend>0?pend+' pendente'+(pend>1?'s':''):'';const w=document.getElementById('tab-ped-loja');if(!data||!data.length){w.innerHTML='<div class="es">Nenhum pedido ainda.</div>';return;}w.innerHTML='<table class="admin-table"><thead><tr><th>Cliente</th><th>WhatsApp</th><th>Kit</th><th>Frete</th><th>Total</th><th>CEP</th><th>Pgto</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody>'+data.map(p=>{const total=Number(p.kit_preco)+Number(p.frete_preco||0);return '<tr><td>'+p.nome+'</td><td>'+(p.telefone||'—')+'</td><td>'+p.kit_unidades+' un. (R$ '+Number(p.kit_preco).toFixed(2).replace('.',',')+')</td><td>'+(p.frete_servico||'—')+' (R$ '+Number(p.frete_preco||0).toFixed(2).replace('.',',')+')</td><td><b>R$ '+total.toFixed(2).replace('.',',')+'</b></td><td>'+(p.cep||'—')+'</td><td>'+p.pagamento+'</td><td>'+new Date(p.solicitado_em).toLocaleDateString('pt-BR')+'</td><td><span class="sp '+p.status+'">'+p.status+'</span></td><td>'+(p.status==='aguardando'?'<button class="bok" onclick="confPedLoja(\''+p.id+'\')">OK</button>':'')+'</td></tr>';}).join('')+'</tbody></table>';}
+async function confPedLoja(id){await sb.from('pedidos_loja').update({status:'confirmado',confirmado_em:new Date().toISOString()}).eq('id',id);loadPedLoja();}
+async function loadSorteios(){const w=document.getElementById('lista-sorteios');if(!w)return;const {data}=await sb.from('sorteios').select('*').order('sorteado_em',{ascending:false}).limit(20);if(!data||!data.length){w.innerHTML='<div class="es">Nenhum sorteio realizado ainda.</div>';return;}w.innerHTML=data.map(s=>'<div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:0.5px solid #222;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:#4ade80;letter-spacing:2px;min-width:60px;text-align:center;">'+String(s.numero_sorteado).padStart(3,'0')+'</div><div style="flex:1;"><div style="font-size:13px;color:#e5e7eb;font-weight:500;">'+s.nome_ganhador+'</div><div style="font-size:11px;color:#6b7280;margin-top:2px;">🏆 '+s.premio+'</div><div style="font-size:11px;color:#4b5563;margin-top:2px;">'+(s.telefone_ganhador||'sem tel')+' · '+new Date(s.sorteado_em).toLocaleString('pt-BR')+'</div></div></div>').join('');}
+
+async function loadAss(){const {data}=await sb.from('assinantes').select('*').order('criado_em',{ascending:false});TA=data||[];renderAss(TA);const agora=new Date();const at=TA.filter(a=>{if(!a.ativo)return false;if(a.vencimento&&new Date(a.vencimento)<agora)return false;return true;}).length;const ve=TA.filter(a=>{if(!a.ativo||!a.vencimento)return false;const d=(new Date(a.vencimento)-agora)/(1000*60*60*24);return d>0&&d<=5;}).length;const ia=TA.filter(a=>{if(!a.ativo)return true;if(a.vencimento&&new Date(a.vencimento)<agora)return true;return false;}).length;const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};s('cnt-at',at);s('cnt-ve',ve);s('cnt-in',ia);}
+function filtAss(b){renderAss(TA.filter(a=>a.nome.toLowerCase().includes(b.toLowerCase())||(a.telefone||'').includes(b)));}
+function renderAss(lista){const w=document.getElementById('lista-ass');if(!lista||!lista.length){w.innerHTML='<div class="es">Nenhum assinante encontrado.</div>';return;}const agora=new Date();w.innerHTML=lista.map(a=>{const venc=a.vencimento?new Date(a.vencimento):null;const vs=venc?venc.toLocaleDateString('pt-BR'):'—';const vi=venc&&venc<agora;const at=a.ativo&&!vi;const df=venc?Math.ceil((venc-agora)/(1000*60*60*24)):null;const vc=vi?'#f87171':df!==null&&df<=5?'#fbbf24':'#4ade80';const vl=vi?'⚠️ VENCIDO':df!==null&&df<=5?'⚠️ Vence em '+df+'d':'Vence '+vs;return '<div class="ac"><div><div style="font-size:14px;font-weight:500;color:#f0f0f0;">'+a.nome+'</div><div style="font-size:12px;color:#9ca3af;margin-top:2px;">📱 '+(a.telefone||'sem tel')+' • @'+a.usuario+' • 🔑 '+a.senha+'</div><div style="font-size:12px;color:'+vc+';margin-top:2px;">'+vl+'</div></div><div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;"><span class="sp '+(at?'confirmado':'aguardando')+'">'+(at?'Ativo':'Inativo')+'</span><div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;"><button class="bok" onclick="renAss(\''+a.id+'\',\'mensal\')" style="background:var(--blue);font-size:10px;padding:4px 8px;">+30d</button><button class="bok" onclick="renAss(\''+a.id+'\',\'semestral\')" style="background:#1d4ed8;font-size:10px;padding:4px 8px;">+6m</button><button class="bok" onclick="renAss(\''+a.id+'\',\'anual\')" style="background:#0f2d6e;font-size:10px;padding:4px 8px;">+1a</button></div><div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;"><button class="bok" data-tel="'+(a.telefone||'')+'" data-nome="'+a.nome+'" data-user="'+a.usuario+'" data-senha="'+a.senha+'" onclick="envLogin(this)" style="background:#16a34a;font-size:10px;padding:4px 8px;">📲 Login</button><button class="bok" onclick="resetSenha(\''+a.id+'\',\''+a.nome.replace(/\'/g,"\\\'")+'\')" style="background:#7c3aed;font-size:10px;padding:4px 8px;">🔑 Senha</button><button class="bok" style="'+(a.ativo?'background:#dc2626':'')+';font-size:10px;padding:4px 8px;" onclick="togAss(\''+a.id+'\','+a.ativo+')">'+(a.ativo?'Desativar':'Ativar')+'</button><button class="bok" onclick="excluirAss(\''+a.id+'\',\''+a.nome.replace(/\'/g,"\\\'")+'\')" style="background:#1c0a0a;border:0.5px solid #dc262655;color:#f87171;font-size:10px;padding:4px 8px;">🗑️</button></div></div></div>';}).join('');}
+async function resetSenha(id,nome){const nova=prompt('Nova senha para '+nome+':');if(!nova||nova.length<4){if(nova!==null)alert('Senha precisa ter no mínimo 4 caracteres.');return;}await sb.from('assinantes').update({senha:nova}).eq('id',id);alert('Senha alterada com sucesso!\nNova senha: '+nova);loadAss();}
+async function excluirAss(id,nome){if(!confirm('Excluir permanentemente o assinante "'+nome+'"?\n\n⚠️ TODOS os dados dele serão apagados:\n- Histórico de acessos\n- Pedidos de kit\n- Vínculos com pedidos da loja\n\nEssa ação NÃO pode ser desfeita.'))return;if(!confirm('Tem certeza absoluta? Última chance.'))return;try{const e1=await sb.from('acessos').delete().eq('assinante_id',id);if(e1.error)throw e1.error;const e2=await sb.from('pedidos_kit').delete().eq('assinante_id',id);if(e2.error)throw e2.error;const e3=await sb.from('pedidos_loja').update({assinante_id:null}).eq('assinante_id',id);if(e3.error)throw e3.error;const e4=await sb.from('assinantes').delete().eq('id',id);if(e4.error)throw e4.error;alert('Assinante "'+nome+'" excluído com sucesso!');loadAss();}catch(e){alert('Erro ao excluir: '+(e.message||JSON.stringify(e))+'\n\nVerifique no console (F12) para mais detalhes.');console.error('Erro excluirAss:',e);}}
+async function renAss(id,plano){const {data}=await sb.from('assinantes').select('vencimento').eq('id',id).single();const base=data?.vencimento&&new Date(data.vencimento)>new Date()?new Date(data.vencimento):new Date();base.setDate(base.getDate()+(plano==='anual'?365:plano==='semestral'?180:30));await sb.from('assinantes').update({vencimento:base.toISOString(),ativo:true}).eq('id',id);loadAss();}
+async function togAss(id,ativo){if(ativo&&!confirm('Tem certeza que deseja desativar este assinante? Ele perderá acesso imediatamente.'))return;await sb.from('assinantes').update({ativo:!ativo}).eq('id',id);loadAss();}
+function envLogin(btn){const tel=btn.dataset.tel,nome=btn.dataset.nome,user=btn.dataset.user,senha=btn.dataset.senha;if(!tel){alert('Sem telefone.');return;}const msg='Olá '+nome+'! 🎉\n\nSeu acesso ao *TKTX SC Assistente Pro* está pronto!\n\n🌐 Site: tktxsc.vercel.app\n👤 Usuário: '+user+'\n🔑 Senha: '+senha+'\n\nQualquer dúvida é só chamar! 😊';window.open('https://wa.me/55'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');}
+async function criarAss(){const nome=document.getElementById('add-nome').value.trim(),tel=document.getElementById('add-tel').value.trim(),user=document.getElementById('add-user').value.trim(),senha=document.getElementById('add-senha').value.trim(),plano=document.getElementById('add-plano').value;if(!nome||!user||!senha){alert('Preencha nome, usuário e senha.');return;}const agora=new Date();const tf=new Date();tf.setDate(agora.getDate()+2);let venc=null;if(plano==='mensal'){venc=new Date();venc.setDate(agora.getDate()+30);}else if(plano==='semestral'){venc=new Date();venc.setDate(agora.getDate()+180);}else if(plano==='anual'){venc=new Date();venc.setDate(agora.getDate()+365);}const {error}=await sb.from('assinantes').insert({nome,telefone:tel,usuario:user,senha,ativo:true,trial_fim:tf.toISOString(),vencimento:venc?venc.toISOString():null});if(error){alert('Erro: usuário já existe.');return;}document.getElementById('add-nome').value='';document.getElementById('add-tel').value='';document.getElementById('add-user').value='';document.getElementById('add-senha').value='';loadAss();if(tel&&confirm('Acesso criado! Enviar login pelo WhatsApp agora?')){const pl={mensal:'Mensal',semestral:'Semestral',anual:'Anual',trial:'Trial 2 dias'}[plano];const msg='Olá '+nome+'! 🎉\n\nSeu acesso ao *TKTX SC Assistente Pro* está pronto! ('+pl+')\n\n🌐 Site: tktxsc.vercel.app\n👤 Usuário: '+user+'\n🔑 Senha: '+senha+'\n\nQualquer dúvida é só chamar! 😊';window.open('https://wa.me/55'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');}else alert('Acesso criado!\nUsuário: '+user+'\nSenha: '+senha);}
+
+async function criarRifa(){const p=document.getElementById('rp').value.trim(),d=document.getElementById('rd').value.trim(),t=parseInt(document.getElementById('rt').value),v=parseFloat(document.getElementById('rv').value);if(!p||!t||!v){alert('Preencha todos os campos!');return;}const {error}=await sb.from('rifas').insert({premio:p,descricao:d,total_cotas:t,valor_cota:v,cotas_vendidas:0,ativa:true});if(error){alert('Erro: '+error.message);return;}alert('Rifa criada! Prêmio: '+p);document.getElementById('rp').value='';document.getElementById('rd').value='';document.getElementById('rt').value='';document.getElementById('rv').value='';loadPart();}
+async function apagarRifa(id,premio){if(!confirm('Apagar a rifa "'+premio+'"?\n\n⚠️ Isso também apaga TODOS os participantes dela. Essa ação NÃO pode ser desfeita.'))return;if(!confirm('Tem certeza absoluta? Última chance.'))return;await sb.from('participantes_rifa').delete().eq('rifa_id',id);await sb.from('rifas').delete().eq('id',id);alert('Rifa apagada.');loadPart();}
+async function loadPart(){const {data:rifas}=await sb.from('rifas').select('*').eq('ativa',true).order('criado_em',{ascending:false});const wrap=document.getElementById('lista-part');if(!rifas?.length){wrap.innerHTML='<div class="es">Nenhuma rifa ativa. Crie uma acima.</div>';document.getElementById('btn-sort').style.display='none';RA=null;return;}const rifaSel=RA?.id&&rifas.find(r=>r.id===RA.id)?RA.id:rifas[0].id;RA=rifas.find(r=>r.id===rifaSel);const sel='<div class="fw" style="margin-bottom:14px;"><label class="fl">Selecionar rifa</label><select id="sel-rifa" onchange="selRifa(this.value)" style="margin-bottom:0;">'+rifas.map(r=>'<option value="'+r.id+'"'+(r.id===rifaSel?' selected':'')+'>'+r.premio+' ('+(r.cotas_vendidas||0)+'/'+r.total_cotas+' cotas)</option>').join('')+'</select></div>';const apagar='<button onclick="apagarRifa(\''+RA.id+'\',\''+RA.premio.replace(/'/g,"\\'")+'\')" style="background:#1c0a0a;border:0.5px solid #dc262633;color:#f87171;font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:\'DM Sans\',sans-serif;margin-bottom:14px;">🗑️ Apagar esta rifa</button>';const {data:parts}=await sb.from('participantes_rifa').select('*').eq('rifa_id',RA.id).order('criado_em',{ascending:false});const btn=document.getElementById('btn-sort');if(btn)btn.style.display=parts?.length?'block':'none';if(!parts?.length){wrap.innerHTML=sel+apagar+'<div class="es">Nenhum participante ainda nesta rifa.</div>';return;}wrap.innerHTML=sel+apagar+parts.map(p=>'<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:0.5px solid #222;"><div><div style="font-size:13px;color:#d1d5db;">'+p.nome+' — '+p.telefone+'</div><div style="font-size:11px;color:#6b7280;">'+p.cotas+' cota'+(p.cotas>1?'s':'')+' • Nums: '+(p.numeros?.join(', ')||'aguardando')+'</div></div>'+(p.status==='aguardando'?'<button class="bok" onclick="confPart(this,\''+p.id+'\','+p.cotas+')">OK</button>':'<span class="sp confirmado">confirmado</span>')+'</div>').join('');}
+function selRifa(id){RA={id};loadPart();}
+async function confPart(btn,id,cotas){if(btn){btn.disabled=true;btn.textContent='...';}try{if(!RA)return;const {data:rifa}=await sb.from('rifas').select('*').eq('id',RA.id).single();if(!rifa)return;const {data:v}=await sb.from('participantes_rifa').select('numeros').eq('rifa_id',rifa.id).not('numeros','is',null);const usados=(v||[]).flatMap(p=>p.numeros||[]);const disp=Array.from({length:rifa.total_cotas},(_,i)=>i+1).filter(n=>!usados.includes(n));const srt=disp.sort(()=>Math.random()-0.5).slice(0,cotas);await sb.from('participantes_rifa').update({status:'confirmado',numeros:srt}).eq('id',id);await sb.from('rifas').update({cotas_vendidas:(rifa.cotas_vendidas||0)+cotas}).eq('id',rifa.id);loadPart();}catch(e){if(btn){btn.disabled=false;btn.textContent='OK';}alert('Erro ao confirmar. Tente de novo.');}}
+async function sortear(){if(!RA)return;const {data:parts}=await sb.from('participantes_rifa').select('*').eq('rifa_id',RA.id).eq('status','confirmado');if(!parts?.length){alert('Nenhum participante confirmado.');return;}const todos=parts.flatMap(p=>(p.numeros||[]).map(n=>({num:n,nome:p.nome,telefone:p.telefone})));const win=todos[Math.floor(Math.random()*todos.length)];await sb.from('sorteios').insert({rifa_id:RA.id,premio:RA.premio,numero_sorteado:win.num,nome_ganhador:win.nome,telefone_ganhador:win.telefone||null});document.getElementById('res-sort').innerHTML='<div style="background:#0a1f0a;border:2px solid var(--green);border-radius:12px;padding:1.5rem;text-align:center;margin-top:1rem;"><div style="font-size:13px;color:#86efac;margin-bottom:8px;">🎉 GANHADOR</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:64px;color:#4ade80;letter-spacing:4px;">'+String(win.num).padStart(3,'0')+'</div><div style="font-size:16px;color:#86efac;margin-top:4px;">'+win.nome+'</div></div>';loadSorteios();}
+
+(async function init(){const ok=await tentarLoginAuto();if(!ok)setTimeout(loadRifaPublic,500);})();
+</script>
+</body>
+</html>
