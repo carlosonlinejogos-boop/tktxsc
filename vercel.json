@@ -1,11 +1,1 @@
-{
-  "functions": {
-    "api/claude.js": {
-      "memory": 128,
-      "maxDuration": 30
-    }
-  },
-  "rewrites": [
-    { "source": "/comprar", "destination": "/" }
-  ]
-}
+
