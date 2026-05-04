@@ -116,26 +116,12 @@ export default async function handler(req, res) {
       }))
       .sort((a, b) => a.preco - b.preco);
     
-    // FALLBACK: se PAC/SEDEX/J&T TODOS falharam, aceita outras transportadoras
-    // (Jadlog, Loggi, Total Express, Azul Cargo, etc) pra cliente não ficar sem frete
-    let servicos = servicosPrincipais;
-    if (servicos.length === 0) {
-      console.warn('[FRETE] Nenhum serviço principal disponível — usando fallback');
-      servicos = data
-        .filter(s => !s.error && s.price)
-        .map(s => ({
-          id: s.id,
-          nome: s.name,
-          empresa: s.company?.name || '',
-          preco: parseFloat(s.custom_price || s.price),
-          prazo: s.custom_delivery_time || s.delivery_time
-        }))
-        .sort((a, b) => a.preco - b.preco)
-        .slice(0, 3); // Máximo 3 alternativas
-    }
+    // SÓ usa as 3 transportadoras autorizadas: Correios PAC, Correios SEDEX e J&T Express
+    // Se nenhuma das 3 estiver disponível, o front mostra opção manual via WhatsApp
+    const servicos = servicosPrincipais;
     
     if (servicos.length === 0) {
-      console.error('[FRETE] NENHUM serviço disponível pro CEP', cep);
+      console.error('[FRETE] NENHUMA das 3 transportadoras (PAC/SEDEX/J&T) disponível pro CEP', cep);
     }
     
     return res.status(200).json({ servicos });
