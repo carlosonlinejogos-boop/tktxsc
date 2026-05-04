@@ -1,16 +1,8 @@
 {
   "rewrites": [
-    {
-      "source": "/comprar",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/rifa",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/quiz",
-      "destination": "/index.html"
-    }
+    { "source": "/comprar", "destination": "/index.html" },
+    { "source": "/rifa", "destination": "/index.html" },
+    { "source": "/quiz", "destination": "/index.html" },
+    { "source": "/planos", "destination": "/index.html" }
   ]
 }
