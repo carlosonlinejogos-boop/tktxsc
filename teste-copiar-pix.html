@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste — Copiar Pix (TKTX SC)</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0a0a0a;color:#fff;margin:0;padding:1.5rem;line-height:1.5;}
+    h1{font-size:18px;margin:0 0 8px;}
+    .info{font-size:12px;color:#9ca3af;background:#1a1a1a;padding:10px;border-radius:8px;margin-bottom:1rem;border:0.5px solid #333;}
+    .info b{color:#fff;}
+    .card{background:#0d0d0d;border:0.5px solid #1a1a1a;border-radius:12px;padding:1rem;margin-bottom:1rem;}
+    .card h2{font-size:14px;margin:0 0 10px;color:#fbbf24;}
+    input,textarea{width:100%;box-sizing:border-box;background:#000;border:0.5px solid #2a2a2a;color:#fff;padding:10px;border-radius:6px;font-size:14px;font-family:monospace;}
+    textarea{min-height:60px;resize:vertical;}
+    button{width:100%;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:8px;padding:13px;font-size:13px;font-weight:700;cursor:pointer;margin-top:10px;}
+    .resultado{margin-top:10px;padding:10px;border-radius:6px;font-size:12px;display:none;}
+    .ok{background:#0a2818;border:0.5px solid #16a34a;color:#86efac;}
+    .erro{background:#2c0a0a;border:0.5px solid #dc2626;color:#fca5a5;}
+    .cole{font-size:11px;color:#9ca3af;margin-top:6px;display:block;}
+    .ambiente{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;color:#9ca3af;}
+    .ambiente b{color:#fff;}
+  </style>
+</head>
+<body>
+  <h1>🧪 Teste — Copiar Pix</h1>
+  <div class="info">
+    Esta página testa a função de copiar exatamente como ela está no site. 
+    <b>Abra esta página no navegador que quer testar</b> (computador, iPhone, Android, navegador interno do WhatsApp...) e clique nos botões abaixo.
+  </div>
+  
+  <div class="card">
+    <h2>📋 Ambiente detectado</h2>
+    <div class="ambiente" id="amb"></div>
+  </div>
+  
+  <div class="card">
+    <h2>Teste 1 — Chave Pix curta (input)</h2>
+    <input type="text" id="chave" readonly value="tktxscoficial@gmail.com" onclick="this.select()"/>
+    <button onclick="testar1()">📋 COPIAR CHAVE PIX</button>
+    <div id="r1" class="resultado"></div>
+    <span class="cole">Cole abaixo pra confirmar:</span>
+    <input type="text" placeholder="Cole aqui (Ctrl+V) pra ver o que foi copiado" style="margin-top:6px;"/>
+  </div>
+  
+  <div class="card">
+    <h2>Teste 2 — Código Pix longo (textarea)</h2>
+    <textarea id="brcode" readonly onclick="this.select()">00020126540014BR.GOV.BCB.PIX0123tktxscoficial@gmail.com5204000053039865406385.545802BR5915TKTX SC OFICIAL6013BALN CAMBORIU62160512TKTX2471188156304ABCD</textarea>
+    <button onclick="testar2()">📋 COPIAR CÓDIGO COMPLETO</button>
+    <div id="r2" class="resultado"></div>
+    <span class="cole">Cole abaixo pra confirmar:</span>
+    <textarea placeholder="Cole aqui (Ctrl+V) pra ver o que foi copiado" style="margin-top:6px;"></textarea>
+  </div>
+  
+  <div class="card">
+    <h2>Teste 3 — Texto sem elemento fonte</h2>
+    <button onclick="testar3()">📋 COPIAR 'TESTE FUNCIONA 123'</button>
+    <div id="r3" class="resultado"></div>
+    <span class="cole">Cole abaixo pra confirmar:</span>
+    <input type="text" placeholder="Cole aqui (Ctrl+V)" style="margin-top:6px;"/>
+  </div>
+  
+<script>
+// === COPIAR PARA CLIPBOARD — versão à prova de balas ===
+// SÍNCRONA (sem async/await) pra preservar user gesture em TODOS os navegadores.
+function copiarTextoUniversal(texto, elementoFonte){
+  if(!texto) return false;
+  
+  let sucesso=false;
+  let elementoTemp=null;
+  let elemento=(elementoFonte&&typeof elementoFonte.select==='function')?elementoFonte:null;
+  
+  if(!elemento){
+    elementoTemp=document.createElement('textarea');
+    elementoTemp.value=texto;
+    elementoTemp.setAttribute('readonly','');
+    elementoTemp.style.cssText='position:fixed;left:0;top:0;width:2em;height:2em;font-size:16px;opacity:0.001;padding:0;border:0;margin:0;z-index:-1;';
+    document.body.appendChild(elementoTemp);
+    elemento=elementoTemp;
+  }
+  
+  try{
+    const ehIos=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;
+    
+    if(ehIos){
+      const wasReadOnly=elemento.readOnly;
+      const wasEditable=elemento.contentEditable;
+      try{elemento.contentEditable='true';elemento.readOnly=false;}catch(e){}
+      
+      const range=document.createRange();
+      range.selectNodeContents(elemento);
+      const sel=window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      if(elemento.setSelectionRange){
+        try{elemento.setSelectionRange(0,(elemento.value||texto).length);}catch(e){}
+      }
+      
+      sucesso=document.execCommand('copy');
+      
+      try{elemento.contentEditable=wasEditable||'inherit';elemento.readOnly=wasReadOnly;}catch(e){}
+    }else{
+      elemento.focus({preventScroll:true});
+      if(elemento.select)elemento.select();
+      if(elemento.setSelectionRange){
+        try{elemento.setSelectionRange(0,(elemento.value||texto).length);}catch(e){}
+      }
+      sucesso=document.execCommand('copy');
+    }
+  }catch(e){
+    console.warn('execCommand falhou:',e);
+  }
+  
+  if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){
+    try{
+      const p=navigator.clipboard.writeText(texto);
+      if(p&&typeof p.then==='function'){
+        p.then(()=>{sucesso=true;},(err)=>{console.warn('Clipboard API rejeitou:',err);});
+      }
+    }catch(e){
+      console.warn('Clipboard API throw:',e);
+    }
+  }
+  
+  if(elementoTemp){
+    setTimeout(()=>{try{document.body.removeChild(elementoTemp);}catch(e){}},250);
+  }
+  
+  return sucesso;
+}
+
+function mostrarResultado(id, ok, texto){
+  const r=document.getElementById(id);
+  if(ok){
+    r.className='resultado ok';
+    r.textContent='✅ execCommand retornou TRUE. Cole abaixo pra confirmar que o texto realmente foi pro clipboard.';
+  }else{
+    r.className='resultado erro';
+    r.textContent='⚠️ execCommand retornou FALSE. A Clipboard API moderna pode ter copiado mesmo assim — tente colar.';
+  }
+  r.style.display='block';
+}
+
+function testar1(){
+  const el=document.getElementById('chave');
+  const ok=copiarTextoUniversal(el.value,el);
+  mostrarResultado('r1',ok);
+}
+function testar2(){
+  const el=document.getElementById('brcode');
+  const ok=copiarTextoUniversal(el.value,el);
+  mostrarResultado('r2',ok);
+}
+function testar3(){
+  const ok=copiarTextoUniversal('TESTE FUNCIONA 123');
+  mostrarResultado('r3',ok);
+}
+
+// Mostra info do ambiente
+(function(){
+  const ua=navigator.userAgent;
+  const ehIos=/iPad|iPhone|iPod/.test(ua);
+  const ehAndroid=/Android/i.test(ua);
+  const ehSafari=/Safari/i.test(ua)&&!/Chrome|CriOS|FxiOS/i.test(ua);
+  const ehChrome=/Chrome|CriOS/i.test(ua);
+  const ehWaInApp=/WhatsApp/i.test(ua)||/Instagram/i.test(ua)||/FBAN|FBAV/i.test(ua);
+  
+  const amb=[
+    ['Sistema',ehIos?'iOS':ehAndroid?'Android':'Desktop'],
+    ['Navegador',ehWaInApp?'In-app (WhatsApp/Insta/FB)':ehSafari?'Safari':ehChrome?'Chrome':'Outro'],
+    ['HTTPS (isSecureContext)',window.isSecureContext?'✅ Sim':'⚠️ Não'],
+    ['Clipboard API',navigator.clipboard&&navigator.clipboard.writeText?'✅ Disponível':'⚠️ Não disponível'],
+    ['execCommand',document.queryCommandSupported&&document.queryCommandSupported('copy')?'✅ Suportado':'⚠️ Não'],
+  ];
+  document.getElementById('amb').innerHTML=amb.map(([k,v])=>'<div><b>'+k+':</b> '+v+'</div>').join('');
+})();
+</script>
+</body>
+</html>
