@@ -1,8 +1,5 @@
 {
   "rewrites": [
-    { "source": "/comprar", "destination": "/index.html" },
-    { "source": "/rifa", "destination": "/index.html" },
-    { "source": "/quiz", "destination": "/index.html" },
-    { "source": "/planos", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
