@@ -1602,6 +1602,14 @@ textarea{resize:vertical;min-height:75px;}
     </div>
   </section>
 
+  <!-- MEME DE MARCA — identidade TKTX SC (esconde sozinho se a imagem não existir) -->
+  <section id="lp-meme-semcom" class="lp-section" style="padding-top:8px;padding-bottom:8px;">
+    <div style="max-width:520px;margin:0 auto;text-align:center;">
+      <div style="font-size:12px;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:10px;">A diferença é real 😂</div>
+      <img src="/meme-sem-com.png" alt="Tatuando sem TKTX vs com TKTX" style="width:100%;height:auto;border-radius:16px;box-shadow:0 12px 36px rgba(15,23,42,0.10);display:block;" onerror="var s=document.getElementById('lp-meme-semcom');if(s)s.style.display='none';"/>
+    </div>
+  </section>
+
   <!-- GALERIA UNBOXING -->
   <section class="lp-gallery">
     <div class="lp-section-head">
@@ -2168,6 +2176,9 @@ textarea{resize:vertical;min-height:75px;}
       </div>
     </div>
 
+    <!-- ORDER BUMP RIFA (opcional) -->
+    <div id="rifa-bump-cp" style="display:none;"></div>
+
     <!-- RESUMO -->
     <div class="cp-resumo">
       <div class="cp-resumo-line"><div>Kit selecionado</div><div id="cp-kit-label">—</div></div>
@@ -2175,6 +2186,7 @@ textarea{resize:vertical;min-height:75px;}
       <div class="cp-resumo-line" id="cp-frete-line" style="display:none;"><div>Frete</div><div id="cp-frete-label">—</div></div>
       <div class="cp-resumo-line"><div>Pagamento</div><div id="cp-pay-label">—</div></div>
       <div class="cp-resumo-line eco" id="cp-eco-line" style="display:none;"><div>💡 Economia se assinar</div><div id="cp-eco-val">—</div></div>
+      <div class="cp-resumo-line" id="cp-rifa-line" style="display:none;color:#b45309;"><div>🎯 Sorteio</div><div id="cp-rifa-val">—</div></div>
       <div class="cp-resumo-line total"><div>Total</div><div class="v" id="cp-total">R$ 0,00</div></div>
     </div>
 
@@ -2360,6 +2372,9 @@ textarea{resize:vertical;min-height:75px;}
       <div style="font-size:11px;color:#64748b;text-align:center;margin-top:10px;line-height:1.5;">🛡️ <b style="color:#15803d;">Compra 100% segura</b> · Produto original · Envio para todo o Brasil</div>
     </div>
 
+    <!-- ORDER BUMP RIFA (opcional) -->
+    <div id="rifa-bump-promo" style="display:none;"></div>
+
     <!-- RESUMO -->
     <div class="cp-resumo">
       <div class="cp-resumo-line"><div>Quantidade</div><div id="promo-res-qtd">—</div></div>
@@ -2368,6 +2383,7 @@ textarea{resize:vertical;min-height:75px;}
       <div class="cp-resumo-line" id="promo-res-frete-line" style="display:none;"><div>Frete</div><div id="promo-res-frete">—</div></div>
       <div class="cp-resumo-line"><div>Pagamento</div><div id="promo-res-pay">Pix</div></div>
       <div class="cp-resumo-line eco" id="promo-res-eco-line" style="display:none;"><div>💰 Economia vs. normal</div><div id="promo-res-eco">—</div></div>
+      <div class="cp-resumo-line" id="promo-rifa-line" style="display:none;color:#b45309;"><div>🎯 Sorteio</div><div id="promo-rifa-val">—</div></div>
       <div class="cp-resumo-line total"><div>Total</div><div class="v" id="promo-res-total">R$ 0,00</div></div>
     </div>
 
@@ -5332,10 +5348,13 @@ function _repetirRenderModal(){
           '<button id="rp-pay-cartao" onclick="_repetirSelPay(\'cartao\')" style="background:#f1f5f9;color:#0f172a;border:1px solid #f1f5f9;border-radius:10px;padding:13px 8px;cursor:pointer;font-family:\'DM Sans\';"><div style="font-size:20px;margin-bottom:3px;">💳</div><div style="font-size:13px;font-weight:600;">Cartão</div><div style="font-size:10px;color:#64748b;margin-top:2px;">Crédito ou débito</div></button>'+
         '</div>'+
       '</div>'+
+      // BUMP RIFA (opcional)
+      '<div id="rifa-bump-rp" style="display:none;"></div>'+
       // RESUMO
       '<div style="background:linear-gradient(135deg,#dcfce7,#f8fafc);border:0.5px solid #16a34a55;border-radius:12px;padding:14px;margin-bottom:12px;">'+
         '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;color:#64748b;"><div>Subtotal (<span id="rp-resumo-qtd">'+s.qtd+'</span> un)</div><div id="rp-resumo-sub">—</div></div>'+
         '<div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;color:#64748b;"><div>Frete</div><div id="rp-resumo-frete">—</div></div>'+
+        '<div id="rp-resumo-rifa-wrap" style="display:none;justify-content:space-between;margin-bottom:6px;font-size:12px;color:#b45309;"><div>🎯 Sorteio</div><div id="rp-resumo-rifa">—</div></div>'+
         '<div style="border-top:1px dashed #16a34a44;padding-top:8px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;"><div style="font-size:12px;color:#64748b;letter-spacing:1px;">TOTAL</div><div id="rp-resumo-total" style="font-size:26px;font-weight:700;color:#16a34a;font-family:\'Bebas Neue\',sans-serif;letter-spacing:1px;">R$ 0,00</div></div>'+
       '</div>'+
       '<button id="rp-confirmar" onclick="_repetirConfirmar()" style="width:100%;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:12px;padding:15px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.5px;box-shadow:0 4px 16px rgba(74,222,128,0.25);">✅ CONFIRMAR PEDIDO</button>'+
@@ -5344,6 +5363,7 @@ function _repetirRenderModal(){
   
   document.body.appendChild(overlay);
   _repetirAtualizarResumo();
+  try{renderRifaBump('rp','rifa-bump-rp',_repetirAtualizarResumo);}catch(e){console.warn('bump rp:',e);}
 }
 
 // Renderiza só o bloco de endereço (em modo "visualização" ou "edição")
@@ -5631,11 +5651,15 @@ function _repetirAtualizarResumo(){
   const freteValor=freteObj?Number(freteObj.preco):0;
   const balmQtdR=Number(s.balmQtd||0);
   const balmValor=balmQtdR*(window.BALM_PRECO_UN||60);
-  const total=subtotal+freteValor+balmValor;
+  const rifaBumpRp=(typeof rifaBumpValorTotal==='function')?rifaBumpValorTotal('rp'):0;
+  const total=subtotal+freteValor+balmValor+rifaBumpRp;
   const f=(v)=>'R$ '+Number(v).toFixed(2).replace('.',',');
   const elS=document.getElementById('rp-resumo-sub');if(elS) elS.textContent=f(subtotal);
   const elF=document.getElementById('rp-resumo-frete');if(elF) elF.textContent=freteObj?f(freteValor):'—';
   const elT=document.getElementById('rp-resumo-total');if(elT) elT.textContent=f(total);
+  const wrapRifaRp=document.getElementById('rp-resumo-rifa-wrap');
+  const elRifaRp=document.getElementById('rp-resumo-rifa');
+  if(wrapRifaRp){if(rifaBumpRp>0){wrapRifaRp.style.display='flex';if(elRifaRp)elRifaRp.textContent=f(rifaBumpRp);}else wrapRifaRp.style.display='none';}
   
   // Linha do balm: cria/atualiza/remove dinamicamente
   let elB=document.getElementById('rp-resumo-balm');
@@ -5705,7 +5729,10 @@ async function _repetirConfirmar(){
     const balmQtdC=Number(s.balmQtd||0);
     const balmPrecoUnC=window.BALM_PRECO_UN||60;
     const valorBalmC=balmQtdC*balmPrecoUnC;
-    const valorTotal=valorKit+valorFrete+valorBalmC;
+    const rifaBumpValRp=(typeof rifaBumpValorTotal==='function')?rifaBumpValorTotal('rp'):0;
+    const rifaBumpMsgRp=(typeof rifaBumpMsgWhatsapp==='function')?rifaBumpMsgWhatsapp('rp'):'';
+    s._rifaObs=(typeof rifaBumpObsTexto==='function')?(rifaBumpObsTexto('rp')||null):null;
+    const valorTotal=valorKit+valorFrete+valorBalmC+rifaBumpValRp;
     const nomeFrete=((freteObj.empresa||'')+' '+freteObj.nome).trim();
     
     // Endereço completo
@@ -5736,9 +5763,20 @@ async function _repetirConfirmar(){
     msg+='💵 *TOTAL: '+f(valorTotal)+'*\n\n';
     msg+='📍 *Entrega:*\n'+enderecoCompleto+'\n\n';
     msg+='💳 *Pagamento:* '+(s.payment==='pix'?'Pix':'Cartão');
+    msg+=rifaBumpMsgRp;
     
     // === SALVAR NO BANCO (background, fire-and-forget) ===
     _repetirSalvarBanco(s,valorKit,valorFrete,valorTotal,nomeFrete,enderecoCompleto,balmQtdC,valorBalmC);
+
+    // 🎯 RIFA: gera participante(s) na aba Rifa Admin (se marcou) e limpa seleção
+    (async function(){
+      try{
+        var _ehAssRp=false;
+        try{_ehAssRp=(typeof isAss==='function')?!!isAss():false;}catch(e){}
+        await rifaBumpSalvarParticipantes('rp',{nome:s.nome,telefone:s.telefone,cpf:s.cpf||null,ehAssinante:_ehAssRp});
+      }catch(e){console.warn('rifa bump rp save:',e);}
+      try{rifaBumpLimpar('rp');}catch(e){}
+    })();
     
     // === DISPARAR EVENTOS DE TRACKING (Meta Pixel + Google Ads) ===
     // Purchase NÃO dispara aqui (cliente ainda não pagou). Só InitiateCheckout.
@@ -5940,6 +5978,7 @@ async function _repetirSalvarBanco(s,valorKit,valorFrete,valorTotal,nomeFrete,en
       numb_qtd:num(s.numbQtd),
       balm_qtd:num(balmQtd),
       valor_balm:num(valorBalm),
+      observacoes:(s&&s._rifaObs)||null,
       status:'aguardando'
     };
     
@@ -7329,6 +7368,118 @@ async function solAvulso(){
 }
 
 
+// ============================================================
+// === ORDER BUMP DE RIFA NO CHECKOUT (opcional, não invasivo) =
+// Mostra as rifas ativas como um "quer concorrer?" dentro do
+// resumo do pedido (abas Comprar, Promo e Repetir/cliente logado).
+// Se o cliente marcar, o valor entra no total, gera o participante
+// na aba Rifa Admin e marca o pedido. Tudo embrulhado em try/catch:
+// se qualquer coisa da rifa falhar, o pedido continua normal.
+// ============================================================
+window.RIFA_BUMP_SEL = window.RIFA_BUMP_SEL || {cp:{},promo:{},rp:{}};
+window._rifaBumpOnChange = window._rifaBumpOnChange || {};
+window._rifasBumpCache = window._rifasBumpCache || null;
+function _rbFmt(v){return 'R$ '+Number(v||0).toFixed(2).replace('.',',');}
+async function carregarRifasBump(forcar){
+  if(window._rifasBumpCache && !forcar) return window._rifasBumpCache;
+  try{
+    const {data}=await sb.from('rifas').select('*').eq('ativa',true).order('criado_em',{ascending:false}).limit(2);
+    window._rifasBumpCache=(data||[]).filter(r=>r&&r.id&&r.valor_cota);
+  }catch(e){console.warn('carregarRifasBump:',e);window._rifasBumpCache=[];}
+  return window._rifasBumpCache;
+}
+function rifaBumpSelecionadas(ctx){
+  const sel=window.RIFA_BUMP_SEL[ctx]||{};
+  const cache=window._rifasBumpCache||[];
+  return cache.filter(r=>sel[r.id]);
+}
+function rifaBumpValorTotal(ctx){
+  return rifaBumpSelecionadas(ctx).reduce((s,r)=>s+Number(r.valor_cota||0),0);
+}
+function rifaBumpMsgWhatsapp(ctx){
+  const sels=rifaBumpSelecionadas(ctx);
+  if(!sels.length) return '';
+  let t='\n\n🎯 *SORTEIO (cota incluída no total)*';
+  sels.forEach(r=>{t+='\n• '+r.premio+' — 1 cota '+_rbFmt(r.valor_cota);});
+  return t;
+}
+function rifaBumpObsTexto(ctx){
+  const sels=rifaBumpSelecionadas(ctx);
+  if(!sels.length) return '';
+  return '🎯 RIFA: '+sels.map(r=>r.premio+' (cota '+_rbFmt(r.valor_cota)+')').join(' + ');
+}
+function rifaBumpLimpar(ctx){
+  window.RIFA_BUMP_SEL[ctx]={};
+  const cont=document.getElementById('rifa-bump-'+ctx);
+  if(cont) _rbRenderInner(ctx,cont);
+}
+function rifaBumpToggle(ctx,rifaId){
+  window.RIFA_BUMP_SEL[ctx]=window.RIFA_BUMP_SEL[ctx]||{};
+  window.RIFA_BUMP_SEL[ctx][rifaId]=!window.RIFA_BUMP_SEL[ctx][rifaId];
+  const cont=document.getElementById('rifa-bump-'+ctx);
+  if(cont) _rbRenderInner(ctx,cont);
+  try{const cb=window._rifaBumpOnChange[ctx];if(typeof cb==='function')cb();}catch(e){console.warn('rifaBumpToggle cb:',e);}
+}
+function _rbRenderInner(ctx,cont){
+  const rifas=window._rifasBumpCache||[];
+  if(!rifas.length){cont.style.display='none';cont.innerHTML='';return;}
+  const sel=window.RIFA_BUMP_SEL[ctx]||{};
+  cont.style.display='block';
+  let linhas='';
+  rifas.forEach(r=>{
+    const on=!!sel[r.id];
+    linhas+='<div onclick="rifaBumpToggle(\''+ctx+'\',\''+r.id+'\')" style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:10px 12px;border-radius:10px;border:1.5px solid '+(on?'#f59e0b':'#fde68a')+';background:'+(on?'#fffbeb':'#ffffff')+';margin-top:8px;transition:all .15s;">'+
+      '<div style="width:22px;height:22px;border-radius:6px;flex-shrink:0;border:2px solid '+(on?'#f59e0b':'#d1d5db')+';background:'+(on?'#f59e0b':'#fff')+';display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;">'+(on?'✓':'')+'</div>'+
+      '<div style="flex:1;line-height:1.3;">'+
+        '<div style="font-size:13px;font-weight:700;color:#0f172a;">Concorrer a '+r.premio+'</div>'+
+        '<div style="font-size:11px;color:#b45309;">1 cota do sorteio por apenas <b>'+_rbFmt(r.valor_cota)+'</b></div>'+
+      '</div>'+
+      '<div style="font-size:11px;font-weight:700;color:'+(on?'#16a34a':'#94a3b8')+';white-space:nowrap;">'+(on?'+ '+_rbFmt(r.valor_cota):'Adicionar')+'</div>'+
+    '</div>';
+  });
+  cont.innerHTML='<div style="background:linear-gradient(135deg,#fffdf5,#fff);border:1px solid #fbbf2455;border-radius:14px;padding:12px 12px 14px;margin-bottom:10px;">'+
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">'+
+      '<span style="font-size:16px;">🎯</span>'+
+      '<span style="font-size:13px;font-weight:800;color:#0f172a;letter-spacing:0.2px;">Quer concorrer a um prêmio? <span style="font-weight:500;color:#94a3b8;">(opcional)</span></span>'+
+    '</div>'+
+    '<div style="font-size:11px;color:#64748b;margin-bottom:2px;">Aproveite que já está fechando o pedido e participe do nosso sorteio. É só marcar — o valor entra no total.</div>'+
+    linhas+
+  '</div>';
+}
+async function renderRifaBump(ctx,containerId,onChange){
+  try{
+    const cont=document.getElementById(containerId);
+    if(!cont) return;
+    window._rifaBumpOnChange[ctx]=onChange||null;
+    // Não reseta a seleção se o cliente já marcou nesta sessão de checkout
+    cont.innerHTML='';cont.style.display='none';
+    await carregarRifasBump();
+    _rbRenderInner(ctx,cont);
+    try{const cb=window._rifaBumpOnChange[ctx];if(typeof cb==='function')cb();}catch(e){}
+  }catch(e){console.warn('renderRifaBump:',e);}
+}
+async function rifaBumpSalvarParticipantes(ctx,dados){
+  try{
+    const sels=rifaBumpSelecionadas(ctx);
+    if(!sels.length) return;
+    for(const r of sels){
+      try{
+        await sb.from('participantes_rifa').insert({
+          rifa_id:r.id,
+          nome:dados.nome||'Cliente',
+          telefone:dados.telefone||'',
+          cpf:dados.cpf||null,
+          cotas:1,
+          valor_total:Number(r.valor_cota||0),
+          eh_assinante:!!dados.ehAssinante,
+          status:'aguardando',
+          criado_em:new Date().toISOString()
+        });
+      }catch(e){console.warn('rifaBumpSalvarParticipantes insert:',e);}
+    }
+  }catch(e){console.warn('rifaBumpSalvarParticipantes:',e);}
+}
+
 function fecharModal(e){if(e&&e.target!==document.getElementById('modal-rifa'))return;document.getElementById('modal-rifa').style.display='none';}
 
 // Variáveis: MV = valor cota, MVAss = se cliente é assinante (aplica 20% off)
@@ -7725,6 +7876,8 @@ function showComprar(){
   });
   // 🎯 Dispara notificações de pedidos recentes (prova social)
   try{iniciarNotifPedidos();}catch(e){}
+  // 🎯 Order bump de rifa (opcional) — atualiza o resumo ao marcar
+  try{renderRifaBump('cp','rifa-bump-cp',atualizaCpResumo);}catch(e){console.warn('bump cp:',e);}
   
   renderCpKits();
   window.scrollTo(0,0);
@@ -7878,6 +8031,10 @@ async function mostrarTelaSucessoComRifa(nomeCliente,msgWhatsapp){
     '</div>'+
     
     rifaHtml+
+    '<div id="suc-meme-dor" style="margin-top:1.5rem;max-width:340px;margin-left:auto;margin-right:auto;">'+
+      '<div style="font-size:11px;color:#94a3b8;margin-bottom:8px;">Relaxa que a dor não vai te pegar 😎</div>'+
+      '<img src="/meme-dor.png" alt="Sentir dor durante a tatuagem vs eu com TKTX" style="width:100%;height:auto;border-radius:14px;box-shadow:0 8px 24px rgba(15,23,42,0.10);display:block;" onerror="var m=document.getElementById(\'suc-meme-dor\');if(m)m.style.display=\'none\';"/>'+
+    '</div>'+
   '</div>';
   
   // Salva mensagem pra abrir WhatsApp
@@ -8738,6 +8895,18 @@ function atualizaCpResumo(){
     if(balmLine)balmLine.style.display='none';
   }
   
+  // === RIFA (order bump opcional): soma no total + linha do resumo ===
+  const rifaBumpCp=(typeof rifaBumpValorTotal==='function')?rifaBumpValorTotal('cp'):0;
+  const rifaLineCp=document.getElementById('cp-rifa-line');
+  const rifaValCp=document.getElementById('cp-rifa-val');
+  if(rifaBumpCp>0){
+    total+=rifaBumpCp;
+    if(rifaLineCp)rifaLineCp.style.display='flex';
+    if(rifaValCp)rifaValCp.textContent='R$ '+rifaBumpCp.toFixed(2).replace('.',',');
+  }else{
+    if(rifaLineCp)rifaLineCp.style.display='none';
+  }
+
   totEl.textContent='R$ '+total.toFixed(2).replace('.',',');
   
   // === Sincroniza barra flutuante (mobile) ===
@@ -8758,8 +8927,8 @@ function atualizaCpResumo(){
       const valorPlanoExtra=cpPlanoSel?planos[cpPlanoSel].total:0;
       const freteExtra=(cpFreteSel!==null&&cpFreteSel!==undefined)?(parseFloat(document.getElementById('cp-frete-'+cpFreteSel)?.dataset.preco)||0):0;
       const balmExtra=Number(window.cpBalmQtd||0)*(window.BALM_PRECO_UN||60);
-      const totalNormalCompleto=p.totalNormal+valorPlanoExtra+freteExtra+balmExtra;
-      const totalAssCompleto=p.totalAss+valorPlanoExtra+freteExtra+balmExtra;
+      const totalNormalCompleto=p.totalNormal+valorPlanoExtra+freteExtra+balmExtra+rifaBumpCp;
+      const totalAssCompleto=p.totalAss+valorPlanoExtra+freteExtra+balmExtra+rifaBumpCp;
       if(stickyTotalNormal){
         stickyTotalNormal.style.display=p.economia>0?'block':'none';
         stickyTotalNormal.textContent='R$ '+totalNormalCompleto.toFixed(2).replace('.',',');
@@ -9307,7 +9476,10 @@ async function finalizarPedido(){
   const balmQtd=Number(window.cpBalmQtd||0);
   const balmPrecoUn=window.BALM_PRECO_UN||60;
   const valorBalm=balmQtd*balmPrecoUn;
-  const valorTotal=valorKit+valorPlano+(valorFrete||0)+valorBalm;
+  const rifaBumpVal=(typeof rifaBumpValorTotal==='function')?rifaBumpValorTotal('cp'):0;
+  const rifaBumpMsg=(typeof rifaBumpMsgWhatsapp==='function')?rifaBumpMsgWhatsapp('cp'):'';
+  const rifaBumpObs=(typeof rifaBumpObsTexto==='function')?(rifaBumpObsTexto('cp')||null):null;
+  const valorTotal=valorKit+valorPlano+(valorFrete||0)+valorBalm+rifaBumpVal;
   
   // === Disparar conversão pro Google Ads ===
   // Conta o pedido como conversão no momento que o cliente clica em "Finalizar pedido"
@@ -9393,6 +9565,7 @@ async function finalizarPedido(){
     'CEP: '+cep+
     (cpPlanoSel||cpDescontoAtivo?'':'\n\n_💡 Economizaria R$ '+eco.toFixed(2).replace('.',',')+' sendo assinante_')+
     loginMsg+
+    rifaBumpMsg+
     rifaMsg;
 
   // === ABRIR WHATSAPP IMEDIATAMENTE ===
@@ -9453,6 +9626,13 @@ async function finalizarPedido(){
   // Fire-and-forget: se falhar, paciência. O pedido já foi enviado pelo WhatsApp.
   (async function salvarBackground(){
     try{
+      // 🎯 RIFA: gera o(s) participante(s) na aba Rifa Admin (se cliente marcou)
+      try{
+        var _ehAssCp=false;
+        try{_ehAssCp=!!((typeof cpDescontoAtivo!=='undefined'&&cpDescontoAtivo)||(typeof cpClienteJaAss!=='undefined'&&cpClienteJaAss));}catch(e){}
+        await rifaBumpSalvarParticipantes('cp',{nome:nome,telefone:telLimpo,cpf:cpfLimpo,ehAssinante:_ehAssCp});
+      }catch(e){console.warn('rifa bump cp save:',e);}
+      try{rifaBumpLimpar('cp');}catch(e){}
       // 1. Cliente: busca por CPF ou telefone
       let clienteExistente=null;
       try{
@@ -9548,6 +9728,7 @@ async function finalizarPedido(){
           numb_qtd:numbQtd,
           balm_qtd:num(balmQtd),
           valor_balm:num(valorBalm),
+          observacoes:rifaBumpObs,
           status:'aguardando'
         };
         
@@ -10487,14 +10668,18 @@ function promoAtualizaResumo(){
   const totalKit=promoTotalKit(q);
   const frete=promoFreteValor();
   const total=totalKit+frete;
+  const rifaBumpPromo=(typeof rifaBumpValorTotal==='function')?rifaBumpValorTotal('promo'):0;
+  const totalComRifa=total+rifaBumpPromo;
   const normalUn=Number(window.PROMO_PRECO_NORMAL)||50;
   const economia=(normalUn-precoUn)*q;
   const set=(id,txt)=>{const e=document.getElementById(id);if(e)e.textContent=txt;};
   set('promo-res-qtd',q+(q>1?' unidades':' unidade'));
   set('promo-res-modelos',(typeof getDivisaoTexto==='function')?getDivisaoTexto('promo'):'—');
   set('promo-res-kit',promoFmt(totalKit)+' ('+promoFmt(precoUn)+'/un)');
-  set('promo-res-total',promoFmt(total));
+  set('promo-res-total',promoFmt(totalComRifa));
   set('promo-res-pay',window.promoPay==='pix'?'Pix':'Cartão');
+  const rifaLinePromo=document.getElementById('promo-rifa-line');
+  if(rifaLinePromo){if(rifaBumpPromo>0){rifaLinePromo.style.display='flex';set('promo-rifa-val',promoFmt(rifaBumpPromo));}else rifaLinePromo.style.display='none';}
   const fl=document.getElementById('promo-res-frete-line');
   const freteSel=(window.promoFreteSel!==null&&window.promoFreteSel!==undefined);
   if(fl){fl.style.display=freteSel?'flex':'none';set('promo-res-frete',freteSel?promoFmt(frete):'—');}
@@ -10502,8 +10687,8 @@ function promoAtualizaResumo(){
   if(el){if(economia>0){el.style.display='flex';set('promo-res-eco',promoFmt(economia));}else el.style.display='none';}
   // Sticky
   const st=document.getElementById('promo-sticky');
-  set('promo-sticky-total',promoFmt(total));
-  set('promo-sticky-sub',q+' un'+(freteSel?' + frete':' · falta o frete'));
+  set('promo-sticky-total',promoFmt(totalComRifa));
+  set('promo-sticky-sub',q+' un'+(freteSel?' + frete':' · falta o frete')+(rifaBumpPromo>0?' + sorteio':''));
   if(st) st.style.display='block';
 }
 
@@ -10573,6 +10758,7 @@ function showPromo(){
   promoSetPay('pix');
   promoAtualizaResumo();
   promoIniciarCountdown();
+  try{renderRifaBump('promo','rifa-bump-promo',promoAtualizaResumo);}catch(e){console.warn('bump promo:',e);}
   try{if(typeof iniciarNotifPedidos==='function') iniciarNotifPedidos();}catch(e){}
   try{if(typeof fbqAdvanced!=='undefined') fbqAdvanced('track','ViewContent',{content_name:'Promoção Fim de Mês TKTX',content_category:'promocao',content_type:'product',currency:'BRL',value:35.00});}catch(e){}
   // Marca em vermelho o que falta preencher (igual /comprar) + atualiza ao vivo
@@ -10710,7 +10896,9 @@ async function promoFinalizar(){
   const precoUn=promoPrecoUn(q);
   const totalKit=promoTotalKit(q);
   const frete=promoFreteValor();
-  const total=totalKit+frete;
+  const rifaBumpValPromo=(typeof rifaBumpValorTotal==='function')?rifaBumpValorTotal('promo'):0;
+  const rifaBumpMsgPromo=(typeof rifaBumpMsgWhatsapp==='function')?rifaBumpMsgWhatsapp('promo'):'';
+  const total=totalKit+frete+rifaBumpValPromo;
   const freteCard=document.getElementById('promo-frete-'+window.promoFreteSel);
   const nomeFrete=freteCard?freteCard.dataset.nome:'Frete';
   const prazoFrete=freteCard?freteCard.dataset.prazo:'';
@@ -10745,7 +10933,7 @@ async function promoFinalizar(){
     '💵 *TOTAL:* '+promoFmt(total)+'\n'+
     '💳 *Pagamento:* '+payTxt+'\n\n'+
     '📍 *Entrega:*\n'+enderecoCompleto+
-    loginMsg+'\n\n'+
+    loginMsg+rifaBumpMsgPromo+'\n\n'+
     '_Pedido feito pela página de Promoção._';
 
   // === Cria/atualiza a CONTA do cliente (clientes + assinantes), igual ao /comprar ===
@@ -10805,7 +10993,7 @@ async function promoFinalizar(){
         gold_qtd:n0(d.gold),
         numb_qtd:n0(d.numb),
         pagamento:payTxt,
-        observacoes:'🔥 PROMOÇÃO FIM DE MÊS',
+        observacoes:'🔥 PROMOÇÃO FIM DE MÊS'+((typeof rifaBumpObsTexto==='function'&&rifaBumpObsTexto('promo'))?' | '+rifaBumpObsTexto('promo'):''),
         origem:'promo',
         status:'aguardando'
       };
@@ -10818,6 +11006,12 @@ async function promoFinalizar(){
       if(r&&r.error){await sb.from('pedidos_loja').insert({nome_cliente:s0(nome)||'Sem nome',telefone:s0(telLimpo),kit_unidades:n0(q),kit_preco:n0(totalKit),valor_total:n0(total),pagamento:payTxt,status:'aguardando'});}
     }
   }catch(e){console.warn('promo salvar:',e);}
+
+  // 🎯 RIFA: gera participante na aba Rifa Admin (se marcou) e limpa seleção
+  try{
+    await rifaBumpSalvarParticipantes('promo',{nome:nome,telefone:telLimpo,cpf:cpfLimpo,ehAssinante:false});
+  }catch(e){console.warn('rifa bump promo save:',e);}
+  try{rifaBumpLimpar('promo');}catch(e){}
 
   // Pixel: AddPaymentInfo + Lead (Purchase só após "Já paguei")
   try{
@@ -13559,6 +13753,7 @@ function renderPedLoja(){
         (p.frete_servico?'<div>🚚 <b>Frete:</b> '+p.frete_servico+' — R$ '+valorFrete.toFixed(2).replace('.',',')+'</div>':'')+
         '<div>💳 <b>Pagamento:</b> '+(p.pagamento||'—')+'</div>'+
         '<div style="color:#0f172a;margin-top:6px;font-size:14px;"><b>💵 Total: R$ '+valorTot.toFixed(2).replace('.',',')+'</b></div>'+
+        ((p.observacoes||'').includes('🎯 RIFA')?'<div style="margin-top:6px;padding:6px 9px;background:#fffbeb;border:0.5px solid #fbbf2455;border-radius:6px;font-size:11px;color:#b45309;">🎯 <b>Sorteio:</b> '+((p.observacoes.split('🎯 RIFA:')[1]||'cota adicionada').split('|')[0].trim())+' — <b>confirme também na aba Rifa Admin</b></div>':'')+
         (p.endereco?'<div style="margin-top:6px;font-size:11px;color:#64748b;">📍 '+p.endereco+'</div>':'')+
         // Mostra brindes adicionados (se tiver)
         ((p.brinde_gold>0||p.brinde_numb>0)?
