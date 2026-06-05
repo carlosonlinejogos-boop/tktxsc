@@ -3740,7 +3740,7 @@ textarea{resize:vertical;min-height:75px;}
               <div style="font-size:24px;color:#0f172a;font-weight:600;line-height:1.2;margin-top:4px;" id="rc-atrasados">0</div>
             </div>
             <div style="background:#fef3c7;border:0.5px solid #fbbf2444;border-radius:10px;padding:12px;text-align:center;">
-              <div style="font-size:10px;color:#b45309;text-transform:uppercase;letter-spacing:1px;">Falta 2 dias</div>
+              <div style="font-size:10px;color:#b45309;text-transform:uppercase;letter-spacing:1px;">Tá na hora</div>
               <div style="font-size:24px;color:#0f172a;font-weight:600;line-height:1.2;margin-top:4px;" id="rc-falta">0</div>
             </div>
             <div style="background:#dcfce7;border:0.5px solid #4ade8044;border-radius:10px;padding:12px;text-align:center;">
@@ -3777,8 +3777,9 @@ textarea{resize:vertical;min-height:75px;}
           <div style="display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap;">
             <button onclick="filtrarRecompra('todos')" id="rc-f-todos" class="rc-filt-btn active" style="cursor:pointer;background:#f1f5f9;border:0.5px solid #e5e7eb;color:#475569;font-size:11px;padding:6px 12px;border-radius:6px;font-family:'DM Sans';">📋 Todos</button>
             <button onclick="filtrarRecompra('atrasados')" id="rc-f-atrasados" class="rc-filt-btn" style="cursor:pointer;background:#fee2e2;border:0.5px solid #dc262644;color:#dc2626;font-size:11px;padding:6px 12px;border-radius:6px;font-family:'DM Sans';">🔴 Atrasados</button>
-            <button onclick="filtrarRecompra('falta')" id="rc-f-falta" class="rc-filt-btn" style="cursor:pointer;background:#fef3c7;border:0.5px solid #fbbf2444;color:#b45309;font-size:11px;padding:6px 12px;border-radius:6px;font-family:'DM Sans';">🟡 Falta 2 dias</button>
+            <button onclick="filtrarRecompra('falta')" id="rc-f-falta" class="rc-filt-btn" style="cursor:pointer;background:#fef3c7;border:0.5px solid #fbbf2444;color:#b45309;font-size:11px;padding:6px 12px;border-radius:6px;font-family:'DM Sans';">🟡 Tá na hora</button>
             <button onclick="filtrarRecompra('recentes')" id="rc-f-recentes" class="rc-filt-btn" style="cursor:pointer;background:#dcfce7;border:0.5px solid #4ade8044;color:#15803d;font-size:11px;padding:6px 12px;border-radius:6px;font-family:'DM Sans';">🟢 Recentes</button>
+            <button onclick="filtrarRecompra('novos')" id="rc-f-novos" class="rc-filt-btn" style="cursor:pointer;background:#eff6ff;border:0.5px solid #2563eb44;color:#2563eb;font-size:11px;padding:6px 12px;border-radius:6px;font-family:'DM Sans';">🆕 Sem padrão</button>
             <button onclick="filtrarRecompra('top')" id="rc-f-top" class="rc-filt-btn" style="cursor:pointer;background:#fef3c7;border:0.5px solid #fbbf2455;color:#b45309;font-size:11px;padding:6px 12px;border-radius:6px;font-family:'DM Sans';">🌟 Top Clientes</button>
           </div>
           
@@ -3802,9 +3803,11 @@ textarea{resize:vertical;min-height:75px;}
         <div class="card">
           <div class="ct">📊 Como funciona</div>
           <div style="font-size:12px;color:#64748b;line-height:1.7;">
-            <b style="color:#475569;">🔴 Atrasados:</b> Cliente já passou da data esperada de recompra. Mande mensagem AGORA pra não perder.<br>
-            <b style="color:#475569;">🟡 Falta 2 dias:</b> Janela perfeita pra adiantar o pedido antes dele esquecer.<br>
+            A régua de recompra (🔴🟡🟢) só vale pra clientes com <b>3+ pedidos</b> — aí o ritmo é o real dele. Quem comprou 1 ou 2 vezes ainda não tem padrão confiável.<br><br>
+            <b style="color:#475569;">🔴 Atrasados:</b> Passou da data esperada (com uma folga). Mande mensagem AGORA pra não perder.<br>
+            <b style="color:#475569;">🟡 Tá na hora:</b> Janela perfeita — está chegando ou acabou de chegar a data. Adiante o pedido.<br>
             <b style="color:#475569;">🟢 Recentes:</b> Comprou faz pouco tempo, ainda não é hora.<br>
+            <b style="color:#475569;">🆕 Sem padrão:</b> 1ª compra ou só 2 pedidos (em formação). Não cobre como atrasado — varejo ocasional cai aqui.<br>
             <b style="color:#475569;">🌟 Top Clientes:</b> Os que mais compram no total. Atenção VIP.<br><br>
             <b style="color:#475569;">Níveis de fidelidade (info visual):</b><br>
             🥉 <b>Bronze</b>: 20+ pomadas no total<br>
@@ -18293,34 +18296,21 @@ async function loadRecompra(){  const w=document.getElementById('lista-recompra'
     const agora=new Date();
     const baseClientes=Object.values(clientesMap);
 
-    // === Médias GLOBAIS (clientes recorrentes) pra estimar quem só comprou 1x ===
-    let somaInt=0,nInt=0,somaConsumo=0,nConsumo=0;
-    baseClientes.forEach(c=>{
-      c.pedidos.sort((a,b)=>new Date(a.confirmado_em||a.criado_em)-new Date(b.confirmado_em||b.criado_em));
-      if(c.pedidos.length>=2){
-        let soma=0;
-        for(let i=1;i<c.pedidos.length;i++){
-          soma+=(new Date(c.pedidos[i].confirmado_em||c.pedidos[i].criado_em)-new Date(c.pedidos[i-1].confirmado_em||c.pedidos[i-1].criado_em))/(1000*60*60*24);
-        }
-        const im=soma/(c.pedidos.length-1);
-        if(im>0){
-          somaInt+=im;nInt++;
-          const qtdMediaPed=c.totalUn/c.pedidos.length;// quanto ele consome por intervalo
-          if(qtdMediaPed>0){somaConsumo+=(im/qtdMediaPed);nConsumo++;}// dias por unidade
-        }
-      }
-    });
-    const intervaloGlobal=nInt?Math.round(somaInt/nInt):30;// fallback: 30 dias
-    const diasPorUnidade=nConsumo?(somaConsumo/nConsumo):0;// 0 = sem dado de consumo ainda
-
-    // === Calcula previsão e categoria de cada cliente ===
+    // === Calcula ritmo e categoria de cada cliente ===
+    // Régua de recompra (atrasado/falta/recente) SÓ vale com 3+ pedidos (padrão real).
+    // 1 pedido = 1ª compra · 2 pedidos = em formação (ritmo ainda não confiável).
+    // O ritmo é a MÉDIA REAL dos pedidos dele — quem compra volume/frequência aparece
+    // rápido; varejo ocasional tem intervalo grande e não vira atrasado todo mês.
     const clientes=baseClientes.map(c=>{
+      // Ordena pedidos do mais antigo pro mais recente
+      c.pedidos.sort((a,b)=>new Date(a.confirmado_em||a.criado_em)-new Date(b.confirmado_em||b.criado_em));
+
       const ultimoPedido=c.pedidos[c.pedidos.length-1];
       const ultimaData=new Date(ultimoPedido.confirmado_em||ultimoPedido.criado_em);
       const diasDesdeUltimo=Math.floor((agora-ultimaData)/(1000*60*60*24));
       const qtdHabitual=Math.max(1,Math.round(c.totalUn/c.pedidos.length));// "kit de sempre"
 
-      // Intervalo médio real (2+ pedidos)
+      // Intervalo médio REAL (precisa de 2+ pedidos pra ter ao menos 1 intervalo)
       let intervaloMedio=null;
       if(c.pedidos.length>=2){
         let soma=0;
@@ -18330,23 +18320,27 @@ async function loadRecompra(){  const w=document.getElementById('lista-recompra'
         intervaloMedio=Math.round(soma/(c.pedidos.length-1));
       }
 
-      // Intervalo usado pra prever: real, ou estimado pela quantidade + média geral
-      let intervaloPrev=intervaloMedio,estimado=false;
-      if(!intervaloPrev||intervaloPrev<=0){
-        estimado=true;
-        intervaloPrev=diasPorUnidade>0?Math.round(qtdHabitual*diasPorUnidade):intervaloGlobal;
-        if(intervaloPrev<15) intervaloPrev=15;// limites razoáveis
-        if(intervaloPrev>120) intervaloPrev=120;
+      let categoria,diasParaProx=null,dataPrevista=null,preliminar=false;
+      if(c.pedidos.length<2){
+        // 1 pedido: primeira compra, sem como prever
+        categoria='primeira';
+      } else if(c.pedidos.length<3 || !intervaloMedio || intervaloMedio<=0){
+        // 2 pedidos: ritmo preliminar, NÃO cobra como atrasado ainda
+        categoria='formando';
+        preliminar=true;
+        if(intervaloMedio>0){
+          diasParaProx=intervaloMedio-diasDesdeUltimo;
+          dataPrevista=new Date(ultimaData.getTime()+intervaloMedio*86400000);
+        }
+      } else {
+        // 3+ pedidos: padrão confiável → classifica pela urgência usando o ritmo REAL
+        diasParaProx=intervaloMedio-diasDesdeUltimo;
+        dataPrevista=new Date(ultimaData.getTime()+intervaloMedio*86400000);
+        const folga=Math.max(2,Math.round(intervaloMedio*0.15));// tolerância proporcional ao ritmo
+        if(diasParaProx<-folga) categoria='atrasados';
+        else if(diasParaProx<=3) categoria='falta';// janela ideal de cobrança (antes/na hora)
+        else categoria='recentes';
       }
-
-      const diasParaProx=intervaloPrev-diasDesdeUltimo;
-      const dataPrevista=new Date(ultimaData.getTime()+intervaloPrev*86400000);
-
-      // Categoria (agora TODOS têm previsão, real ou estimada)
-      let categoria='recentes';
-      if(diasParaProx<-1) categoria='atrasados';
-      else if(diasParaProx>=-1 && diasParaProx<=2) categoria='falta';
-      else categoria='recentes';
 
       // Nível de fidelidade (volume realista pra TKTX SC: 1000-2000 pomadas/mês)
       let nivel='—',nivelEmoji='',nivelCor='#64748b';
@@ -18360,11 +18354,10 @@ async function loadRecompra(){  const w=document.getElementById('lista-recompra'
         ultimaData:ultimaData,
         diasDesdeUltimo:diasDesdeUltimo,
         intervaloMedio:intervaloMedio,
-        intervaloPrev:intervaloPrev,
-        estimado:estimado,
         qtdHabitual:qtdHabitual,
         diasParaProx:diasParaProx,
         dataPrevista:dataPrevista,
+        preliminar:preliminar,
         categoria:categoria,
         nivel:nivel,
         nivelEmoji:nivelEmoji,
@@ -18439,6 +18432,7 @@ function renderizarRecompra(){
   if(f==='atrasados') lista=lista.filter(c=>c.categoria==='atrasados');
   else if(f==='falta') lista=lista.filter(c=>c.categoria==='falta');
   else if(f==='recentes') lista=lista.filter(c=>c.categoria==='recentes');
+  else if(f==='novos') lista=lista.filter(c=>c.categoria==='primeira'||c.categoria==='formando');
   else if(f==='top'){lista.sort((a,b)=>b.totalUn-a.totalUn);lista=lista.slice(0,50);}
   
   // Filtro busca
@@ -18454,7 +18448,7 @@ function renderizarRecompra(){
   else if(ord==='antigo') lista.sort((a,b)=>b.diasDesdeUltimo-a.diasDesdeUltimo);
   else if(f==='todos' || ord==='urgencia'){
     // Ordenação por urgência: atrasados primeiro, depois falta, depois recentes
-    const ordem={atrasados:0,falta:1,recentes:2,novo:3};
+    const ordem={atrasados:0,falta:1,recentes:2,formando:3,primeira:4};
     lista.sort((a,b)=>{
       if(ordem[a.categoria]!==ordem[b.categoria]) return ordem[a.categoria]-ordem[b.categoria];
       // Dentro da mesma urgência, chama primeiro o cliente que mais vale ($$)
@@ -18494,14 +18488,15 @@ function renderizarRecompra(){
 }
 
 function renderCardCliente(c){
-  const corCat={atrasados:'#dc2626',falta:'#fbbf24',recentes:'#16a34a',novo:'#1d4ed8'}[c.categoria]||'#64748b';
+  const corCat={atrasados:'#dc2626',falta:'#fbbf24',recentes:'#16a34a',formando:'#2563eb',primeira:'#64748b'}[c.categoria]||'#64748b';
   const fmtData=(d)=>d?new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}):'—';
-  const prev=c.dataPrevista?(' · 📅 prevê '+fmtData(c.dataPrevista)+(c.estimado?' (estimado)':'')):'';
+  const prev=c.dataPrevista?(' · 📅 prevê '+fmtData(c.dataPrevista)+(c.preliminar?' (preliminar)':'')):'';
   const labelCat={
     atrasados:'🔴 ATRASADO há '+Math.abs(c.diasParaProx||0)+' dia'+(Math.abs(c.diasParaProx||0)!==1?'s':'')+prev,
-    falta:(c.diasParaProx<=0?'🟡 HOJE é o dia':c.diasParaProx===1?'🟡 Amanhã é o dia':'🟡 Faltam '+c.diasParaProx+' dias')+prev,
+    falta:(c.diasParaProx<=0?'🟡 Tá na hora (chama agora)':c.diasParaProx===1?'🟡 Amanhã é o dia':'🟡 Faltam '+c.diasParaProx+' dias')+prev,
     recentes:'🟢 Comprou há '+c.diasDesdeUltimo+' dia'+(c.diasDesdeUltimo!==1?'s':'')+prev,
-    novo:'🆕 Cliente novo'
+    formando:'🌱 Em formação ('+c.totalPedidos+'º pedido)'+prev,
+    primeira:'🆕 1ª compra · há '+c.diasDesdeUltimo+' dia'+(c.diasDesdeUltimo!==1?'s':'')
   }[c.categoria]||c.categoria;
   
   const ticketMedio=c.totalGasto/c.totalPedidos;
@@ -18534,7 +18529,7 @@ function renderCardCliente(c){
       '</div>'+
       '<div style="background:#ffffff;border-radius:6px;padding:8px;text-align:center;">'+
         '<div style="font-size:9px;color:#64748b;text-transform:uppercase;">Intervalo</div>'+
-        '<div style="font-size:13px;color:#475569;font-weight:500;">'+(c.intervaloMedio?c.intervaloMedio+' dias':(c.intervaloPrev?'~'+c.intervaloPrev+' dias':'—'))+'</div>'+
+        '<div style="font-size:13px;color:#475569;font-weight:500;">'+(c.intervaloMedio?c.intervaloMedio+' dias'+(c.preliminar?'*':''):'—')+'</div>'+
       '</div>'+
     '</div>'+
     
