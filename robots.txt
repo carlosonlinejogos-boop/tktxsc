@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /admin
-Disallow: /api/
+
+# Bloqueia páginas de conta/painel (não indexar área logada)
+Disallow: /redefinir
+Disallow: /indique
 
 Sitemap: https://www.tktxsc.com.br/sitemap.xml
