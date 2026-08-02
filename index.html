@@ -12201,7 +12201,14 @@ function mascararTel(tel){const v=tel.replace(/\D/g,'');if(v.length===11) return
 // Preço SEMPRE da tabela FAIXAS_PRECO (coluna anualUn) via calcularPrecos(qtd,'anual').
 // 6 opções de quantidade · frete cobrado (cotação real) · sem balm · sem cupom.
 // ============================================================
-window.PROMO_FIM=new Date(2026,6,31,23,59,59); // 31/07/2026 23:59
+// ⏰ A promoção fecha no ÚLTIMO DIA DO MÊS e se renova sozinha no dia 1º.
+// (02/08/26: a data era fixa em 31/07 e o site passou a mostrar "PROMOÇÃO ENCERRADA"
+// no topo — a compra continuava funcionando, mas quem chegava achava que tinha acabado
+// e ia embora. Nunca mais depender de data escrita na mão.)
+window.PROMO_FIM=(function(){
+  var d=new Date();
+  return new Date(d.getFullYear(), d.getMonth()+1, 0, 23, 59, 59);  // dia 0 do mês seguinte = último deste
+})();
 window.PROMO_OPCOES=[1,5,10,25,50,100];         // as 6 quantidades da promo
 // Estado da promoção (10un pré-selecionado · modelo Gold · frete ainda não escolhido)
 window.PROMOA={qtd:10,modelo:'gold',frete:null,balm:0};
@@ -12921,8 +12928,15 @@ function promoIniciarCountdown(){
   if(window._promoCountdownTimer) clearInterval(window._promoCountdownTimer);
   const el=document.getElementById('promo-countdown'); if(!el) return;
   const tick=()=>{
-    const diff=window.PROMO_FIM.getTime()-Date.now();
-    if(diff<=0){el.textContent='ENCERRADA';return;}
+    let diff=window.PROMO_FIM.getTime()-Date.now();
+    // 🛡️ Virou o mês com a aba aberta? recalcula pro fim do mês novo em vez de dizer
+    // "ENCERRADA" (o contador nunca pode desanimar quem chegou pra comprar).
+    if(diff<=0){
+      const _d=new Date();
+      window.PROMO_FIM=new Date(_d.getFullYear(),_d.getMonth()+1,0,23,59,59);
+      diff=window.PROMO_FIM.getTime()-Date.now();
+      if(diff<=0){el.textContent='ÚLTIMAS HORAS';return;}
+    }
     const dias=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
     const p=(n)=>String(n).padStart(2,'0');
     el.textContent=(dias>0?dias+'d ':'')+p(h)+':'+p(m)+':'+p(s);
