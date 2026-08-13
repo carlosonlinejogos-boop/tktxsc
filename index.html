@@ -1648,7 +1648,7 @@ textarea{resize:vertical;min-height:75px;}
     <div style="max-width:480px;margin:0 auto;display:flex;align-items:center;gap:12px;">
       <div style="flex:1;min-width:0;">
         <div id="lp-bar-label" style="font-size:10px;color:#64748b;letter-spacing:0.5px;text-transform:uppercase;font-weight:600;">A partir de</div>
-        <div id="lp-bar-value" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#0f172a;letter-spacing:0.5px;line-height:1;">R$ 28<span style="font-size:13px;color:#64748b;font-family:'DM Sans';font-weight:500;"> /un</span></div>
+        <div id="lp-bar-value" style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#0f172a;letter-spacing:0.5px;line-height:1;">R$ 20<span style="font-size:13px;color:#64748b;font-family:'DM Sans';font-weight:500;"> /un</span></div>
         <div id="lp-bar-unit" style="font-size:11px;color:#64748b;margin-top:2px;display:none;">R$ 35/un · economiza R$ 150</div>
       </div>
       <button id="lp-bar-btn" onclick="window.lpGoCheckout && window.lpGoCheckout()" style="background:#1E88E5;color:#fff;border:none;border-radius:12px;padding:14px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans';white-space:nowrap;box-shadow:0 4px 16px rgba(30,136,229,0.4);">COMPRAR →</button>
@@ -1684,7 +1684,7 @@ textarea{resize:vertical;min-height:75px;}
             <div class="lp-hero-price-from">a partir de</div>
             <div class="lp-hero-price-val">
               <span class="lp-hero-price-old">R$ 50</span>
-              <span class="lp-hero-price-new">R$ 28</span>
+              <span class="lp-hero-price-new">R$ 20</span>
               <span class="lp-hero-price-suffix">/un</span>
             </div>
           </div>
@@ -2259,7 +2259,7 @@ textarea{resize:vertical;min-height:75px;}
     <div class="lp-cta-final-inner">
       <h2 class="lp-cta-final-h">Pronto pra garantir sua TKTX original?</h2>
       <p>Loja oficial em Santa Catarina · Envio pra todo Brasil · Suporte humano</p>
-      <a class="lp-cta-final-btn" onclick="lpGoCheckout()" style="background:#fff;color:#1E88E5;display:inline-flex;text-decoration:none;">Comprar agora — a partir de R$ 28 →</a>
+      <a class="lp-cta-final-btn" onclick="lpGoCheckout()" style="background:#fff;color:#1E88E5;display:inline-flex;text-decoration:none;">Comprar agora — a partir de R$ 20 →</a>
     </div>
   </section>
 
@@ -2322,7 +2322,7 @@ textarea{resize:vertical;min-height:75px;}
       <button class="btn-auth" onclick="doLogin()">Entrar</button>
       <div class="auth-err" id="login-err">Usuário ou senha incorretos. Esqueceu? Toque em "Esqueci minha senha" logo abaixo.</div>
       <div style="text-align:center;margin-top:12px;display:flex;flex-direction:column;gap:8px;">
-        <span onclick="esqueciSenha()" style="font-size:13px;color:#2563eb;cursor:pointer;text-decoration:underline;">Esqueci minha senha</span>
+        <span onclick="esqueciSenha()" style="font-size:13px;color:#2563eb;cursor:pointer;text-decoration:underline;">Esqueci minha senha</span><span style="color:#cbd5e1;margin:0 6px;">·</span><span onclick="loginCodigoAbrir()" style="font-size:13px;color:#16a34a;cursor:pointer;text-decoration:underline;font-weight:600;">Entrar sem senha (código por email)</span>
         <span onclick="naoSeiMeuLogin()" style="font-size:13px;color:#64748b;cursor:pointer;text-decoration:underline;">Não sei qual é o meu login</span>
       </div>
     </div>
@@ -6911,6 +6911,109 @@ async function esqueciSenha(){
     console.warn('esqueciSenha:',e);
     if(confirm('⚠️ Não consegui enviar agora.\n\nQuer falar com a gente no WhatsApp pra resolver na hora?')) window.open(wa,'_blank');
   }
+}
+
+
+// ============ 🔐 ENTRAR COM CÓDIGO POR EMAIL (13/08/2026) ============
+// Cliente digita email/CPF/WhatsApp → recebe código de 6 dígitos no email
+// (o número vai no ASSUNTO) → digita → ENTRA. Regras todas no servidor
+// (edge login-codigo + RPCs): vale 10 min, morre em 5 erros, 1 por vez,
+// anti-flood 60s. Este bloco NÃO toca no doLogin — é um caminho paralelo.
+const LOGIN_CODIGO_URL='https://ohwvqnmcfbzdmnucvary.supabase.co/functions/v1/login-codigo';
+function loginCodigoAbrir(){
+  var ov=document.getElementById('login-codigo-ov'); if(ov) ov.remove();
+  ov=document.createElement('div'); ov.id='login-codigo-ov';
+  ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,0.82);display:flex;align-items:center;justify-content:center;padding:18px;font-family:\'DM Sans\',sans-serif;';
+  ov.innerHTML='<div style="background:#fff;border-radius:16px;max-width:400px;width:100%;padding:26px 22px;box-sizing:border-box;">'+
+    '<div style="text-align:center;"><div style="font-size:40px;">🔐</div>'+
+    '<div style="font-size:19px;font-weight:800;color:#0f172a;margin-top:6px;">Entrar com código</div>'+
+    '<div style="font-size:13px;color:#64748b;margin-top:6px;line-height:1.5;">Sem precisar de senha: a gente manda um código de 6 dígitos pro seu email.</div></div>'+
+    '<div id="lc-passo1" style="margin-top:16px;">'+
+      '<label style="font-size:12px;color:#475569;">Seu email, CPF ou WhatsApp</label>'+
+      '<input type="text" id="lc-contato" placeholder="seuemail@email.com" autocomplete="username" style="width:100%;box-sizing:border-box;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:15px;margin-top:4px;"/>'+
+      '<button id="lc-btn-enviar" onclick="loginCodigoEnviar()" style="width:100%;margin-top:12px;background:#16a34a;color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;">📧 Receber o código</button>'+
+    '</div>'+
+    '<div id="lc-passo2" style="margin-top:16px;display:none;">'+
+      '<div id="lc-enviado" style="font-size:13px;color:#15803d;background:#f0fdf4;border:1px solid #16a34a44;border-radius:10px;padding:10px 12px;line-height:1.5;"></div>'+
+      '<label style="font-size:12px;color:#475569;display:block;margin-top:12px;">Código de 6 dígitos</label>'+
+      '<input type="text" id="lc-codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" style="width:100%;box-sizing:border-box;padding:13px;border:1px solid #e5e7eb;border-radius:10px;font-size:24px;letter-spacing:8px;text-align:center;font-family:monospace;margin-top:4px;"/>'+
+      '<button id="lc-btn-entrar" onclick="loginCodigoEntrar()" style="width:100%;margin-top:12px;background:#16a34a;color:#fff;border:none;border-radius:10px;padding:14px;font-size:15px;font-weight:800;cursor:pointer;">Entrar</button>'+
+      '<button id="lc-btn-reenviar" onclick="loginCodigoEnviar()" disabled style="width:100%;margin-top:8px;background:transparent;border:none;color:#94a3b8;font-size:12px;cursor:pointer;text-decoration:underline;">reenviar código (60s)</button>'+
+    '</div>'+
+    '<div id="lc-msg" style="font-size:12.5px;margin-top:10px;display:none;border-radius:8px;padding:9px 12px;line-height:1.45;"></div>'+
+    '<button onclick="document.getElementById(\'login-codigo-ov\').remove()" style="width:100%;margin-top:12px;background:#f1f5f9;color:#475569;border:none;border-radius:10px;padding:11px;font-size:13px;cursor:pointer;">Fechar</button>'+
+  '</div>';
+  document.body.appendChild(ov);
+  try{ document.getElementById('lc-contato').focus(); }catch(e){}
+}
+function loginCodigoMsg(t,tipo){
+  var m=document.getElementById('lc-msg'); if(!m) return;
+  m.style.display='block'; m.textContent=t;
+  if(tipo==='erro'){ m.style.background='#fef2f2'; m.style.color='#b91c1c'; m.style.border='1px solid #fecaca'; }
+  else { m.style.background='#f0fdf4'; m.style.color='#15803d'; m.style.border='1px solid #bbf7d0'; }
+}
+function loginCodigoCooldown(){
+  var b=document.getElementById('lc-btn-reenviar'); if(!b) return;
+  var s=60; b.disabled=true;
+  var iv=setInterval(function(){
+    s--; if(!document.getElementById('lc-btn-reenviar')){ clearInterval(iv); return; }
+    if(s<=0){ clearInterval(iv); b.disabled=false; b.textContent='reenviar código'; b.style.color='#2563eb'; }
+    else b.textContent='reenviar código ('+s+'s)';
+  },1000);
+}
+async function loginCodigoEnviar(){
+  var c=(document.getElementById('lc-contato')||{}).value||''; c=c.trim();
+  if(c.length<5){ loginCodigoMsg('Digite seu email, CPF ou WhatsApp completo.','erro'); return; }
+  var b1=document.getElementById('lc-btn-enviar'); if(b1){ b1.disabled=true; b1.textContent='Enviando...'; }
+  try{
+    var r=await fetch(LOGIN_CODIGO_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'enviar',contato:c})});
+    var d=await r.json().catch(function(){return{};});
+    // conta SEM email próprio → WhatsApp (único caso que a edge v2 distingue, de propósito)
+    if(d&&d.ok&&d.tem_email===false){
+      loginCodigoMsg('Sua conta não tem email cadastrado, então não dá pra mandar o código. Chama a gente no WhatsApp (47) 9244-4477 que a gente resolve na hora — ou entre com sua senha.','erro');
+      if(b1){ b1.disabled=false; b1.textContent='📧 Receber o código'; } return;
+    }
+    // 🔒 anti-enumeração: a edge responde IGUAL pra "achou" e "não achou" e NÃO revela
+    // o email de ninguém. Por isso a tela não afirma que a conta existe — só instrui.
+    if(d&&d.ok){
+      document.getElementById('lc-passo1').style.display='none';
+      document.getElementById('lc-passo2').style.display='block';
+      document.getElementById('lc-enviado').innerHTML='📬 Se existe uma conta com esse dado e um email cadastrado, o código já foi enviado pra lá.<br>O número vai no <b>assunto</b> do email. Não achou? Olha no <b>Spam</b>.';
+      var m=document.getElementById('lc-msg'); if(m) m.style.display='none';
+      loginCodigoCooldown();
+      try{ document.getElementById('lc-codigo').focus(); }catch(e){}
+      return;
+    }
+    loginCodigoMsg('Não consegui enviar agora. Tenta de novo em instantes ou chama no WhatsApp.','erro');
+  }catch(e){ loginCodigoMsg('Sem conexão agora. Tenta de novo em instantes.','erro'); }
+  if(b1){ b1.disabled=false; b1.textContent='📧 Receber o código'; }
+}
+async function loginCodigoEntrar(){
+  var c=((document.getElementById('lc-contato')||{}).value||'').trim();
+  var cod=((document.getElementById('lc-codigo')||{}).value||'').replace(/\D/g,'');
+  if(cod.length!==6){ loginCodigoMsg('O código tem 6 números — confere no email (tá no assunto).','erro'); return; }
+  var b=document.getElementById('lc-btn-entrar'); if(b){ b.disabled=true; b.textContent='Conferindo...'; }
+  try{
+    var r=await fetch(LOGIN_CODIGO_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'entrar',contato:c,codigo:cod})});
+    var d=await r.json().catch(function(){return{};});
+    if(d&&d.ok&&d.conta&&d.conta.id){
+      // 🔓 MESMO desfecho do doLogin (espelhado linha a linha — nada inventado)
+      CU={...d.conta}; IA=false;
+      salvarSessao({admin:false,id:d.conta.id,token:d.conta.session_token,criado:Date.now()});
+      try{ limparRateLimit('login'); }catch(e){}
+      try{ await sb.from('acessos').insert({assinante_id:d.conta.id}); }catch(e){}
+      var o=document.getElementById('login-codigo-ov'); if(o) o.remove();
+      showApp(); try{ startCheck(); }catch(e){}
+      try{ setTimeout(pedirEmailPopup,500); }catch(e){}
+      return;
+    }
+    var erro=(d&&d.erro)||'';
+    if(erro==='errado') loginCodigoMsg('Código errado. Você ainda tem '+(d.restantes!=null?d.restantes:'algumas')+' tentativa(s). Confere o número no assunto do email.','erro');
+    else if(erro==='expirado') loginCodigoMsg('Esse código venceu (vale 10 minutos). Toca em \"reenviar código\" pra receber outro.','erro');
+    else if(erro==='bloqueado'||erro==='sem_codigo') loginCodigoMsg('Esse código não vale mais. Toca em \"reenviar código\" pra receber um novo.','erro');
+    else loginCodigoMsg('Não deu certo agora. Tenta de novo ou chama no WhatsApp (47) 9244-4477.','erro');
+  }catch(e){ loginCodigoMsg('Sem conexão agora. Tenta de novo em instantes.','erro'); }
+  if(b){ b.disabled=false; b.textContent='Entrar'; }
 }
 
 function showRedefinir(){
