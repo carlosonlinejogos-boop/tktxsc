@@ -64,7 +64,7 @@ html.t0112 .lp-plans-grid, html.t0112 .np-plans-grid{grid-template-columns:minma
     <text x="600" y="510" text-anchor="middle" font-family="Arial,sans-serif" font-size="34" letter-spacing="18" fill="#64748b">OFICIAL</text>
   </svg>
 </template>
-<meta name="description" content="Pomada TKTX Gold original, com 29% de lidocaína e 6 a 8 horas de efeito. Loja oficial em Santa Catarina, envio pra todo o Brasil com rastreio.">
+<meta name="description" content="Pomada TKTX Gold Alumínio original, com 25% de lidocaína e 6 a 8 horas de efeito. Loja oficial em Santa Catarina, envio pra todo o Brasil com rastreio.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://www.tktxsc.com.br/">
 
@@ -79,7 +79,7 @@ html.t0112 .lp-plans-grid, html.t0112 .np-plans-grid{grid-template-columns:minma
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Pomada Anestésica TKTX SC — Loja Oficial no Brasil">
-<meta property="og:description" content="Pomada TKTX Gold original, com 29% de lidocaína e 6 a 8 horas de efeito. Postamos em até 2 dias úteis, de SC pra todo o Brasil.">
+<meta property="og:description" content="Pomada TKTX Gold Alumínio original, com 25% de lidocaína e 6 a 8 horas de efeito. Postamos em até 2 dias úteis, de SC pra todo o Brasil.">
 <meta property="og:url" content="https://www.tktxsc.com.br/">
 <meta property="og:image" content="https://www.tktxsc.com.br/pomada-tktxsc-gold.png">
 <meta property="og:image:width" content="1200">
@@ -2580,7 +2580,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
       <div class="lp-hero-text">
         <div class="lp-pill">A loja oficial TKTX no Brasil</div>
         <h1 class="lp-headline">Tatuagem, micro ou depilação<br>sem <em>sentir dor</em>.</h1>
-        <p class="lp-subhead">Pomada TKTX Gold original: <b>29% de lidocaína</b> e <b>6 a 8 horas de efeito</b>. Enviamos de Santa Catarina pra todo o Brasil, com rastreio.</p>
+        <p class="lp-subhead">Pomada TKTX Gold Alumínio original: <b>25% de lidocaína</b> e <b>6 a 8 horas de efeito</b>. Enviamos de Santa Catarina pra todo o Brasil, com rastreio.</p>
         <div class="lp-hero-price">
           <div>
             <div class="lp-hero-price-from">a partir de</div>
@@ -10699,7 +10699,8 @@ function umModeloAplicar(){
   // capa: /hero-<id>.png só depois de carregar. Se o arquivo não abrir, a capa dos 4 NÃO volta: aparece a ficha em texto
   // do modelo (o .placeholder que já existe, reescrito). Nunca imagem quebrada.
   try{
-    if(!lidoDe(m)) _umHtml(q('p.lp-subhead'),'Pomada TKTX original: <b>6 a 8 horas de efeito</b>. Enviamos de Santa Catarina pra todo o Brasil, com rastreio.');   // LIDO-GOLD-2311: a capa só cita percentual do modelo que tem
+    if(!lidoDe(m)) _umHtml(q('p.lp-subhead'),'Pomada TKTX original: <b>6 a 8 horas de efeito</b>. Enviamos de Santa Catarina pra todo o Brasil, com rastreio.');
+    else _umHtml(q('p.lp-subhead'),'Pomada '+m.nome+' original: <b>'+lidoDe(m)+'</b> e <b>6 a 8 horas de efeito</b>. Enviamos de Santa Catarina pra todo o Brasil, com rastreio.');   // GOLD-ALU-2611b   // LIDO-GOLD-2311: a capa só cita percentual do modelo que tem
     _umEsconde(q('a.lp-hero-modelos'));                                      // "ou ver os 4 modelos →"
     var img=q('#lpCarouselTrack .lp-slide img'), vid=q('.bnrv-wrap video.bnrv-video');
     var ph=q('#lpCarouselTrack .lp-slide .placeholder');
