@@ -32575,7 +32575,7 @@ async function abChamarWhats(id){
   if(!window.CW_FILA_EM||Date.now()-window.CW_FILA_EM>60000){ try{ await cwCarregarFila(); }catch(e){} }
   var naFila=(window.CW_FILA||[]).find(function(x){ return waTelNorm(x.telefone)===alvo; })||null;
   // 🛒 05/10: manda a DATA do carrinho — sem ela a trava tratava qualquer compra antiga como "já comprou" (cliente de 69 dias não dava pra chamar)
-  var fato=await cwConferirAgora({carrinho_id:id,telefone:tel,email:car.email||(naFila&&naFila.email)||'',criado_em:car.criado_em||(naFila&&naFila.criado_em)||null});
+  var fato=await cwConferirAgora({carrinho_id:id,telefone:tel,email:car.email||(naFila&&naFila.email)||'',criado_em:car.criado_em||(naFila&&naFila.criado_em)||null,valor:(car.valor_estimado!=null?car.valor_estimado:(naFila?naFila.valor:null))});   // CARRINHO-FRENTE-2611: o valor decide a regra dos 7 dias
   var travou=cwFatoBloqueio(fato);
   if(travou){ alert(travou); try{ cwCarregarFila(); }catch(e){} return {aberto:false,motivo:'fato'}; }
   // 🛑 08/10 FREIO DO WHATSAPP (empresa: "dá um jeito de não ser bloqueado mais"). Muda a regra de 14/09 SÓ pra gente nova:
@@ -38662,7 +38662,12 @@ async function cwConferirAgora(c){
     // ultima_compra). Sem criado_em no carrinho, qualquer compra bloqueia (conservador).
     var pago=function(p){ return p.status==='confirmado'||!!p.confirmado_em||!!p.pago_em; };
     var quando=function(p){ return Math.max.apply(null,[p.criado_em,p.confirmado_em,p.pago_em].map(function(d){ var t=d?new Date(d).getTime():NaN; return isFinite(t)?t:-Infinity; })); };
-    var desde=c.criado_em?new Date(c.criado_em).getTime()-7*86400000:NaN;
+    // 🛒 CARRINHO-FRENTE-2611 (26/11, TKTX: "se ele acabou de tentar comprar é hora de chamar"): carrinho com valor > 0 montado
+    // DEPOIS da compra paga é carrinho novo. Só bloqueia a compra de 30 min antes dele em diante (é o próprio pedido, a mesma folga
+    // da admin_carrinhos_abandonados). Os 7 dias ANTES continuam só pro carrinho de R$ 0 ou sem valor (só voltou pra ver o pedido).
+    var temValor=Number(c.valor!=null?c.valor:c.valor_estimado)>0;
+    out.carrinhoComValor=temValor;
+    var desde=c.criado_em?new Date(c.criado_em).getTime()-(temValor?30*60000:7*86400000):NaN;
     out.comprou=peds.find(function(p){ return pago(p)&&(isNaN(desde)||quando(p)>=desde); })||null;
     out.compraAntes=peds.find(function(p){ return pago(p)&&!isNaN(desde)&&quando(p)<desde; })||null;
     var rc=await sb.from('carrinhos_abandonados').select('id,finalizado,finalizado_em,recuperado,criado_em,atualizado_em,origem').in('telefone',tels).order('atualizado_em',{ascending:false}).limit(50);
@@ -38678,7 +38683,9 @@ async function cwConferirAgora(c){
 }
 // '' ou por que NÃO mandar: já comprou, ou o carrinho da fila virou pedido / foi marcado recuperado
 function cwFatoBloqueio(f){
-  if(f.comprou) return '✅ Essa pessoa já comprou (pedido #'+f.comprou.id+'). Não é carrinho abandonado: não mandei.';
+  if(f.comprou) return f.carrinhoComValor   // CARRINHO-FRENTE-2611
+    ? '✅ Essa pessoa pagou o pedido #'+f.comprou.id+' junto ou depois de montar esse carrinho. Não é carrinho abandonado: não mandei.'
+    : '✅ Essa pessoa já comprou (pedido #'+f.comprou.id+'). Não é carrinho abandonado: não mandei.';
   var k=f.carrinho;
   if(k&&k.finalizado) return '✅ Esse carrinho virou pedido'+(k.finalizado_em?' ('+waDataSP(k.finalizado_em)+' às '+waHoraSP(k.finalizado_em)+')':'')+'. Não mandei: se o pedido estiver aguardando, cobre pelo card dele em 🛒 Pedidos Loja.';
   if(k&&k.recuperado) return '✅ Esse carrinho foi marcado como recuperado. Não mandei.';
