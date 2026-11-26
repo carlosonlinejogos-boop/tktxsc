@@ -2521,7 +2521,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
     <button onclick="navPublico('inicio')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🏠 Início</button>
     <button onclick="navPublico('comprar')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🛒 Comprar</button>
     <button id="tn-cartuchos" onclick="navPublico('cartuchos')" style="display:none;background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">📦 Cartuchos WJX</button><!-- 🔩 CARTUCHO-1911 -->
-    <button onclick="navPublico('planos')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">⭐ Planos</button>
+    <button onclick="navPublico('planos')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;"><!--VARREDURA-0112--><span class="t12-old">⭐ Planos</span><span class="t12-new">⭐ Plano Anual</span></button>
     <button onclick="navPublico('rifa')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🎯 Rifa</button>
     <button onclick="navPublico('provas')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🛡️ Provas</button>
     <button onclick="navPublico('quiz')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">❓ Quiz</button>
@@ -2535,7 +2535,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
     <button onclick="navPublico('inicio')">🏠 Início</button>
     <button onclick="navPublico('comprar')">🛒 Comprar</button>
     <button id="tn-menu-cartuchos" onclick="navPublico('cartuchos')" style="display:none;">📦 Cartuchos WJX</button><!-- 🔩 CARTUCHO-1911 -->
-    <button onclick="navPublico('planos')">⭐ Planos</button>
+    <button onclick="navPublico('planos')"><!--VARREDURA-0112--><span class="t12-old">⭐ Planos</span><span class="t12-new">⭐ Plano Anual</span></button>
     <button onclick="navPublico('rifa')">🎯 Rifa</button>
     <button onclick="navPublico('provas')">🛡️ Provas</button>
     <button onclick="navPublico('quiz')">❓ Quiz</button>
@@ -2733,7 +2733,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
             <div class="lp-model-placeholder gold-ph" style="display:none;">TKTX<br><span style="font-size:14px;">GOLD 10g</span></div>
           </div>
           <div class="lp-model-info">
-            <h3 class="lp-model-name lp-model-name-gold">TKTX GOLD <span>99%</span></h3>
+            <h3 class="lp-model-name lp-model-name-gold">TKTX GOLD <span>ALUMÍNIO</span></h3>
             <div class="lp-model-specs">
               <div class="lp-model-spec"><span>6-8h</span> de efeito</div>
               <div class="lp-model-spec"><span>•</span> Tubo de alumínio</div>
@@ -3215,7 +3215,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
   <section class="lp-section" id="lp-planos">
     <div class="lp-section-inner">
       <div class="lp-section-head">
-        <div class="lp-section-eyebrow">Planos de assinatura</div>
+        <div class="lp-section-eyebrow"><!--VARREDURA-0112--><span class="t12-old">Planos de assinatura</span><span class="t12-new">Plano de assinatura</span></div>
         <h2 class="lp-section-title">Compra sempre? Vira assinante.</h2>
         <p class="lp-section-sub"><!--TABELA-0112--><span class="t12-old">Quanto maior o plano, mais barata a pomada.</span><span class="t12-new">No plano Anual a pomada sai mais barata em toda compra.</span> Peça quando quiser, sem espera, e ganhe 1 pomada grátis na adesão.</p>
       </div>
@@ -3334,7 +3334,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
   <footer class="lp-footer">
     <nav aria-label="Navegação do rodapé" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:16px;font-size:13px;">
       <a href="/comprar" onclick="navPublico('comprar');return false;" style="color:#475569;text-decoration:none;">Comprar TKTX</a>
-      <a href="/planos" onclick="navPublico('planos');return false;" style="color:#475569;text-decoration:none;">Planos de assinatura</a>
+      <a href="/planos" onclick="navPublico('planos');return false;" style="color:#475569;text-decoration:none;"><!--VARREDURA-0112--><span class="t12-old">Planos de assinatura</span><span class="t12-new">Plano de assinatura</span></a>
       <a href="/provas" onclick="navPublico('provas');return false;" style="color:#475569;text-decoration:none;">Provas · Loja oficial</a>
       <a href="/rifa" onclick="navPublico('rifa');return false;" style="color:#475569;text-decoration:none;">Rifa</a>
     </nav>
@@ -5050,7 +5050,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
       </div>
       <details class="np-faq-item" open>
         <summary>E se eu não usar tudo que o plano oferece?</summary>
-        <div class="np-faq-body">Mesmo se você usar só <b>metade</b> dos benefícios, ainda compensa. O cálculo é simples: a economia por pomada + a pomada de brinde por si só <b>pagam o plano</b>. Se ainda assim não rolar pra você, é só não renovar — sem multa, sem letra miúda.</div>
+        <div class="np-faq-body"><!--VARREDURA-0112--><span class="t12-old">Mesmo se você usar só <b>metade</b> dos benefícios, ainda compensa. O cálculo é simples: a economia por pomada + a pomada de brinde por si só <b>pagam o plano</b>. Se ainda assim não rolar pra você, é só não renovar — sem multa, sem letra miúda.</span><span class="t12-new">Depende de quanto você compra: a calculadora acima mostra se o plano <b>Anual</b> compensa pra você. Se não compensar, compre sem plano — sem multa, sem letra miúda.</span></div>
       </details>
       <details class="np-faq-item">
         <summary>Posso cancelar a qualquer momento?</summary>
@@ -5654,7 +5654,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
             <div class="ct" style="margin-bottom:0;">🎁 Kits Surpresa</div>
             <button onclick="abrirNovoKitSurpresa()" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;font-family:'DM Sans';">+ Novo kit</button>
           </div>
-          <div style="font-size:12px;color:#64748b;margin-bottom:1rem;line-height:1.5;">Crie kits promocionais com estoque limitado. Aparecem só para assinantes Semestral e Anual.</div>
+          <div style="font-size:12px;color:#64748b;margin-bottom:1rem;line-height:1.5;"><!--VARREDURA-0112--><span class="t12-old">Crie kits promocionais com estoque limitado. Aparecem só para assinantes Semestral e Anual.</span><span class="t12-new">Crie kits promocionais com estoque limitado. Aparecem só para assinantes do plano Anual.</span></div>
           <div id="lista-kits-adm"><div class="es">🔄 Carregando...</div></div>
         </div>
       </div>
@@ -6612,6 +6612,11 @@ async function _verificarAssinanteExistente1(k){
     const agora=new Date();
     const ass=data.find(a=>a.ativo&&a.vencimento&&new Date(a.vencimento)>agora);
     if(!ass){wrap.innerHTML='';cpClienteJaAss=false;_cpZerarAssinante();return;}   // ASSIN-2311 A5
+    if(window.T0112&&window.t12Sai&&t12Sai(ass.plano||'mensal')){   // VARREDURA-0112: plano antigo (Mensal/Semestral) paga o preço sem plano
+      cpClienteJaAss=false; _cpZerarAssinante();
+      wrap.innerHTML='<div class="cliente-existe-card" style="background:#fef3c7;border:1.5px solid #fbbf24;"><div class="cliente-existe-title" style="color:#92400e;">👋 Olá '+String(ass.nome||'').split(' ')[0]+'!</div><div class="cliente-existe-desc" style="color:#92400e;margin-bottom:0;">Seu plano atual não dá mais desconto: desde 01/12 o preço de assinante é só do plano <b>Anual</b>. Este pedido sai no preço normal, ou assine o Anual aqui embaixo.</div></div>';
+      return;
+    }
     
     if(cpDescontoAtivo&&cpClienteAssData&&cpClienteAssData.id!==ass.id) _cpZerarAssinante();   // ASSIN-2311 A5: outra conta → ativa de novo
     cpClienteJaAss=true;
@@ -8086,7 +8091,7 @@ async function renderHistoricoPedidos(){
 window._repetirState=null;
 
 // ASSIN-2311 A4: plano em dia do cliente logado (mesma régua do Fazer Pedido / pvPlanoVigente: vencimento > agora)
-function _repetirPlanoVig(){ try{ if(typeof CU==='undefined'||!CU||IA) return null; return (CU.vencimento&&new Date(CU.vencimento)>new Date())?(CU.plano||'mensal'):null; }catch(e){ return null; } }
+function _repetirPlanoVig(){ try{ if(typeof CU==='undefined'||!CU||IA) return null; var _p=(CU.vencimento&&new Date(CU.vencimento)>new Date())?(CU.plano||'mensal'):null; return (_p&&window.t12Escolha)?t12Escolha(_p):_p; /*VARREDURA-0112: plano antigo = preço sem plano*/ }catch(e){ return null; } }
 // ASSIN-2311 A1: o Repetir da tela inicial só tem o nº do pedido: busca o pedido e chama o repetirPedido com os MESMOS argumentos do botão de Meus Pedidos
 async function repetirPedidoPorId(id){
   let lista=Array.isArray(window._homePedidosCache)?window._homePedidosCache:[];
@@ -9239,21 +9244,21 @@ function _assinPlanosTxt(){
   }catch(e){ return fim; }
 }
 function renderBloqueioRenovar(titulo,desc){
-  const wppMsg=encodeURIComponent('Olá! Quero renovar meu plano TKTX SC. Meu usuário é '+(CU?.usuario||''));
+  const wppMsg=encodeURIComponent((window.T0112?'Olá! Quero assinar o plano Anual TKTX SC. Meu usuário é ':'Olá! Quero renovar meu plano TKTX SC. Meu usuário é ')/*VARREDURA-0112*/+(CU?.usuario||''));
   return '<div style="background:linear-gradient(135deg,#fef3c7,#fef3c7);border:1.5px solid #fbbf24;border-radius:14px;padding:1.5rem;text-align:center;margin:1rem 0;">'+
     '<div style="font-size:42px;margin-bottom:8px;">🔒</div>'+
     '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:#0f172a;letter-spacing:1px;line-height:1.2;margin-bottom:6px;">'+(titulo||'Recurso exclusivo de assinantes')+'</div>'+
     '<div style="font-size:13px;color:#475569;line-height:1.5;margin-bottom:14px;">'+(desc||'Seu período de teste acabou. Renove seu plano pra desbloquear esse recurso.')+'</div>'+
     '<div style="background:#ffffff;border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:#64748b;line-height:1.6;">'+
       '✅ Ferramentas de IA (Pós-tat, Orçamento, Roteiro, Atendente)<br>'+
-      '✅ Kit Mensal com preço de assinante<br>'+
+      '✅ '+(window.T0112?'Pomada mais barata em toda compra (plano Anual)':'Kit Mensal com preço de assinante')/*VARREDURA-0112*/+'<br>'+
       '✅ 20% off em todas as rifas<br>'+
       '✅ 1 pomada de brinde no 1º pagamento'+
     '</div>'+
     '<a href="https://wa.me/554792444477?text='+wppMsg+'" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.5px;">⭐ RENOVAR PLANO PELO WHATSAPP</a>'+
   '</div>';
 }
-function isAss(){if(!CU||IA)return false;return !!(CU.vencimento&&new Date(CU.vencimento)>new Date());}   // ASSIN-2311 A3: só plano em dia (mesma régua de rjAssinante/pvPlanoVigente)
+function isAss(){if(!CU||IA)return false;if(window.t12Sai&&t12Sai(CU.plano||'mensal'))return false;/*VARREDURA-0112: plano antigo = sem plano (rifa sem os 20%)*/return !!(CU.vencimento&&new Date(CU.vencimento)>new Date());}   // ASSIN-2311 A3: só plano em dia (mesma régua de rjAssinante/pvPlanoVigente)
 
 // === Sessão persistente (localStorage) ===
 function salvarSessao(obj){try{localStorage.setItem('tktxsc_sess',JSON.stringify(obj));}catch(e){}}
@@ -10035,21 +10040,22 @@ function renderTBanner(){
     if(diasFalta>0&&diasFalta<=5){
       const isCritico=diasFalta<=2;
       const tel=CU.telefone||'';
-      const msgRenovar=encodeURIComponent('Olá! Quero renovar minha assinatura TKTX SC. Meu usuário é '+CU.usuario);
+      const msgRenovar=encodeURIComponent(((window.t12Sai&&t12Sai(CU.plano||'mensal'))?'Olá! Quero assinar o plano Anual TKTX SC. Meu usuário é ':'Olá! Quero renovar minha assinatura TKTX SC. Meu usuário é ')/*VARREDURA-0112*/+CU.usuario);
       const linkRenovar='https://wa.me/'+WPP+'?text='+msgRenovar;
       const cor=isCritico?'#f87171':'#fbbf24';
       const bgCor=isCritico?'#fee2e2':'#fef3c7';
       const borderCor=isCritico?'#dc262644':'#fbbf2444';
       const icone=isCritico?'⚠️':'⏰';
-      const titulo=isCritico?'URGENTE: Renove sua assinatura!':'Sua assinatura está acabando!';
-      const subTxt=isCritico?'Faltam <b>'+diasFalta+' dia'+(diasFalta!==1?'s':'')+'</b> para vencer. Renove agora para não perder Kit e Rifa.':'Faltam <b>'+diasFalta+' dias</b> para vencer. Renove e continue aproveitando!';
+      const _vzAnt=!!(window.t12Sai&&t12Sai(CU.plano||'mensal'));   // VARREDURA-0112: Mensal/Semestral não se renovam mais
+      const titulo=_vzAnt?'Seu plano está acabando':(isCritico?'URGENTE: Renove sua assinatura!':'Sua assinatura está acabando!');
+      const subTxt=_vzAnt?'Faltam <b>'+diasFalta+' dia'+(diasFalta!==1?'s':'')+'</b>. Para continuar com desconto, assine o plano Anual.'/*VARREDURA-0112*/:isCritico?'Faltam <b>'+diasFalta+' dia'+(diasFalta!==1?'s':'')+'</b> para vencer. Renove agora para não perder Kit e Rifa.':'Faltam <b>'+diasFalta+' dias</b> para vencer. Renove e continue aproveitando!';
       w.innerHTML='<div style="background:'+bgCor+';border:1px solid '+borderCor+';border-radius:10px;padding:12px 16px;margin-bottom:1rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">'+
         '<div style="font-size:24px;">'+icone+'</div>'+
         '<div style="flex:1;min-width:200px;">'+
           '<div style="font-size:13px;font-weight:500;color:'+cor+';margin-bottom:2px;">'+titulo+'</div>'+
           '<div style="font-size:12px;color:#64748b;line-height:1.4;">'+subTxt+'</div>'+
         '</div>'+
-        '<a href="'+linkRenovar+'" target="_blank" style="background:'+cor+';color:#0f172a;text-decoration:none;font-size:12px;font-weight:500;padding:8px 14px;border-radius:8px;white-space:nowrap;">📲 Renovar agora</a>'+
+        '<a href="'+linkRenovar+'" target="_blank" style="background:'+cor+';color:#0f172a;text-decoration:none;font-size:12px;font-weight:500;padding:8px 14px;border-radius:8px;white-space:nowrap;">'+(_vzAnt?'📲 Assinar o Anual':'📲 Renovar agora')/*VARREDURA-0112*/+'</a>'+
       '</div>';
       return;
     }
@@ -10185,7 +10191,7 @@ async function renderKit(){
   const bl=lim.bloqueado;
   document.getElementById('btn-kit').disabled=bl;
   document.getElementById('btn-kit').style.display='';// reset (caso tenha sido escondido em trial expirado)
-  document.getElementById('kit-grid').innerHTML=renderSeletorQtd({prefix:'kit',qtd:KS||1,assinante:true,disabled:bl,onChangeFn:'kitSetQtd',maxUnidades:lim.maxUnidades,plano:(CU&&CU.plano)||'mensal'});
+  document.getElementById('kit-grid').innerHTML=renderSeletorQtd({prefix:'kit',qtd:KS||1,assinante:!(window.t12Sai&&t12Sai((CU&&CU.plano)||'mensal'))/*VARREDURA-0112*/,disabled:bl,onChangeFn:'kitSetQtd',maxUnidades:lim.maxUnidades,plano:(CU&&CU.plano)||'mensal'});
   
   if(bl){
     document.getElementById('pag-pix').classList.add('dis');
@@ -10670,9 +10676,34 @@ function umRifaFoto(r){ var m=modeloUnico(); return (r&&r.banner_url)||(m?m.foto
 function umModeloLinha(m,prefix,disabled){
   var off=disabled?'pointer-events:none;opacity:0.55;':'';
   return '<div id="'+prefix+'-um-modelo" style="'+off+'display:flex;align-items:center;gap:12px;background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;margin-top:10px;text-align:left;">'+
-    '<img src="'+m.foto+'" alt="'+m.nome+'" width="56" height="56" loading="lazy" style="width:56px;height:56px;flex:0 0 56px;object-fit:contain;border-radius:10px;background:linear-gradient(180deg,#ffffff,#f1f5f9);" onerror="this.style.display=\'none\';">'+
+    '<img src="'+m.foto+'" alt="'+m.nome+'" width="56" height="56" loading="lazy" onclick="verCaixaModelo(\''+m.id+'\')" style="cursor:zoom-in;pointer-events:auto;opacity:1;width:56px;height:56px;flex:0 0 56px;object-fit:contain;border-radius:10px;background:linear-gradient(180deg,#ffffff,#f1f5f9);" onerror="this.style.display=\'none\';">'+
     '<div style="min-width:0;line-height:1.35;"><div style="font-size:14px;font-weight:800;color:'+m.cor+';">'+m.nome+'</div>'+
-    '<div style="font-size:12px;color:#64748b;margin-top:2px;">'+(lidoDe(m)?'<b style="color:#0f172a;">'+lidoDe(m)+'</b> · ':'')+'🌸 creme rosa · ⏱️ 6 a 8 h · tubo de '+m.tubo+(m.tubo==='plástico'?' que não amassa':'')+'</div></div></div>';
+    '<div style="font-size:12px;color:#64748b;margin-top:2px;">'+(lidoDe(m)?'<b style="color:#0f172a;">'+lidoDe(m)+'</b> · ':'')+'🌸 creme rosa · ⏱️ 6 a 8 h · tubo de '+m.tubo+(m.tubo==='plástico'?' que não amassa':'')+'</div>'+
+    '<button type="button" onclick="verCaixaModelo(\''+m.id+'\')" style="pointer-events:auto;opacity:1;margin-top:6px;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid '+m.bd+';background:'+m.bg+';color:'+m.cor+';font-size:13px;font-weight:800;cursor:pointer;">🔍 Ver a caixa que você recebe</button>'+   // VER-CAIXA-2611
+    '</div></div>';
+}
+// VER-CAIXA-2611 (empresa 26/11: "dar a opção da pessoa ver a imagem… pra não falar depois que achou que era 99%"):
+// foto grande da caixa de verdade, com o nome e o percentual do modelo. Fecha no X, no fundo, no Entendi ou no Esc.
+function verCaixaModelo(id){
+  try{
+    var m=null; for(var i=0;i<MODELOS.length;i++){ if(MODELOS[i].id===id){ m=MODELOS[i]; break; } }
+    if(!m) return;
+    var velho=document.getElementById('ver-caixa-ov'); if(velho) velho.remove();
+    var ov=document.createElement('div'); ov.id='ver-caixa-ov';
+    ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label','Caixa da '+m.nome);
+    ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.82);display:flex;align-items:center;justify-content:center;padding:16px;';
+    ov.innerHTML='<div style="background:#fff;border-radius:16px;max-width:560px;width:100%;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);text-align:center;position:relative;">'+
+      '<button type="button" aria-label="Fechar" onclick="document.getElementById(\'ver-caixa-ov\').remove()" style="position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:22px;background:#f1f5f9;font-size:20px;font-weight:900;color:#0f172a;cursor:pointer;">✕</button>'+
+      '<div style="font-size:16px;font-weight:900;color:'+m.cor+';margin:6px 44px 10px;">Esta é a caixa que você recebe</div>'+
+      '<img src="'+m.foto+'" alt="Caixa da '+m.nome+'" style="width:100%;height:auto;max-height:60vh;object-fit:contain;border-radius:12px;background:#fff;">'+
+      '<div style="font-size:15px;font-weight:800;color:#0f172a;margin-top:10px;">'+m.nome+'</div>'+
+      '<div style="font-size:13px;color:#475569;margin-top:4px;line-height:1.4;">'+(lidoDe(m)?'<b>'+lidoDe(m)+'</b> · ':'')+'creme rosa · tubo de '+m.tubo+'</div>'+
+      '<button type="button" onclick="document.getElementById(\'ver-caixa-ov\').remove()" style="margin-top:14px;min-height:44px;padding:0 22px;border:0;border-radius:12px;background:#2563eb;color:#fff;font-size:14px;font-weight:800;cursor:pointer;">Entendi</button>'+
+      '</div>';
+    ov.addEventListener('click',function(e){ if(e.target===ov) ov.remove(); });
+    document.addEventListener('keydown',function esc(e){ if(e.key==='Escape'){ var o=document.getElementById('ver-caixa-ov'); if(o) o.remove(); document.removeEventListener('keydown',esc); } });
+    document.body.appendChild(ov);
+  }catch(e){}
 }
 // ── partes FIXAS da página (capa, vitrine, FAQ, /promo, /planos): o original fica guardado na memória e volta igualzinho ──
 var _umReg=[];
@@ -12156,6 +12187,7 @@ function atualizaKitResumo(){
 }
 
 async function solKit(){
+  if(window.vz12Virou&&vz12Virou()) return;   // VARREDURA-0112: aba aberta antes de 01/12 00:00 recarrega com a tabela nova
   const nome=document.getElementById('kit-nome').value.trim();
   if(!nome){alert('Digite seu nome.');return;}
   if(!KS||KS<1){alert('Selecione a quantidade.');return;}
@@ -12196,11 +12228,11 @@ async function solKit(){
   const enderecoTxt=(kitEnderecoData&&kitEnderecoData.cep===cep.replace(/\D/g,''))?(kitEnderecoData.rua+', '+kitEnderecoData.bairro+', '+kitEnderecoData.cidade+', CEP '+cep):'CEP '+cep;   // 📍 05/10: o endereço do ViaCEP só vale se for DESTE CEP
   await sb.from('pedidos_kit').insert({assinante_id:CU.id,nome_tatuador:nome,kit_unidades:k.un,kit_preco:k.p,valor_frete:valorFrete,valor_total:total,pagamento:PS==='pix'?'Pix':'Cartão',status:'aguardando'});
   // Rifa (order bump): salva as cotas que o cliente escolheu junto do pedido
-  try{await rifaBumpSalvarParticipantes('kit',{nome:nome,telefone:(CU&&CU.telefone)||'',cpf:(CU&&CU.cpf)||null,ehAssinante:true});}catch(e){console.warn('rifa kit save:',e);}
+  try{await rifaBumpSalvarParticipantes('kit',{nome:nome,telefone:(CU&&CU.telefone)||'',cpf:(CU&&CU.cpf)||null,ehAssinante:!(window.t12Sai&&t12Sai((CU&&CU.plano)||'mensal'))/*VARREDURA-0112*/});}catch(e){console.warn('rifa kit save:',e);}
   const msg='🔵 *PEDIDO KIT ASSINANTE - TKTX SC*\n\n'+
     '👤 *Tatuador:* '+nome+'\n'+
     '👤 *Conta:* @'+CU.usuario+'\n\n'+
-    '📦 *Pedido:* '+k.l+' (R$ '+k.precoUn.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'/un — preço assinante)\n'+
+    '📦 *Pedido:* '+k.l+' (R$ '+k.precoUn.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+((window.t12Sai&&t12Sai((CU&&CU.plano)||'mensal'))?'/un — preço normal)\n':'/un — preço assinante)\n')/*VARREDURA-0112*/+
     '🎯 *Modelos:* '+getDivisaoTexto('kit')+'\n'+
     '💰 *Valor do kit:* R$ '+k.p.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'\n\n'+
     '🚚 *Frete:* '+nomeFrete+'\n'+
@@ -12983,6 +13015,9 @@ async function verificarAssinanteRifa(){
     const ehTrial=ass.trial_fim&&new Date(ass.trial_fim)>agora&&!ass.assinante_desde;
     const venc=ass.vencimento?new Date(ass.vencimento):null;
     const ativo=venc&&venc>agora&&!ehTrial;
+    let _vzAnt=false;   // VARREDURA-0112: assinante_por_tel não devolve o plano; checar_assinante devolve. Plano antigo = sem os 20%
+    if(ativo&&window.T0112){ try{ const _rp=await sb.rpc('checar_assinante',{p_doc:tel}); const _pl=_rp&&_rp.data&&_rp.data.plano; _vzAnt=!!(_pl&&t12Sai(_pl)); }catch(e){} }
+    if(_vzAnt){ MVAss=false;MVAssData=null; if(!document.getElementById('m-nome').value) document.getElementById('m-nome').value=ass.nome||''; if(!document.getElementById('m-tel').value) document.getElementById('m-tel').value=ass.telefone||''; aviso.style.display='block'; aviso.innerHTML='<div style="background:#fef3c7;border:0.5px solid #fbbf2444;border-radius:8px;padding:8px 12px;font-size:12px;color:#92400e;">Seu plano atual não dá mais desconto na rifa: desde 01/12 os 20% são só do plano Anual.</div>'; am(); return; }
     
     if(!ativo){
       MVAss=false;MVAssData=null;
@@ -15015,6 +15050,16 @@ function calcularPrecos(qtd, plano){
   };
 }
 
+// VARREDURA-0112: depois de 01/12 a economia de assinante é a do plano Anual pela tabela nova: (sem plano − Anual) × quantidade
+function vz12EcoAnual(qtd){ const q=parseInt(qtd)||0; if(q<1) return 0; const f=getFaixa(q); return Math.max(0,q*(Number(f.precoUn)-Number(f.anualUn))); }
+function vz12EcoLinha(qtd){ const e=vz12EcoAnual(qtd); return e>0?'\n\n_💡 Economizaria R$ '+e.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' no plano Anual_':''; }
+// VARREDURA-0112: 'de R$' do kit surpresa pela tabela nova (kit só do Anual → preço Anual; kit público → preço de quem vê)
+function vz12KitDe(k,plano){ if(!window.T0112) return k?k.preco_normal:0; const q=Math.max(1,parseInt(k&&k.qtd_pomadas)||1); const f=getFaixa(q); return q*Number((k&&k.publico===true&&plano!=='anual')?f.precoUn:f.anualUn); }
+// VARREDURA-0112: '20% off' da rifa em reais, pela cota da rifa no ar (sem cota conhecida: só o %)
+function vz12RifaEco(rifas){ const v=Number(((Array.isArray(rifas)?rifas:[])[0]||{}).valor_cota)||0; return v>0?'Você economiza R$ '+(v*0.2).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' por cota':'20% off em cada cota'; }
+// VARREDURA-0112: aba aberta antes da meia-noite de 01/12 ainda tem a tabela velha → recarrega antes de gravar o pedido
+function vz12Virou(){ try{ if(window.T0112) return false; if(Date.now()<Date.parse('2026-12-01T00:00:00-03:00')) return false; let s=null; try{ s=sessionStorage.getItem('t0112_teste'); }catch(e){} if(s==='0') return false; alert('Os preços mudaram à meia-noite. Vou atualizar a página.'); try{ location.reload(); }catch(e){} return true; }catch(e){ return false; } }
+
 // === LIMITES DE DESCONTO POR PLANO (usado em /comprar) ===
 // Conforme regras dos planos:
 // - Mensal: até 24un com desconto
@@ -15308,7 +15353,7 @@ function atualizaCpResumo(){
         ecoLine.style.display='flex';
         ecoVal.textContent='R$ '+p.economia.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
         ecoVal.style.color='';
-        if(lbl){lbl.textContent='💡 Economia se assinar';lbl.style.color='';}
+        if(lbl){lbl.textContent=(window.T0112?'💡 Economia no plano Anual':'💡 Economia se assinar')/*VARREDURA-0112*/;lbl.style.color='';}
       }
       
       // Callout "vire assinante" só se: NÃO é assinante já E NÃO selecionou plano ainda
@@ -15512,7 +15557,7 @@ function atualizaCpResumo(){
       if(stickyTotal){stickyTotal.textContent='R$ '+total.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});stickyTotal.style.color='#2563eb';}
       if(stickyEco){
         if(p.economia>0){
-          stickyEco.textContent='💡 Assinante economiza R$ '+p.economia.toLocaleString('pt-BR',{maximumFractionDigits:0});
+          stickyEco.textContent=(window.T0112?'💡 No Anual economiza R$ ':'💡 Assinante economiza R$ ')/*VARREDURA-0112*/+p.economia.toLocaleString('pt-BR',{maximumFractionDigits:0});
           stickyEco.style.color='#fbbf24';
         }else{
           stickyEco.textContent='';
@@ -16518,6 +16563,7 @@ async function anivUploadFoto(input){
 }
 
 async function finalizarPedido(){
+  if(window.vz12Virou&&vz12Virou()) return;   // VARREDURA-0112: aba aberta antes de 01/12 00:00 recarrega com a tabela nova
   // 🚦 TRAVA ANTI-FLOOD: impede o MESMO pedido de ser enviado várias vezes (dedo-duplo no botão).
   // Síncrono e ANTES de qualquer await — toques rápidos em sequência batem aqui e param.
   if(window._pedidoEnviando){ try{cpToast('⏳ Seu pedido já está sendo enviado — aguarde um instante.','erro');}catch(e){} return; }
@@ -16588,6 +16634,7 @@ async function finalizarPedido(){
   }catch(e){}
   // === USA AS FAIXAS DE PREÇO (escadinha do plano escolhido) ===
   if(window.t12Sai&&t12Sai(cpPlanoSel)) cpPlanoSel=null;   // TABELA-0112: última porta antes de gravar o pedido
+  if(window.t12Sai&&cpDescontoAtivo&&cpClienteAssData&&t12Sai(cpClienteAssData.plano||'mensal')) cpDescontoAtivo=false;   // VARREDURA-0112: desconto ligado antes da virada não vale para plano antigo
   const _planoCp=cpPlanoSel||((cpDescontoAtivo&&cpClienteAssData)?(cpClienteAssData.plano||'mensal'):null);
   const precos=calcularPrecos(cpQtd,_planoCp);
   const k={
@@ -16806,7 +16853,7 @@ async function finalizarPedido(){
     bairro+'\n'+
     cidade+'\n'+
     'CEP: '+cep+
-    (cpPlanoSel||cpDescontoAtivo||(k.un<1&&!(eco>0))?'':'\n\n_💡 Economizaria R$ '+eco.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' sendo assinante_')+   //🧩 PEÇAS-BANCADA-1211 (sopeça): sem pomada (só peças/spray) não cita "Economizaria R$ 0,00"
+    (cpPlanoSel||cpDescontoAtivo||(k.un<1&&!(eco>0))?'':(window.T0112?vz12EcoLinha(k.un)/*VARREDURA-0112*/:'\n\n_💡 Economizaria R$ '+eco.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' sendo assinante_'))+   //🧩 PEÇAS-BANCADA-1211 (sopeça): sem pomada (só peças/spray) não cita "Economizaria R$ 0,00"
     loginMsg+
     rifaBumpMsg+
     rifaMsg;
@@ -22888,7 +22935,7 @@ function seoRota(rota){
       comprar:{p:'/comprar',t:'Comprar Pomada TKTX Original | Loja Oficial TKTX SC'},
       cartuchos:{p:'/cartuchos',t:'Cartuchos WJX | TKTX SC',d:'Cartuchos WJX a R$ 5 cada: 1007RL, 1009RL, 1013RM, 1027RM e 1215RM.'},/*🔩 CARTUCHO-1911*/
       bancada:{p:'/bancada',t:'Peças para a bancada do tatuador | TKTX SC',d:'Descanso de máquina, porta-batoque, suporte de cartuchos e outras peças para a bancada. Preta, branca ou azul, com o nome do seu estúdio.'},   // 🎯 BANCADA-1811
-      planos:{p:'/planos',t:'Planos de Assinatura TKTX — Pomada a partir de '+(/*TABELA-0112*/window.T0112?'R$ 28':'R$ 26')+'/un'},
+      planos:{p:'/planos',t:(window.T0112?'Plano Anual TKTX — Pomada a partir de R$ 28/un':'Planos de Assinatura TKTX — Pomada a partir de R$ 26/un')/*VARREDURA-0112*/},
       promo:{p:'/promo',t:'Promoção Anual TKTX — Preço de Atacado pra Todo Mundo | TKTX SC'},
       bf:{p:'/selecionado',t:'Você foi selecionado · TKTX SC',noindex:true},   // 🎃 link oculto da Black Friday Secreta
       rifa:{p:'/rifa',t:'Rifa TKTX SC — Concorra a prêmios | Loja Oficial'},
@@ -25528,7 +25575,7 @@ function showPlanos(){
     if(tab) tab.innerHTML=renderTabelaPrecosVisual('planos',0,null);
   },50);
   // 🎁 Kit Surpresa DESATIVADO (31/07 — TKTX: "não usamos mais"). A função fica, só não é chamada.
-  try{if(typeof fbqAdvanced!=='undefined')fbqAdvanced('track','ViewContent',{content_name:'Página Planos TKTX',content_category:'plano-assinatura',content_type:'product',currency:'BRL',value:197.40});}catch(e){}
+  try{if(typeof fbqAdvanced!=='undefined')fbqAdvanced('track','ViewContent',{content_name:'Página Planos TKTX',content_category:'plano-assinatura',content_type:'product',currency:'BRL',value:(window.T0112?358.80:197.40)/*VARREDURA-0112*/});}catch(e){}
 }
 
 // Banner de Kits Surpresa na página /planos — gera FOMO pra fazer cliente assinar
@@ -25572,7 +25619,7 @@ async function renderBannerKitsSurpresaPlanos(){
     html+='<div style="display:grid;gap:8px;margin-bottom:14px;">';
     kitsAtivos.forEach(k=>{
       const economia=k.preco_normal&&k.preco_normal>k.preco?k.preco_normal-k.preco:0;
-      const planosArr=Array.isArray(k.planos_permitidos)?k.planos_permitidos:[];
+      const planosArr=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
       const planosTxt=planosArr.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join('/');
       const corBorda=k.qtd_disponivel<=2?'#dc2626':'#fbbf2466';
       
@@ -27233,11 +27280,12 @@ function quizArgumentoVenda(rec,precos,planos,economiaKit){
     // PLANO ANUAL — empurrão máximo (revenda + estúdio, 50un)
     const investimento=totalKitAss+p.valor;
     const lucroRevenda=(50*50)-investimento;// vende a R$50/un
-    return '<div style="font-size:13px;color:#0f172a;line-height:1.6;font-weight:500;margin-bottom:8px;">🔥 Cenário REVENDA + ESTÚDIO:</div>'+
+    return '<div style="font-size:13px;color:#0f172a;line-height:1.6;font-weight:500;margin-bottom:8px;">'+(window.T0112?'🔥 Pra quem compra em quantidade:':'🔥 Cenário REVENDA + ESTÚDIO:')/*VARREDURA-0112*/+'</div>'+
       '<div style="font-size:12px;color:#475569;line-height:1.7;">'+
+      (window.T0112?('Você compra <b style="color:#16a34a;">50 un por R$ '+totalKitAss.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</b> no plano Anual — R$ '+(totalKitNormal-totalKitAss).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' a menos que sem plano.<br><br>')/*VARREDURA-0112: só o fato, sem lucro de revenda*/:(
       'Você compra <b style="color:#16a34a;">50un por R$ '+totalKitAss.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</b> + R$ '+p.valor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' do plano = <b>R$ '+investimento.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' investido</b>.<br>'+
       'Revendendo a R$ 50/un você fatura <b style="color:#16a34a;">R$ 2.500</b>.<br><br>'+
-      '💰 <b style="color:#b45309;">LUCRO LÍQUIDO de R$ '+lucroRevenda.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' já no PRIMEIRO kit</b> — pagando seu plano e ainda sobrando.<br><br>'+
+      '💰 <b style="color:#b45309;">LUCRO LÍQUIDO de R$ '+lucroRevenda.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' já no PRIMEIRO kit</b> — pagando seu plano e ainda sobrando.<br><br>'))/*VARREDURA-0112*/+
       (window.T0112/*TABELA-0112: conta com a tabela nova*/?('Em 12 meses, se buscar só 1 kit por mês: <b style="color:#16a34a;">economia de R$ '+(economiaKit*12).toLocaleString('pt-BR',{maximumFractionDigits:0})+'</b> contra preço normal.'+(economiaKit*12>p.valor?' Paga seu plano <b>'+(economiaKit*12/p.valor).toLocaleString('pt-BR',{maximumFractionDigits:1})+' vezes</b>.':'')):
       'Em 12 meses, se buscar só 1 kit por mês: <b style="color:#16a34a;">economia de R$ 1.200</b> contra preço normal. Paga seu plano <b>3 vezes</b>.')+
       '</div>';
@@ -33224,7 +33272,7 @@ async function loadKitsSurpresaAdmin(){
       w.innerHTML='<div style="background:#f8fafc;border:0.5px solid #f1f5f9;border-radius:12px;padding:2rem 1.25rem;text-align:center;">'+
         '<div style="font-size:42px;margin-bottom:8px;">🎁</div>'+
         '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#0f172a;letter-spacing:1px;margin-bottom:6px;">Nenhum kit surpresa criado</div>'+
-        '<div style="font-size:13px;color:#64748b;line-height:1.5;margin-bottom:14px;">Crie kits promocionais com estoque limitado pra incentivar assinaturas Semestral e Anual.</div>'+
+        '<div style="font-size:13px;color:#64748b;line-height:1.5;margin-bottom:14px;">Crie kits promocionais com estoque limitado pra incentivar '+(window.T0112?'o plano Anual':'assinaturas Semestral e Anual')/*VARREDURA-0112*/+'.</div>'+
         '<button onclick="abrirNovoKitSurpresa()" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:\'DM Sans\';">+ Criar primeiro kit</button>'+
         '</div>';
       return;
@@ -33234,7 +33282,7 @@ async function loadKitsSurpresaAdmin(){
     for(const k of data){
       const vendidos=(k.qtd_total||0)-(k.qtd_disponivel||0);
       const pct=k.qtd_total>0?(vendidos/k.qtd_total)*100:0;
-      const planosTxt=Array.isArray(k.planos_permitidos)?k.planos_permitidos.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' / '):'';
+      const planosTxt=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos)/*VARREDURA-0112*/.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' / '):'';
       const corStatus=k.ativo?(k.qtd_disponivel<=0?'#fbbf24':'#16a34a'):'#64748b';
       const labelStatus=!k.ativo?'⛔ Desativado':k.qtd_disponivel<=0?'⚠️ Esgotado':'🔥 Ativo';
       
@@ -33293,7 +33341,7 @@ function abrirModalKitSurpresa(kit){
   overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;';
   overlay.onclick=(e)=>{if(e.target.id==='kit-modal-overlay')fecharModalKitSurpresa();};
   
-  const planosArr=Array.isArray(k.planos_permitidos)?k.planos_permitidos:['semestral','anual'];
+  const planosArr=Array.isArray(k.planos_permitidos)?k.planos_permitidos:(window.T0112?['anual']:['semestral','anual']);   // VARREDURA-0112
   
   overlay.innerHTML='<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:1.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">'+
@@ -33333,8 +33381,8 @@ function abrirModalKitSurpresa(kit){
       
       '<div><label style="font-size:10px;color:#2563eb;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">⭐ Planos que podem comprar</label>'+
       '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
-        '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('mensal')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('mensal')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-mensal" '+(planosArr.includes('mensal')?'checked':'')+' style="margin:0;cursor:pointer;"/> Mensal</label>'+
-        '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('semestral')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('semestral')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-semestral" '+(planosArr.includes('semestral')?'checked':'')+' style="margin:0;cursor:pointer;"/> Semestral</label>'+
+        '<label style="display:'+(window.T0112?'none'/*VARREDURA-0112*/:'flex')+';align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('mensal')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('mensal')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-mensal" '+(planosArr.includes('mensal')?'checked':'')+' style="margin:0;cursor:pointer;"/> Mensal</label>'+
+        '<label style="display:'+(window.T0112?'none'/*VARREDURA-0112*/:'flex')+';align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('semestral')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('semestral')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-semestral" '+(planosArr.includes('semestral')?'checked':'')+' style="margin:0;cursor:pointer;"/> Semestral</label>'+
         '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('anual')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('anual')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-anual" '+(planosArr.includes('anual')?'checked':'')+' style="margin:0;cursor:pointer;"/> Anual</label>'+
       '</div></div>'+
 
@@ -33368,6 +33416,7 @@ async function salvarKitSurpresa(id){
   if(document.getElementById('ks-p-mensal').checked) planos.push('mensal');
   if(document.getElementById('ks-p-semestral').checked) planos.push('semestral');
   if(document.getElementById('ks-p-anual').checked) planos.push('anual');
+  if(window.T0112){ for(let i=planos.length-1;i>=0;i--){ if(t12Sai(planos[i])) planos.splice(i,1); } }   // VARREDURA-0112: desde 01/12 só o Anual
   const publico=!!(document.getElementById('ks-publico')&&document.getElementById('ks-publico').checked);
 
   if(!titulo){alert('⚠️ Digite um título.');return;}
@@ -33522,14 +33571,15 @@ async function loadKitsSurpresaCliente(){
     for(const k of kits){
       const vendidos=(k.qtd_total||0)-(k.qtd_disponivel||0);
       const pct=k.qtd_total>0?(vendidos/k.qtd_total)*100:0;
-      const planosArr=Array.isArray(k.planos_permitidos)?k.planos_permitidos:[];
+      const planosArr=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
       const planosTxt=k.publico?'🌎 Todos os clientes':planosArr.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' / ');
       // 🌎 Kit PÚBLICO: qualquer cliente logado pode pegar (1 por CPF). Senão, gate por plano.
       const podeComprar=k.publico===true?true:(planoReal&&planosArr.includes(planoReal));
       const jaConfirmado=kitsConfirmados.has(k.id);
       const aguardandoPagto=kitsAguardando.has(k.id);
       const esgotado=k.qtd_disponivel<=0;
-      const economia=k.preco_normal&&k.preco_normal>k.preco?k.preco_normal-k.preco:0;
+      const _pn=window.T0112?vz12KitDe(k,planoReal):k.preco_normal;   // VARREDURA-0112: 'de R$' pela tabela nova
+      const economia=_pn&&_pn>k.preco?_pn-k.preco:0;
       
       // Cor da borda
       const corBorda=esgotado?'#64748b':jaConfirmado?'#15803d':aguardandoPagto?'#fbbf24':podeComprar?'#fbbf24':'#e5e7eb';
@@ -33559,13 +33609,13 @@ async function loadKitsSurpresaCliente(){
       html+='<div style="font-size:10px;color:#64748b;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">📦 Você recebe</div>';
       html+='<div style="font-size:16px;color:#0f172a;font-weight:600;line-height:1.2;">'+k.qtd_pomadas+' pomada'+(k.qtd_pomadas!==1?'s':'')+' TKTX</div>';
       let modeloLabel='Cliente escolhe';
-      if(k.modelo==='gold') modeloLabel='🥇 TKTX Gold99%';
+      if(k.modelo==='gold') modeloLabel=(window.T0112?'🥇 TKTX Gold Alumínio':'🥇 TKTX Gold99%')/*VARREDURA-0112*/;
       else if(k.modelo==='numb') modeloLabel='💉 TKTX Numb';
       html+='<div style="font-size:11px;color:#64748b;margin-top:2px;">'+modeloLabel+'</div>';
       html+='</div>';
       // Direita: preço
       html+='<div style="text-align:right;">';
-      if(k.preco_normal&&k.preco_normal>k.preco) html+='<div style="font-size:11px;color:#64748b;text-decoration:line-through;line-height:1;">R$ '+Number(k.preco_normal).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</div>';
+      if(_pn&&_pn>k.preco) html+='<div style="font-size:11px;color:#64748b;text-decoration:line-through;line-height:1;">R$ '+Number(_pn).toLocaleString(/*VARREDURA-0112*/'pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</div>';
       html+='<div style="font-family:\'Bebas Neue\',sans-serif;font-size:32px;color:#16a34a;line-height:1;margin-top:2px;">R$ '+Number(k.preco).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</div>';
       if(economia>0) html+='<div style="font-size:10px;color:#15803d;background:#dcfce7;border:0.5px solid #4ade8055;padding:2px 6px;border-radius:4px;margin-top:4px;display:inline-block;">💰 Economia R$ '+economia.toLocaleString('pt-BR',{maximumFractionDigits:0})+'</div>';
       html+='</div>';
@@ -33708,7 +33758,7 @@ function abrirModalKitCompra(kit,dadosCliente){
     window._kitOverlayClicado=false;
   });
   
-  const modeloLabel=kit.modelo==='gold'?'🥇 TKTX Gold99%':kit.modelo==='numb'?'💉 TKTX Numb':'Você escolhe';
+  const modeloLabel=kit.modelo==='gold'?(window.T0112?'🥇 TKTX Gold Alumínio':'🥇 TKTX Gold99%')/*VARREDURA-0112*/:kit.modelo==='numb'?'💉 TKTX Numb':'Você escolhe';
   const valorKitTxt='R$ '+Number(kit.preco).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   
   let html='<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:1.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;">';
@@ -33736,7 +33786,7 @@ function abrirModalKitCompra(kit,dadosCliente){
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">'+
         '<div onclick="kitSelModelo(\'gold\')" id="kitc-mod-gold" style="cursor:pointer;background:#f8fafc;border:1px solid #f1f5f9;border-radius:8px;padding:14px;text-align:center;transition:all 0.15s;">'+
           '<div style="font-size:24px;line-height:1;margin-bottom:4px;">🥇</div>'+
-          '<div style="font-size:12px;color:#b45309;font-weight:600;">TKTX Gold99%</div>'+
+          '<div style="font-size:12px;color:#b45309;font-weight:600;">'+(window.T0112?'TKTX Gold Alumínio':'TKTX Gold99%')/*VARREDURA-0112*/+'</div>'+
         '</div>'+
         '<div onclick="kitSelModelo(\'numb\')" id="kitc-mod-numb" style="cursor:pointer;background:#f8fafc;border:1px solid #f1f5f9;border-radius:8px;padding:14px;text-align:center;transition:all 0.15s;">'+
           '<div style="font-size:24px;line-height:1;margin-bottom:4px;">💉</div>'+
@@ -34310,7 +34360,9 @@ async function loadFazerPedido(){
     html+='<span style="background:#fef3c7;color:#b45309;font-size:10px;font-weight:600;padding:4px 10px;border-radius:6px;border:0.5px solid #fbbf2466;">Preço normal</span>';
   }
   html+='</div>';
-  if(ehAssinante){
+  if(ehAssinante&&window.t12Sai&&t12Sai(planoReal)){   // VARREDURA-0112: plano antigo paga o preço sem plano
+    html+='<div style="font-size:12px;color:#b45309;line-height:1.5;">Seu plano atual não dá mais desconto: desde 01/12 o preço de assinante é só do plano <b>Anual</b>.<button type="button" onclick="irParaPlanos()" style="display:block;margin-top:8px;min-height:44px;width:100%;background:#fbbf24;color:#0f172a;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Ver o plano Anual →</button></div>';
+  } else if(ehAssinante){
     const regras=getRegrasPlano(planoReal);
     html+='<div style="font-size:12px;color:#15803d;line-height:1.5;">⭐ Seu desconto de assinante já está aplicado. Escolha a quantidade e finalize!</div>';
     if(regras){
@@ -35347,6 +35399,7 @@ function fpBrindeModelo(m){
 }
 
 async function fpFinalizar(){
+  if(window.vz12Virou&&vz12Virou()) return;   // VARREDURA-0112: aba aberta antes de 01/12 00:00 recarrega com a tabela nova
   // 🚦 trava anti dedo-duplo (05/08) — mesmo padrão do /comprar; solta sozinha em 25s.
   // A do celular: toque duplo rápido disparava 2-3 inserts idênticos no mesmo segundo.
   if(window._fpEnviando){ try{cpToast('⏳ Seu pedido já está sendo enviado — aguarde um instante.','erro');}catch(e){} return; }
@@ -35527,7 +35580,7 @@ async function fpFinalizar(){
       cupom_frete_gratis:!!_cupRF.freteGratis,
       frete_servico:str(fp.frete.nome),
       frete_prazo:fp.frete.prazo?num(fp.frete.prazo):null,
-      tem_desconto_assinante:!!(fp.ehAssinante||(fp.assinaturaVencida&&fp.renovarPlano&&valorPlanoF>0)),
+      tem_desconto_assinante:!!((fp.ehAssinante&&!(window.t12Sai&&t12Sai(fp.planoReal)))/*VARREDURA-0112*/||(fp.assinaturaVencida&&fp.renovarPlano&&valorPlanoF>0)),
       ...(valorPlanoF>0?{plano:str(fp.planoVencido||'mensal'),valor_plano:num(valorPlanoF)}:{}),
       assinante_id:assinanteId,
       pagamento:(fp.pay==='cartao'?'Cartão':'Pix'),
@@ -35622,7 +35675,7 @@ async function fpFinalizar(){
     }
 
     // Rifa (order bump): salva as cotas escolhidas junto do pedido
-    try{await rifaBumpSalvarParticipantes('fp',{nome:CU.nome,telefone:telLimpo,cpf:fp.cpf?fp.cpf.replace(/\D/g,''):null,ehAssinante:!!fp.ehAssinante,pedidoId:pedidoId});}catch(e){console.warn('rifa fp save:',e);}
+    try{await rifaBumpSalvarParticipantes('fp',{nome:CU.nome,telefone:telLimpo,cpf:fp.cpf?fp.cpf.replace(/\D/g,''):null,ehAssinante:!!(fp.ehAssinante&&!(window.t12Sai&&t12Sai(fp.planoReal)))/*VARREDURA-0112*/,pedidoId:pedidoId});}catch(e){console.warn('rifa fp save:',e);}
 
     // 🎁 16/10: o brinde da trilha entrou NESTE pedido? (o gatilho decide no INSERT; aqui só lemos o carimbo)
     let _vipPosUn=0;
@@ -35639,7 +35692,7 @@ async function fpFinalizar(){
     if(fp.cpf) msg+='🆔 *'+rotuloDoc(fp.cpf)+':* '+fp.cpf+'\n';
     if(fp.ehAssinante){
       const planoLabel={mensal:'Mensal',semestral:'Semestral',anual:'Anual'}[fp.planoReal];
-      msg+='⭐ *Assinante '+planoLabel+'* (preço de assinante aplicado)\n';
+      msg+=((window.t12Sai&&t12Sai(fp.planoReal))?'⭐ *Plano antigo* (preço normal: desconto só no plano Anual)\n':'⭐ *Assinante '+planoLabel+'* (preço de assinante aplicado)\n');   // VARREDURA-0112
     }
     msg+='\n';
     msg+='📦 *PEDIDO*\n';
@@ -35809,6 +35862,7 @@ async function loadContaCliente(){
     html+='<div style="font-size:10px;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">SEU PLANO</div>';
     html+='<div style="display:flex;align-items:baseline;gap:8px;margin-top:4px;"><span style="font-size:24px;">'+planoEmoji+'</span><span style="font-family:\'Bebas Neue\',sans-serif;font-size:24px;color:'+corPlano+';letter-spacing:1px;">'+planoLabel.toUpperCase()+'</span></div>';
     if(vencData) html+='<div style="font-size:11px;color:'+(vencDias<=30?'#fbbf24':'#64748b')+';margin-top:6px;">'+venceTxt+' · '+vencData+'</div>';
+    if(window.t12Sai&&t12Sai(planoReal)) html+='<div style="font-size:12px;color:#b45309;margin-top:6px;line-height:1.5;">Seu plano atual não dá mais desconto: desde 01/12 o preço de assinante é só do plano Anual.</div><button onclick="irParaPlanos()" style="margin-top:8px;min-height:44px;width:100%;background:#fbbf24;color:#0f172a;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Ver o plano Anual →</button>';   // VARREDURA-0112
     html+='</div>';
   } else {
     html+='<div onclick="irParaPlanos()" style="background:linear-gradient(135deg,#fef3c7,#ffffff);border:1px solid #fbbf2455;border-radius:14px;padding:14px 16px;margin-bottom:1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;">';
@@ -35874,7 +35928,7 @@ async function loadHomeCliente(){
   const planoReal=temAssinatura?(CU.plano||'mensal'):null;
   const planoLabel={mensal:'Mensal',semestral:'Semestral',anual:'Anual'}[planoReal]||'Sem plano';
   const planoIcon={mensal:'📅',semestral:'⭐',anual:'🏆'}[planoReal]||'⚪';
-  const planoVig=(CU.vencimento&&new Date(CU.vencimento)>new Date())?(CU.plano||'mensal'):null;   // ASSIN-2311 A3: a faixa do topo só para plano em dia
+  const planoVig=(CU.vencimento&&new Date(CU.vencimento)>new Date())?(window.t12Escolha?t12Escolha(CU.plano||'mensal'):(CU.plano||'mensal')):null;   // ASSIN-2311 A3: a faixa do topo só para plano em dia · VARREDURA-0112: plano antigo não é 'assinante'
   
   // Calcula dias até vencimento se tem plano
   let vencDias=null;
@@ -35922,6 +35976,7 @@ async function loadHomeCliente(){
     html+='<div class="home-plan-label">Seu plano</div>';
     html+='<div class="home-plan-name">'+planoIcon+' '+planoLabel.toUpperCase()+'</div>';
     if(vencTxt) html+='<div class="home-plan-status'+(ehWarn?' warn':'')+'">'+vencTxt+'</div>';
+    if(window.t12Sai&&t12Sai(planoReal)) html+='<div class="home-plan-status warn" style="font-size:12px;">Sem desconto desde 01/12 · só o Anual tem</div>';   // VARREDURA-0112
     html+='</div>';
     if(ehWarn) html+='<button class="home-plan-btn warn" onclick="bnGo(\'conta\')">RENOVAR</button>';
     else html+='<button class="home-plan-btn" onclick="bnGo(\'conta\')">VER</button>';
@@ -36018,7 +36073,7 @@ async function loadHomeCliente(){
         '<span class="home-atalho-badge" id="home-badge-pedidos" style="display:none;"></span></button>';
   html+='<button class="home-atalho" onclick="irParaPlanos()">'+
         '<div class="home-atalho-icon">⭐</div>'+
-        '<div><div class="home-atalho-title">Planos</div>'+
+        '<div><div class="home-atalho-title">'+(window.T0112?'Plano Anual':'Planos')/*VARREDURA-0112*/+'</div>'+
         '<div class="home-atalho-sub">Vire assinante e economize</div></div></button>';
   html+='<button class="home-atalho" onclick="sp(\'rifa\');try{smn(\'rifa\')}catch(e){}">'+
         '<div class="home-atalho-icon">🎯</div>'+
@@ -36080,7 +36135,7 @@ async function loadHomeCliente(){
       
       // Pega os 2 melhores kits
       kits.slice(0,2).forEach(k=>{
-        const planosArr=Array.isArray(k.planos_permitidos)?k.planos_permitidos:[];
+        const planosArr=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
         const podeComprar=planoReal&&planosArr.includes(planoReal);
         const economia=k.preco_normal&&k.preco_normal>k.preco?k.preco_normal-k.preco:0;
         const urgente=k.qtd_disponivel<=2;
@@ -36135,7 +36190,7 @@ async function loadHomeCliente(){
     }
     
     // === CTA VIRAR ASSINANTE (só se não tem plano) - REFORMULADO bombado ===
-    if(!planoReal){
+    if(!planoReal||(window.t12Sai&&t12Sai(planoReal))){   // VARREDURA-0112: plano antigo vê a oferta do Anual, não 'seu preço de assinante'
       conteudo+='<div onclick="irParaPlanos()" style="cursor:pointer;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 60%,#1d4ed8 100%);border:none;border-radius:18px;padding:1.5rem 1.25rem;margin-top:0.75rem;position:relative;overflow:hidden;box-shadow:0 16px 40px rgba(37,99,235,0.35);">';
       // Decoração: círculos brilhantes
       conteudo+='<div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,0.18),transparent 70%);border-radius:50%;"></div>';
@@ -36159,7 +36214,7 @@ async function loadHomeCliente(){
       conteudo+='<div style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:0.5px;box-shadow:0 6px 16px rgba(22,163,74,0.4);">ASSINAR →</div>';
       conteudo+='</div>';
       // Footnote
-      conteudo+='<div style="font-size:10px;color:rgba(255,255,255,0.75);text-align:center;margin-top:10px;">🎉 2 dias grátis pra testar · nada é cobrado sozinho</div>';   // ASSIN-2311 B1
+      conteudo+='<div style="font-size:'+(planoReal?'12':'10')+'px;color:rgba(255,255,255,0.75);text-align:center;margin-top:10px;">'+(planoReal?'Pagamento único · nada é cobrado sozinho':'🎉 2 dias grátis pra testar · nada é cobrado sozinho')/*VARREDURA-0112: texto novo em 12px*/+'</div>';   // ASSIN-2311 B1
       conteudo+='</div></div>';
     } else {
       // === ASSINANTE: SHOWCASE DOS BÔNUS ATIVOS ===
@@ -36170,7 +36225,7 @@ async function loadHomeCliente(){
       conteudo+='<div style="display:grid;gap:8px;">';
       conteudo+='<div onclick="sp(\'rifa\');try{smn(\'rifa\')}catch(e){}" style="cursor:pointer;background:#ffffff;border:1px solid #86efac;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:transform .15s;">';
       conteudo+='<div style="font-size:24px;line-height:1;flex-shrink:0;">🎯</div>';
-      conteudo+='<div style="flex:1;min-width:0;"><div style="font-size:13px;color:#0f172a;font-weight:700;">Rifa ativa · 20% off pra você</div><div style="font-size:11px;color:#15803d;margin-top:2px;">Você economiza R$ 1,70 por cota</div></div>';
+      conteudo+='<div style="flex:1;min-width:0;"><div style="font-size:13px;color:#0f172a;font-weight:700;">Rifa ativa · 20% off pra você</div><div style="font-size:11px;color:#15803d;margin-top:2px;">'+(window.T0112?vz12RifaEco(typeof rifas!=='undefined'?rifas:[]):'Você economiza R$ 1,70 por cota')/*VARREDURA-0112*/+'</div></div>';
       conteudo+='<div style="font-size:18px;color:#16a34a;font-weight:700;">→</div>';
       conteudo+='</div>';
       conteudo+='<div onclick="irParaComprar()" style="cursor:pointer;background:#ffffff;border:1px solid #86efac;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:transform .15s;">';
@@ -43778,7 +43833,7 @@ function pvSecClientes(H){
 /* ============================================================================
    SEÇÃO 5 — COMPRAR: o lado da loja, e o único lugar com botão de comprar
    ============================================================================ */
-function pvPlanoVigente(){ var c=cu(); if(!c) return null; var vig=!!(c.vencimento&&new Date(c.vencimento)>new Date()); return vig?(c.plano||'mensal'):null; }
+function pvPlanoVigente(){ var c=cu(); if(!c) return null; var vig=!!(c.vencimento&&new Date(c.vencimento)>new Date()); return vig?(window.t12Escolha?t12Escolha(c.plano||'mensal'):(c.plano||'mensal')):null; }   /*VARREDURA-0112: plano antigo = sem plano*/
 function pvFaixas(){ try{ if(typeof FAIXAS_PRECO!=='undefined'&&Array.isArray(FAIXAS_PRECO)) return FAIXAS_PRECO; }catch(e){} return []; }
 function pvPrecoUn(q){ try{ if(typeof precoUnCliente==='function') return pvNum(precoUnCliente(q,pvPlanoVigente())); }catch(e){} return 0; }
 function pvUltimoPedidoUn(H){ var l=(H.loja&&H.loja.lista)||[]; return l.length?pvNum(l[0].un):0; }
