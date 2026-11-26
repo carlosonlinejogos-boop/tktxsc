@@ -15,15 +15,25 @@
     if(s==='1') lig=true; else if(s==='0') lig=false;
   }catch(e){}
   window.T0112=lig;
+  // SO-ANUAL-2611 (empresa 26/11): só o plano Anual é vendido desde JÁ. Este interruptor comanda só a parte "planos";
+  // o preço (tabela de 01/12) continua no T0112. (SO_ANUAL=false antes deste script só existe nos testes.)
+  if(window.SO_ANUAL!==false) window.SO_ANUAL=true;
+  try{ if(window.SO_ANUAL||lig) document.documentElement.classList.add('so-anual'); }catch(e){}
   try{ if(lig) document.documentElement.classList.add('t0112'); }catch(e){}
   // Mensal/Semestral saem da venda: some da tela, de botão, de link e de estado salvo
-  window.t12Sai=function(v){ return !!window.T0112 && /^(mensal|semestral)(un)?$/i.test(String(v==null?'':v).trim()); };
-  window.t12Mostra=function(o){ if(!window.T0112||o==null) return true; if(typeof o!=='object') return !window.t12Sai(o); return ![o.chave,o.k,o.id,o.nome,o.plano].some(function(x){ return window.t12Sai(x); }); };
+  window.t12Sai=function(v){ return !!(window.SO_ANUAL||window.T0112) && /^(mensal|semestral)(un)?$/i.test(String(v==null?'':v).trim()); };   // SO-ANUAL-2611: fora da VENDA já
+  window.t12Mostra=function(o){ if(!(window.SO_ANUAL||window.T0112)||o==null) return true; if(typeof o!=='object') return !window.t12Sai(o); return ![o.chave,o.k,o.id,o.nome,o.plano].some(function(x){ return window.t12Sai(x); }); };
   window.t12Escolha=function(p){ return window.t12Sai(p)?null:p; };    // estado salvo/silencioso → sem plano (nunca cobra plano que o cliente não viu)
   window.t12Renova=function(p){ return window.t12Sai(p)?'anual':p; };  // clique explícito em assinar/renovar → Anual (o preço dele aparece na tela antes de pagar)
+  // SO-ANUAL-2611: DESCONTO de conta que já tem Mensal/Semestral em dia — continua até 30/11, some só em 01/12 (T0112)
+  window.t12Antigo=function(v){ return !!window.T0112 && /^(mensal|semestral)(un)?$/i.test(String(v==null?'':v).trim()); };
+  window.t12Vig=function(p){ return window.t12Antigo(p)?null:p; };
+  // SO-ANUAL-2611: kit surpresa — a vitrine só fala do Anual, mas a conta Mensal/Semestral em dia que o kit já aceitava continua comprando até 30/11
+  window.saKitPode=function(k,pl,arr){ return !!pl && ((arr||[]).indexOf(pl)>=0 || (!window.T0112 && !!k && Array.isArray(k.planos_permitidos) && k.planos_permitidos.indexOf(pl)>=0)); };
   document.addEventListener('DOMContentLoaded',function(){
-    try{ document.querySelectorAll(window.T0112?'.t12-sai,.t12-old':'.t12-new').forEach(function(el){ el.remove(); }); }catch(e){}
-    if(!window.T0112) return;
+    try{ var _sa=!!(window.SO_ANUAL||window.T0112);   // SO-ANUAL-2611: plano (sa-*, t12-sai) pelo SO_ANUAL; preço (t12-old/new) pelo T0112
+      document.querySelectorAll((window.T0112?'.t12-old':'.t12-new')+(_sa?',.t12-sai,.sa-old':',.sa-new')).forEach(function(el){ el.remove(); }); }catch(e){}
+    if(!(window.SO_ANUAL||window.T0112)) return;   // SO-ANUAL-2611
     // SEO: o preço e a pergunta dos planos do Google acompanham a tabela
     try{
       var fx=(typeof FAIXAS_PRECO!=='undefined')?FAIXAS_PRECO:[];
@@ -32,9 +42,9 @@
         try{
           var j=JSON.parse(s.textContent), mudou=false;
           (j['@graph']||[j]).forEach(function(n){
-            if(n&&n.offers&&n.offers.lowPrice&&isFinite(lo)&&isFinite(hi)){ n.offers.lowPrice=lo.toFixed(2); n.offers.highPrice=hi.toFixed(2); mudou=true; }
+            if(window.T0112&&n&&n.offers&&n.offers.lowPrice&&isFinite(lo)&&isFinite(hi)){   /*SO-ANUAL-2611: preço do Google só em 01/12*/ n.offers.lowPrice=lo.toFixed(2); n.offers.highPrice=hi.toFixed(2); mudou=true; }
             if(n&&n['@type']==='FAQPage') (n.mainEntity||[]).forEach(function(p){
-              if(p&&/planos de assinatura/.test(p.name||'')){ p.name='Como funciona o plano de assinatura?'; p.acceptedAnswer.text='Agora é um plano só: o Anual, R$ 358,80 à vista no Pix ou no cartão em até 12x. Com ele a pomada sai mais barata em toda compra (a partir de R$ 28/un). Você pede quando quiser, sem espera e sem limite de quantidade, ganha 1 pomada grátis na adesão e tem 20% off em rifas.'; mudou=true; }
+              if(p&&/planos de assinatura/.test(p.name||'')){ p.name='Como funciona o plano de assinatura?'; p.acceptedAnswer.text='Agora é um plano só: o Anual, R$ 358,80 à vista no Pix ou no cartão em até 12x. Com ele a pomada sai mais barata em toda compra (a partir de '+(window.T0112?'R$ 28':'R$ 26')+'/un). Você pede quando quiser, sem espera e sem limite de quantidade, ganha 1 pomada grátis na adesão e tem 20% off em rifas.'; mudou=true; }   /*SO-ANUAL-2611*/
             });
           });
           if(mudou) s.textContent=JSON.stringify(j);
@@ -46,8 +56,10 @@
 </script>
 <style>
 /* TABELA-0112: cada texto com preço tem as 2 versões; o interruptor decide qual aparece */
-html.t0112 .t12-old, html.t0112 .t12-sai, html:not(.t0112) .t12-new{display:none!important;}
-html.t0112 .lp-plans-grid, html.t0112 .np-plans-grid{grid-template-columns:minmax(0,440px)!important;justify-content:center;}
+/* SO-ANUAL-2611: Mensal/Semestral (t12-sai, sa-old) somem já; texto só do Anual (sa-new) aparece já */
+html.t0112 .t12-old, html.so-anual .t12-sai, html:not(.t0112) .t12-new, html.so-anual .sa-old, html:not(.so-anual) .sa-new{display:none!important;}
+html.so-anual .np-testi-grid{grid-template-columns:minmax(0,440px);justify-content:center;}   /* SO-ANUAL-2611: sobra 1 depoimento (o do Anual), centralizado */
+html.so-anual .lp-plans-grid, html.so-anual .np-plans-grid{grid-template-columns:minmax(0,440px)!important;justify-content:center;}
 </style>
 <meta name="facebook-domain-verification" content="tx5novsdgrb7dyeq3xl9kkj9th3m6b" />  <!-- 29/10: verificação do domínio no portfólio TKTXC -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2521,7 +2533,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
     <button onclick="navPublico('inicio')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🏠 Início</button>
     <button onclick="navPublico('comprar')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🛒 Comprar</button>
     <button id="tn-cartuchos" onclick="navPublico('cartuchos')" style="display:none;background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">📦 Cartuchos WJX</button><!-- 🔩 CARTUCHO-1911 -->
-    <button onclick="navPublico('planos')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;"><!--VARREDURA-0112--><span class="t12-old">⭐ Planos</span><span class="t12-new">⭐ Plano Anual</span></button>
+    <button onclick="navPublico('planos')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;"><!--VARREDURA-0112 SO-ANUAL-2611--><span class="sa-old">⭐ Planos</span><span class="sa-new">⭐ Plano Anual</span></button>
     <button onclick="navPublico('rifa')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🎯 Rifa</button>
     <button onclick="navPublico('provas')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">🛡️ Provas</button>
     <button onclick="navPublico('quiz')" style="background:transparent;color:#cbd5e1;border:none;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'DM Sans';white-space:nowrap;border-radius:8px;flex-shrink:0;">❓ Quiz</button>
@@ -2535,7 +2547,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
     <button onclick="navPublico('inicio')">🏠 Início</button>
     <button onclick="navPublico('comprar')">🛒 Comprar</button>
     <button id="tn-menu-cartuchos" onclick="navPublico('cartuchos')" style="display:none;">📦 Cartuchos WJX</button><!-- 🔩 CARTUCHO-1911 -->
-    <button onclick="navPublico('planos')"><!--VARREDURA-0112--><span class="t12-old">⭐ Planos</span><span class="t12-new">⭐ Plano Anual</span></button>
+    <button onclick="navPublico('planos')"><!--VARREDURA-0112 SO-ANUAL-2611--><span class="sa-old">⭐ Planos</span><span class="sa-new">⭐ Plano Anual</span></button>
     <button onclick="navPublico('rifa')">🎯 Rifa</button>
     <button onclick="navPublico('provas')">🛡️ Provas</button>
     <button onclick="navPublico('quiz')">❓ Quiz</button>
@@ -3215,9 +3227,9 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
   <section class="lp-section" id="lp-planos">
     <div class="lp-section-inner">
       <div class="lp-section-head">
-        <div class="lp-section-eyebrow"><!--VARREDURA-0112--><span class="t12-old">Planos de assinatura</span><span class="t12-new">Plano de assinatura</span></div>
+        <div class="lp-section-eyebrow"><!--VARREDURA-0112 SO-ANUAL-2611--><span class="sa-old">Planos de assinatura</span><span class="sa-new">Plano de assinatura</span></div>
         <h2 class="lp-section-title">Compra sempre? Vira assinante.</h2>
-        <p class="lp-section-sub"><!--TABELA-0112--><span class="t12-old">Quanto maior o plano, mais barata a pomada.</span><span class="t12-new">No plano Anual a pomada sai mais barata em toda compra.</span> Peça quando quiser, sem espera, e ganhe 1 pomada grátis na adesão.</p>
+        <p class="lp-section-sub"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Quanto maior o plano, mais barata a pomada.</span><span class="sa-new">No plano Anual a pomada sai mais barata em toda compra.</span> Peça quando quiser, sem espera, e ganhe 1 pomada grátis na adesão.</p>
       </div>
       <div class="lp-plans-grid">
         <div class="lp-plan t12-sai"><!-- TABELA-0112: sai em 01/12 -->
@@ -3297,8 +3309,8 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
         <div class="lp-faq-body"><b>Pix:</b> gera QR code na hora, aprovação imediata, tudo pelo site. <b>Cartão:</b> você finaliza o pedido e nossa equipe processa o pagamento via WhatsApp com toda segurança.</div>
       </details>
       <details class="lp-faq-item">
-        <summary><!--TABELA-0112--><span class="t12-old">Qual a diferença entre os planos de assinatura?</span><span class="t12-new">Como funciona o plano de assinatura?</span><span class="lp-faq-mark">+</span></summary>
-        <div class="lp-faq-body"><!--TABELA-0112--><span class="t12-old">A diferença é o <b>preço por unidade</b>: quanto maior o plano, mais barata a pomada — Mensal a partir de R$ 27,50/un, Semestral R$ 27, <b>Anual R$ 26</b>. Em todos você <b>pede quando quiser, sem espera e sem limite de quantidade</b>, ganha <b>1 pomada grátis na adesão</b> e tem 20% off em rifas. Mensalidade: Mensal R$ 36,90 · Semestral R$ 197,40 · Anual R$ 358,80.</span><span class="t12-new">Agora é <b>um plano só: o Anual</b>, R$ 358,80 à vista no Pix ou no cartão em até 12x. Com ele a pomada sai mais barata em <b>toda</b> compra (a partir de R$ 28/un). Você <b>pede quando quiser, sem espera e sem limite de quantidade</b>, ganha <b>1 pomada grátis na adesão</b> e tem 20% off em rifas.</span></div>
+        <summary><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Qual a diferença entre os planos de assinatura?</span><span class="sa-new">Como funciona o plano de assinatura?</span><span class="lp-faq-mark">+</span></summary>
+        <div class="lp-faq-body"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">A diferença é o <b>preço por unidade</b>: quanto maior o plano, mais barata a pomada — Mensal a partir de R$ 27,50/un, Semestral R$ 27, <b>Anual R$ 26</b>. Em todos você <b>pede quando quiser, sem espera e sem limite de quantidade</b>, ganha <b>1 pomada grátis na adesão</b> e tem 20% off em rifas. Mensalidade: Mensal R$ 36,90 · Semestral R$ 197,40 · Anual R$ 358,80.</span><span class="sa-new">Agora é <b>um plano só: o Anual</b>, R$ 358,80 à vista no Pix ou no cartão em até 12x. Com ele a pomada sai mais barata em <b>toda</b> compra (a partir de <span class="t12-old">R$ 26</span><span class="t12-new">R$ 28</span>/un). Você <b>pede quando quiser, sem espera e sem limite de quantidade</b>, ganha <b>1 pomada grátis na adesão</b> e tem 20% off em rifas.</span></div>
       </details>
       <details class="lp-faq-item">
         <summary>É seguro? Como usar a pomada com segurança?<span class="lp-faq-mark">+</span></summary>
@@ -3334,7 +3346,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
   <footer class="lp-footer">
     <nav aria-label="Navegação do rodapé" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin-bottom:16px;font-size:13px;">
       <a href="/comprar" onclick="navPublico('comprar');return false;" style="color:#475569;text-decoration:none;">Comprar TKTX</a>
-      <a href="/planos" onclick="navPublico('planos');return false;" style="color:#475569;text-decoration:none;"><!--VARREDURA-0112--><span class="t12-old">Planos de assinatura</span><span class="t12-new">Plano de assinatura</span></a>
+      <a href="/planos" onclick="navPublico('planos');return false;" style="color:#475569;text-decoration:none;"><!--VARREDURA-0112 SO-ANUAL-2611--><span class="sa-old">Planos de assinatura</span><span class="sa-new">Plano de assinatura</span></a>
       <a href="/provas" onclick="navPublico('provas');return false;" style="color:#475569;text-decoration:none;">Provas · Loja oficial</a>
       <a href="/rifa" onclick="navPublico('rifa');return false;" style="color:#475569;text-decoration:none;">Rifa</a>
     </nav>
@@ -3579,7 +3591,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
       <div class="cp-banner-icon">⭐</div>
       <div class="cp-banner-text">
         <div class="cp-banner-title">Assine e economize muito mais!</div>
-        <div class="cp-banner-desc"><!--TABELA-0112--><span class="t12-old">Planos a partir de <b>R$ 36,90/mês</b> ou no cartão em até <b>12x</b>. Ganhe <b>1 pomada grátis na adesão</b> + pomada <b>a partir de R$ 26/un</b> + peça quando quiser + 20% off em rifas.</span><span class="t12-new">Plano Anual: <b>R$ 358,80</b> à vista ou no cartão em até <b>12x</b>. Ganhe <b>1 pomada grátis na adesão</b> + pomada <b>a partir de R$ 28/un</b> + peça quando quiser + 20% off em rifas.</span></div>
+        <div class="cp-banner-desc"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Planos a partir de <b>R$ 36,90/mês</b> ou no cartão em até <b>12x</b>. Ganhe <b>1 pomada grátis na adesão</b> + pomada <b>a partir de R$ 26/un</b> + peça quando quiser + 20% off em rifas.</span><span class="sa-new">Plano Anual: <b>R$ 358,80</b> à vista ou no cartão em até <b>12x</b>. Ganhe <b>1 pomada grátis na adesão</b> + pomada <b>a partir de <span class="t12-old">R$ 26</span><span class="t12-new">R$ 28</span>/un</b> + peça quando quiser + 20% off em rifas.</span></div>
       </div>
       <div style="font-size:18px;color:var(--blue);">→</div>
     </div>
@@ -4602,7 +4614,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
           </div>
           <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px;backdrop-filter:blur(4px);">
             <div style="font-size:20px;line-height:1;margin-bottom:4px;">⚡</div>
-            <div style="font-size:11px;color:#ffffff;font-weight:700;line-height:1.3;"><!--TABELA-0112--><span class="t12-old">A partir de R$ 36,90/mês</span><span class="t12-new">Plano Anual R$ 358,80</span></div>
+            <div style="font-size:11px;color:#ffffff;font-weight:700;line-height:1.3;"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">A partir de R$ 36,90/mês</span><span class="sa-new">Plano Anual R$ 358,80</span></div>
           </div>
         </div>
         
@@ -4810,13 +4822,13 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
     <div class="np-hero">
       <div class="np-hero-eyebrow"><span class="dot"></span>ASSINATURA TKTX SC OFICIAL</div>
       <h2 class="np-hero-title">PARE DE PAGAR<br>PREÇO CHEIO<br><span>EM CADA POMADA</span></h2>
-      <p class="np-hero-sub"><!--TABELA-0112--><span class="t12-old">A pomada cai de <b style="color:#dc2626;">R$ 50</b> até <b style="color:#16a34a;">R$ 26/un</b> — <b>quanto maior o plano, mais barato</b>. Peça <b>quando quiser, sem espera</b>, qualquer quantidade. E ganha <b>1 pomada grátis</b> na adesão. 🎁</span><span class="t12-new">A pomada cai de <b style="color:#dc2626;">R$ 60</b> até <b style="color:#16a34a;">R$ 28/un</b> no <b>plano Anual</b>. Peça <b>quando quiser, sem espera</b>, qualquer quantidade. E ganha <b>1 pomada grátis</b> na adesão. 🎁</span></p>
+      <p class="np-hero-sub"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">A pomada cai de <b style="color:#dc2626;">R$ 50</b> até <b style="color:#16a34a;">R$ 26/un</b> — <b>quanto maior o plano, mais barato</b>. Peça <b>quando quiser, sem espera</b>, qualquer quantidade. E ganha <b>1 pomada grátis</b> na adesão. 🎁</span><span class="sa-new">A pomada cai de <b style="color:#dc2626;"><span class="t12-old">R$ 50</span><span class="t12-new">R$ 60</span></b> até <b style="color:#16a34a;"><span class="t12-old">R$ 26</span><span class="t12-new">R$ 28</span>/un</b> no <b>plano Anual</b>. Peça <b>quando quiser, sem espera</b>, qualquer quantidade. E ganha <b>1 pomada grátis</b> na adesão. 🎁</span></p>
     </div>
 
     <!-- ====================================================== -->
     <!-- ESCADINHA DE PREÇOS — primeira coisa: mostra os preços   -->
     <!-- ====================================================== -->
-    <div class="np-plans-head" style="margin-bottom:14px;"><div class="ey">🪜 Escadinha de preços</div><div class="h2"><!--TABELA-0112--><span class="t12-old">QUANTO MAIOR O PLANO, MAIS BARATO</span><span class="t12-new">NO PLANO ANUAL, MAIS BARATO</span></div></div>
+    <div class="np-plans-head" style="margin-bottom:14px;"><div class="ey">🪜 Escadinha de preços</div><div class="h2"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">QUANTO MAIOR O PLANO, MAIS BARATO</span><span class="sa-new">NO PLANO ANUAL, MAIS BARATO</span></div></div>
     <div style="overflow-x:auto;margin-bottom:0.5rem;">
       <table class="np-matrix-table">
         <thead><tr><th>Quantidade</th><th>Sem plano</th><th class="t12-sai">Mensal</th><th class="pop t12-sai">Semestral</th><!-- TABELA-0112 --><th class="best">Anual</th></tr></thead>
@@ -4827,7 +4839,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
         </tbody>
       </table>
     </div>
-    <div style="text-align:center;font-size:12px;color:#64748b;margin:8px 0 2rem;"><!--TABELA-0112--><span class="t12-old">💡 Preço por unidade. Quanto mais unidades, menos paga — e quanto maior o plano, mais barato ainda.</span><span class="t12-new">💡 Preço por unidade. Quanto mais unidades, menos paga — e no plano Anual, mais barato ainda.</span></div>
+    <div style="text-align:center;font-size:12px;color:#64748b;margin:8px 0 2rem;"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">💡 Preço por unidade. Quanto mais unidades, menos paga — e quanto maior o plano, mais barato ainda.</span><span class="sa-new">💡 Preço por unidade. Quanto mais unidades, menos paga — e no plano Anual, mais barato ainda.</span></div>
 
     <!-- (banner comparativo removido) -->
 
@@ -4838,8 +4850,8 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
         <div class="l">Envio pra todo o Brasil</div>
       </div>
       <div class="np-trust-i">
-        <div class="v green"><!--TABELA-0112--><span class="t12-old">R$ 2.400</span><span class="t12-new">até R$ 15</span></div>
-        <div class="l"><!--TABELA-0112--><span class="t12-old">Economia/ano</span><span class="t12-new">a menos por pomada</span></div>
+        <div class="v green"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">R$ 2.400</span><span class="sa-new">até R$ 15</span></div>
+        <div class="l"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Economia/ano</span><span class="sa-new">a menos por pomada</span></div>
       </div>
       <div class="np-trust-i">
         <div class="v gold">4,9★</div>
@@ -4857,7 +4869,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
     <!-- ====================================================== -->
     <div class="np-divider">
       <div class="line"></div>
-      <div class="lbl"><!--TABELA-0112--><span class="t12-old">🧮 Não sabe qual escolher? Responde 2 perguntas</span><span class="t12-new">🧮 O Anual compensa pra você? Responde 2 perguntas</span></div>
+      <div class="lbl"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">🧮 Não sabe qual escolher? Responde 2 perguntas</span><span class="sa-new">🧮 O Anual compensa pra você? Responde 2 perguntas</span></div>
       <div class="line"></div>
     </div>
 
@@ -4865,8 +4877,8 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
       <div class="np-quiz-head">
         <div class="ico">🧮</div>
         <div class="ey">⚡ 30 segundos</div>
-        <div class="h"><!--TABELA-0112--><span class="t12-old">CALCULADORA DE PLANO IDEAL</span><span class="t12-new">O PLANO ANUAL COMPENSA?</span></div>
-        <div class="sb">Responde 2 perguntas e te mostro <b><!--TABELA-0112--><span class="t12-old">qual plano te dá mais dinheiro no bolso</span><span class="t12-new">se o plano Anual deixa mais dinheiro no seu bolso</span></b></div>
+        <div class="h"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">CALCULADORA DE PLANO IDEAL</span><span class="sa-new">O PLANO ANUAL COMPENSA?</span></div>
+        <div class="sb">Responde 2 perguntas e te mostro <b><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">qual plano te dá mais dinheiro no bolso</span><span class="sa-new">se o plano Anual deixa mais dinheiro no seu bolso</span></b></div>
       </div>
 
       <!-- PERGUNTA 1 -->
@@ -4910,7 +4922,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
         <div style="font-size:13px;color:#475569;line-height:1.6;margin-bottom:14px;">Junto com seu <b style="color:#0f172a;">primeiro pedido</b>, sem custo extra. É nossa forma de dizer "obrigado por confiar". Vai dentro da mesma caixa do seu kit.</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:11px;">
           <span style="background:#ffffff;border:0.5px solid #2563eb33;color:#1d4ed8;padding:5px 10px;border-radius:20px;font-weight:600;"><!--TABELA-0112--><span class="t12-old">✓ Valor de R$ 35</span><span class="t12-new">✓ Valor de R$ 45</span></span>
-          <span style="background:#ffffff;border:0.5px solid #16a34a33;color:#15803d;padding:5px 10px;border-radius:20px;font-weight:600;"><!--TABELA-0112--><span class="t12-old">✓ Qualquer plano</span><span class="t12-new">✓ No plano Anual</span></span>
+          <span style="background:#ffffff;border:0.5px solid #16a34a33;color:#15803d;padding:5px 10px;border-radius:20px;font-weight:600;"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">✓ Qualquer plano</span><span class="sa-new">✓ No plano Anual</span></span>
           <span style="background:#ffffff;border:0.5px solid #fbbf2466;color:#b45309;padding:5px 10px;border-radius:20px;font-weight:600;">✓ Sem letra miúda</span>
         </div>
       </div>
@@ -4924,8 +4936,8 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
     <div class="np-plans-section">
       <div class="np-plans-head">
         <div class="ey">💎 Escolha o seu</div>
-        <div class="h2"><!--TABELA-0112--><span class="t12-old">3 PLANOS, 1 LUCRO MAIOR</span><span class="t12-new">1 PLANO, O MENOR PREÇO</span></div>
-        <div class="sb"><!--TABELA-0112--><span class="t12-old">Quanto mais tempo você se compromete, <b>mais barato fica</b>.</span><span class="t12-new">No plano Anual a pomada fica <b>mais barata em toda compra</b>.</span> Pagamento único, nada é cobrado sozinho.</div><!-- ASSIN-2311 B1 -->
+        <div class="h2"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">3 PLANOS, 1 LUCRO MAIOR</span><span class="sa-new">1 PLANO, O MENOR PREÇO</span></div>
+        <div class="sb"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Quanto mais tempo você se compromete, <b>mais barato fica</b>.</span><span class="sa-new">No plano Anual a pomada fica <b>mais barata em toda compra</b>.</span> Pagamento único, nada é cobrado sozinho.</div><!-- ASSIN-2311 B1 -->
       </div>
 
 
@@ -4966,7 +4978,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
           <div class="np-plan-tag">🏆 MAIS ECONÔMICO</div>
           <div class="np-plan-name">🚀 Anual</div>
           <div class="np-plan-pricing">
-            <div class="np-plan-strike t12-old">de R$ 442,80 por</div><!-- TABELA-0112: 442,80 = 12 × Mensal, que deixa de existir -->
+            <div class="np-plan-strike sa-old">de R$ 442,80 por</div><!-- TABELA-0112 SO-ANUAL-2611: 442,80 = 12 × Mensal, que deixa de existir -->
             <div class="np-plan-val">R$ 358<span class="cents">,80</span></div>
             <div class="np-plan-suf">à vista no Pix (12 meses)</div>
             <div class="np-plan-install">ou no cartão em até <b>12x</b></div>
@@ -4984,9 +4996,9 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
            Antes essas 4 linhas estavam escritas dentro dos 3 cards, idênticas — 12 linhas
            repetidas que só faziam o cliente ler três vezes a mesma coisa pra achar a diferença.
            Agora cada card mostra só o que o diferencia (preço e travamento) e o comum vem aqui. -->
-      <div style="margin-top:18px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:14px 16px;">
-        <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#94a3b8;font-weight:700;margin-bottom:7px;"><!--TABELA-0112--><span class="t12-old">Em todos os planos</span><span class="t12-new">No plano Anual</span></div>
-        <div style="font-size:12.5px;color:#e2e8f0;line-height:1.7;">Peça <b>quando quiser</b>, sem espera · <b>qualquer quantidade</b> sempre no preço do plano · <b>1 pomada grátis</b> na adesão 🎁 · <b>20% off</b> nas rifas</div>
+      <div style="margin-top:18px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;"><!-- SO-ANUAL-2611: era letra clara em fundo branco (ilegível) -->
+        <div style="font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#475569;font-weight:700;margin-bottom:7px;"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Em todos os planos</span><span class="sa-new">No plano Anual</span></div>
+        <div style="font-size:13px;color:#334155;line-height:1.7;"><!-- SO-ANUAL-2611 -->Peça <b>quando quiser</b>, sem espera · <b>qualquer quantidade</b> sempre no preço do plano · <b>1 pomada grátis</b> na adesão 🎁 · <b>20% off</b> nas rifas</div>
       </div>
     </div>
 
@@ -5050,17 +5062,17 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
       </div>
       <details class="np-faq-item" open>
         <summary>E se eu não usar tudo que o plano oferece?</summary>
-        <div class="np-faq-body"><!--VARREDURA-0112--><span class="t12-old">Mesmo se você usar só <b>metade</b> dos benefícios, ainda compensa. O cálculo é simples: a economia por pomada + a pomada de brinde por si só <b>pagam o plano</b>. Se ainda assim não rolar pra você, é só não renovar — sem multa, sem letra miúda.</span><span class="t12-new">Depende de quanto você compra: a calculadora acima mostra se o plano <b>Anual</b> compensa pra você. Se não compensar, compre sem plano — sem multa, sem letra miúda.</span></div>
+        <div class="np-faq-body"><!--VARREDURA-0112 SO-ANUAL-2611--><span class="sa-old">Mesmo se você usar só <b>metade</b> dos benefícios, ainda compensa. O cálculo é simples: a economia por pomada + a pomada de brinde por si só <b>pagam o plano</b>. Se ainda assim não rolar pra você, é só não renovar — sem multa, sem letra miúda.</span><span class="sa-new">Depende de quanto você compra: a calculadora acima mostra se o plano <b>Anual</b> compensa pra você. Se não compensar, compre sem plano — sem multa, sem letra miúda.</span></div>
       </details>
       <details class="np-faq-item">
         <summary>Posso cancelar a qualquer momento?</summary>
-        <div class="np-faq-body"><b>Sim, e não tem o que cancelar.</b> <!--TABELA-0112--><span class="t12-old">Todo plano é pagamento único: o Mensal vale 30 dias, o Semestral 180 e o Anual 365.</span><span class="t12-new">O plano Anual é pagamento único e vale 365 dias.</span> Nada é cobrado sozinho: quando vence, é só renovar se quiser. Não tem multa, não tem fidelidade.</div><!-- ASSIN-2311 B1 -->
+        <div class="np-faq-body"><b>Sim, e não tem o que cancelar.</b> <!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Todo plano é pagamento único: o Mensal vale 30 dias, o Semestral 180 e o Anual 365.</span><span class="sa-new">O plano Anual é pagamento único e vale 365 dias.</span> Nada é cobrado sozinho: quando vence, é só renovar se quiser. Não tem multa, não tem fidelidade.</div><!-- ASSIN-2311 B1 -->
       </details>
-      <details class="np-faq-item t12-new"><!-- TABELA-0112 -->
+      <details class="np-faq-item sa-new"><!-- TABELA-0112 SO-ANUAL-2611 -->
         <summary>Quanto custa a pomada no plano Anual?</summary>
-        <div class="np-faq-body">Em toda faixa de quantidade a pomada sai mais barata que sem plano: de <b>R$ 45</b> (1 a 4 un, contra R$ 60 sem plano) até <b>R$ 28/un</b> (600 un ou mais, contra R$ 29). Você pede <b>quando quiser, qualquer quantidade, sem espera</b>.</div>
+        <div class="np-faq-body">Em toda faixa de quantidade a pomada sai mais barata que sem plano: de <b><span class="t12-old">R$ 35</span><span class="t12-new">R$ 45</span></b> (1 a 4 un, contra <span class="t12-old">R$ 50</span><span class="t12-new">R$ 60</span> sem plano) até <b><span class="t12-old">R$ 26</span><span class="t12-new">R$ 28</span>/un</b> (600 un ou mais, contra <span class="t12-old">R$ 28</span><span class="t12-new">R$ 29</span>). Você pede <b>quando quiser, qualquer quantidade, sem espera</b>.</div><!-- SO-ANUAL-2611 -->
       </details>
-      <details class="np-faq-item t12-old">
+      <details class="np-faq-item sa-old"><!-- SO-ANUAL-2611 -->
         <summary>O que muda do Mensal pro Semestral/Anual?</summary>
         <div class="np-faq-body">Em todos os planos você pede <b>quando quiser, qualquer quantidade, sem espera</b>. A diferença é o <b>preço por unidade</b>: o <b>Mensal</b> já dá preço de assinante (a partir de R$ 27,50/un); o <b>Semestral</b> fica mais barato (a partir de R$ 27); o <b>Anual</b> tem o <b>menor preço</b> (a partir de R$ 26). Quanto maior o plano, mais barata a pomada.</div>
       </details>
@@ -5085,8 +5097,8 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
       <div class="np-cta-final-content">
         <div class="np-cta-final-eyebrow">⭐ Última chamada</div>
         <h2 class="np-cta-final-title">Pronto pra parar de jogar dinheiro fora?</h2>
-        <p class="np-cta-final-sub"><!--TABELA-0112--><span class="t12-old">Junte-se aos tatuadores que já compram com <b>preço de assinante</b>. Plano <b>Semestral</b> à vista no Pix por <b>R$ 197,40</b>. Pagamento único, nada é cobrado sozinho.</span><span class="t12-new">Junte-se aos tatuadores que já compram com <b>preço de assinante</b>. Plano <b>Anual</b> à vista no Pix por <b>R$ 358,80</b> ou no cartão em até 12x. Pagamento único, nada é cobrado sozinho.</span></p><!-- ASSIN-2311 B1 B2 -->
-        <button class="np-cta-final-btn" onclick="quererPlano(window.T0112?'anual':'semestral')"><!-- TABELA-0112 -->⭐ QUERO ASSINAR AGORA</button>
+        <p class="np-cta-final-sub"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Junte-se aos tatuadores que já compram com <b>preço de assinante</b>. Plano <b>Semestral</b> à vista no Pix por <b>R$ 197,40</b>. Pagamento único, nada é cobrado sozinho.</span><span class="sa-new">Junte-se aos tatuadores que já compram com <b>preço de assinante</b>. Plano <b>Anual</b> à vista no Pix por <b>R$ 358,80</b> ou no cartão em até 12x. Pagamento único, nada é cobrado sozinho.</span></p><!-- ASSIN-2311 B1 B2 -->
+        <button class="np-cta-final-btn" onclick="quererPlano((window.SO_ANUAL||window.T0112)?'anual':'semestral')"><!-- TABELA-0112 SO-ANUAL-2611 -->⭐ QUERO ASSINAR AGORA</button>
         <div class="np-cta-final-trust">
           <span>🔒 Pagamento seguro</span>
           <span>✅ Sem multa</span>
@@ -5114,7 +5126,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
   <!-- Aparece após 600px de scroll, leva direto pros planos   -->
   <!-- ====================================================== -->
   <button id="np-fab-assinar" class="np-fab" onclick="npFabClick()" aria-label="Ir para os planos">
-    <span class="star">⭐</span><span><!--TABELA-0112--><span class="t12-old">Assinar a partir de R$ 36,90</span><span class="t12-new">Assinar o Anual · R$ 358,80</span></span>
+    <span class="star">⭐</span><span><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Assinar a partir de R$ 36,90</span><span class="sa-new">Assinar o Anual · R$ 358,80</span></span>
   </button>
 
   <script>
@@ -5139,7 +5151,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
   })();
   // Clique: rola suave até a seção de planos
   function npFabClick(){
-    try{if(typeof fbqAdvanced!=='undefined')fbqAdvanced('trackCustom','FabAssinarClick',{value:(window.T0112?358.80:36.90)/*TABELA-0112*/,currency:'BRL'});}catch(e){}
+    try{if(typeof fbqAdvanced!=='undefined')fbqAdvanced('trackCustom','FabAssinarClick',{value:((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?358.80:36.90)/*TABELA-0112*/,currency:'BRL'});}catch(e){}
     const target=document.querySelector('.np-plans-section');
     if(target){
       target.scrollIntoView({behavior:'smooth',block:'start'});
@@ -5654,7 +5666,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
             <div class="ct" style="margin-bottom:0;">🎁 Kits Surpresa</div>
             <button onclick="abrirNovoKitSurpresa()" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:600;font-family:'DM Sans';">+ Novo kit</button>
           </div>
-          <div style="font-size:12px;color:#64748b;margin-bottom:1rem;line-height:1.5;"><!--VARREDURA-0112--><span class="t12-old">Crie kits promocionais com estoque limitado. Aparecem só para assinantes Semestral e Anual.</span><span class="t12-new">Crie kits promocionais com estoque limitado. Aparecem só para assinantes do plano Anual.</span></div>
+          <div style="font-size:12px;color:#64748b;margin-bottom:1rem;line-height:1.5;"><!--VARREDURA-0112 SO-ANUAL-2611--><span class="sa-old">Crie kits promocionais com estoque limitado. Aparecem só para assinantes Semestral e Anual.</span><span class="sa-new">Crie kits promocionais com estoque limitado. Aparecem só para assinantes do plano Anual.</span></div>
           <div id="lista-kits-adm"><div class="es">🔄 Carregando...</div></div>
         </div>
       </div>
@@ -8091,7 +8103,7 @@ async function renderHistoricoPedidos(){
 window._repetirState=null;
 
 // ASSIN-2311 A4: plano em dia do cliente logado (mesma régua do Fazer Pedido / pvPlanoVigente: vencimento > agora)
-function _repetirPlanoVig(){ try{ if(typeof CU==='undefined'||!CU||IA) return null; var _p=(CU.vencimento&&new Date(CU.vencimento)>new Date())?(CU.plano||'mensal'):null; return (_p&&window.t12Escolha)?t12Escolha(_p):_p; /*VARREDURA-0112: plano antigo = preço sem plano*/ }catch(e){ return null; } }
+function _repetirPlanoVig(){ try{ if(typeof CU==='undefined'||!CU||IA) return null; var _p=(CU.vencimento&&new Date(CU.vencimento)>new Date())?(CU.plano||'mensal'):null; return (_p&&window.t12Vig)?t12Vig(_p):_p; /*SO-ANUAL-2611: desconto da conta antiga até 30/11*/ /*VARREDURA-0112: plano antigo = preço sem plano*/ }catch(e){ return null; } }
 // ASSIN-2311 A1: o Repetir da tela inicial só tem o nº do pedido: busca o pedido e chama o repetirPedido com os MESMOS argumentos do botão de Meus Pedidos
 async function repetirPedidoPorId(id){
   let lista=Array.isArray(window._homePedidosCache)?window._homePedidosCache:[];
@@ -9235,7 +9247,7 @@ function _assinMenorUnTxt(){
   }catch(e){ return ''; }
 }
 function _assinPlanosTxt(){
-  if(window.T0112) return 'Plano Anual: R$ 358,80 à vista ou em até 12x no cartão.';   // TABELA-0112
+  if((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)) return 'Plano Anual: R$ 358,80 à vista ou em até 12x no cartão.';   // TABELA-0112
   const fim='Semestral e Anual em até 12x no cartão.';
   try{
     const v=Number(PLANOS_INFO.mensal.avista);
@@ -9244,21 +9256,21 @@ function _assinPlanosTxt(){
   }catch(e){ return fim; }
 }
 function renderBloqueioRenovar(titulo,desc){
-  const wppMsg=encodeURIComponent((window.T0112?'Olá! Quero assinar o plano Anual TKTX SC. Meu usuário é ':'Olá! Quero renovar meu plano TKTX SC. Meu usuário é ')/*VARREDURA-0112*/+(CU?.usuario||''));
+  const wppMsg=encodeURIComponent(((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'Olá! Quero assinar o plano Anual TKTX SC. Meu usuário é ':'Olá! Quero renovar meu plano TKTX SC. Meu usuário é ')/*VARREDURA-0112*/+(CU?.usuario||''));
   return '<div style="background:linear-gradient(135deg,#fef3c7,#fef3c7);border:1.5px solid #fbbf24;border-radius:14px;padding:1.5rem;text-align:center;margin:1rem 0;">'+
     '<div style="font-size:42px;margin-bottom:8px;">🔒</div>'+
     '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:#0f172a;letter-spacing:1px;line-height:1.2;margin-bottom:6px;">'+(titulo||'Recurso exclusivo de assinantes')+'</div>'+
     '<div style="font-size:13px;color:#475569;line-height:1.5;margin-bottom:14px;">'+(desc||'Seu período de teste acabou. Renove seu plano pra desbloquear esse recurso.')+'</div>'+
     '<div style="background:#ffffff;border-radius:10px;padding:12px;margin-bottom:14px;font-size:12px;color:#64748b;line-height:1.6;">'+
       '✅ Ferramentas de IA (Pós-tat, Orçamento, Roteiro, Atendente)<br>'+
-      '✅ '+(window.T0112?'Pomada mais barata em toda compra (plano Anual)':'Kit Mensal com preço de assinante')/*VARREDURA-0112*/+'<br>'+
+      '✅ '+((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'Pomada mais barata em toda compra (plano Anual)':'Kit Mensal com preço de assinante')/*VARREDURA-0112*/+'<br>'+
       '✅ 20% off em todas as rifas<br>'+
       '✅ 1 pomada de brinde no 1º pagamento'+
     '</div>'+
     '<a href="https://wa.me/554792444477?text='+wppMsg+'" target="_blank" style="display:inline-block;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#0f172a;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;letter-spacing:0.5px;">⭐ RENOVAR PLANO PELO WHATSAPP</a>'+
   '</div>';
 }
-function isAss(){if(!CU||IA)return false;if(window.t12Sai&&t12Sai(CU.plano||'mensal'))return false;/*VARREDURA-0112: plano antigo = sem plano (rifa sem os 20%)*/return !!(CU.vencimento&&new Date(CU.vencimento)>new Date());}   // ASSIN-2311 A3: só plano em dia (mesma régua de rjAssinante/pvPlanoVigente)
+function isAss(){if(!CU||IA)return false;if(window.t12Antigo&&t12Antigo(CU.plano||'mensal'))return false;/*VARREDURA-0112: plano antigo = sem plano (rifa sem os 20%) · SO-ANUAL-2611: só em 01/12*/return !!(CU.vencimento&&new Date(CU.vencimento)>new Date());}   // ASSIN-2311 A3: só plano em dia (mesma régua de rjAssinante/pvPlanoVigente)
 
 // === Sessão persistente (localStorage) ===
 function salvarSessao(obj){try{localStorage.setItem('tktxsc_sess',JSON.stringify(obj));}catch(e){}}
@@ -10021,8 +10033,8 @@ function renderTBanner(){
           '<div style="font-size:11px;color:#2563eb;margin-top:2px;">Trial: <b style="color:#16a34a;">'+d+' dia'+(d!==1?'s':'')+' restante'+(d!==1?'s':'')+'</b> • Desbloqueie tudo agora</div>'+
         '</div>'+
       '</div>'+
-      '<div style="display:grid;grid-template-columns:repeat('+(window.T0112?1:3)+',1fr);gap:6px;margin-bottom:12px;">'+
-        (window.T0112?''/*TABELA-0112*/:'<div style="background:#f8fafc;border:0.5px solid #e5e7eb;border-radius:8px;padding:8px 6px;text-align:center;"><div style="font-size:9px;color:#64748b;letter-spacing:1px;">MENSAL</div><div style="font-size:13px;color:#0f172a;font-weight:500;margin-top:3px;">R$ 36,90</div><div style="font-size:9px;color:#64748b;">vale 30 dias</div><!-- ASSIN-2311 B1 --></div>'+
+      '<div style="display:grid;grid-template-columns:repeat('+((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?1:3)+',1fr);gap:6px;margin-bottom:12px;">'+
+        ((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?''/*TABELA-0112*/:'<div style="background:#f8fafc;border:0.5px solid #e5e7eb;border-radius:8px;padding:8px 6px;text-align:center;"><div style="font-size:9px;color:#64748b;letter-spacing:1px;">MENSAL</div><div style="font-size:13px;color:#0f172a;font-weight:500;margin-top:3px;">R$ 36,90</div><div style="font-size:9px;color:#64748b;">vale 30 dias</div><!-- ASSIN-2311 B1 --></div>'+
         '<div style="background:#f8fafc;border:0.5px solid #e5e7eb;border-radius:8px;padding:8px 6px;text-align:center;"><div style="font-size:9px;color:#64748b;letter-spacing:1px;">SEMESTRAL</div><div style="font-size:13px;color:#0f172a;font-weight:500;margin-top:3px;">R$ 197,40</div><!-- ASSIN-2311 B2 B3 --><div style="font-size:9px;color:#15803d;">à vista Pix</div><div style="font-size:8px;color:#64748b;margin-top:1px;">ou no cartão em até 12x</div></div>')+
         '<div style="background:#f8fafc;border:1px solid #16a34a;border-radius:8px;padding:8px 6px;text-align:center;"><div style="display:inline-block;background:#16a34a;color:#fff;font-size:12px;line-height:1.2;padding:2px 6px;border-radius:6px;margin-bottom:4px;">MELHOR PREÇO</div><div style="font-size:9px;color:#16a34a;letter-spacing:1px;">ANUAL</div><div style="font-size:13px;color:#0f172a;font-weight:500;margin-top:3px;">R$ 358,80</div><!-- ASSIN-2311 B2 B3: selo no fluxo, letra 12px --><div style="font-size:9px;color:#15803d;">à vista Pix</div><div style="font-size:8px;color:#64748b;margin-top:1px;">ou no cartão em até 12x</div></div>'+
       '</div>'+
@@ -10191,7 +10203,7 @@ async function renderKit(){
   const bl=lim.bloqueado;
   document.getElementById('btn-kit').disabled=bl;
   document.getElementById('btn-kit').style.display='';// reset (caso tenha sido escondido em trial expirado)
-  document.getElementById('kit-grid').innerHTML=renderSeletorQtd({prefix:'kit',qtd:KS||1,assinante:!(window.t12Sai&&t12Sai((CU&&CU.plano)||'mensal'))/*VARREDURA-0112*/,disabled:bl,onChangeFn:'kitSetQtd',maxUnidades:lim.maxUnidades,plano:(CU&&CU.plano)||'mensal'});
+  document.getElementById('kit-grid').innerHTML=renderSeletorQtd({prefix:'kit',qtd:KS||1,assinante:!(window.t12Antigo&&t12Antigo((CU&&CU.plano)||'mensal'))/*VARREDURA-0112 SO-ANUAL-2611*/,disabled:bl,onChangeFn:'kitSetQtd',maxUnidades:lim.maxUnidades,plano:(CU&&CU.plano)||'mensal'});
   
   if(bl){
     document.getElementById('pag-pix').classList.add('dis');
@@ -12228,11 +12240,11 @@ async function solKit(){
   const enderecoTxt=(kitEnderecoData&&kitEnderecoData.cep===cep.replace(/\D/g,''))?(kitEnderecoData.rua+', '+kitEnderecoData.bairro+', '+kitEnderecoData.cidade+', CEP '+cep):'CEP '+cep;   // 📍 05/10: o endereço do ViaCEP só vale se for DESTE CEP
   await sb.from('pedidos_kit').insert({assinante_id:CU.id,nome_tatuador:nome,kit_unidades:k.un,kit_preco:k.p,valor_frete:valorFrete,valor_total:total,pagamento:PS==='pix'?'Pix':'Cartão',status:'aguardando'});
   // Rifa (order bump): salva as cotas que o cliente escolheu junto do pedido
-  try{await rifaBumpSalvarParticipantes('kit',{nome:nome,telefone:(CU&&CU.telefone)||'',cpf:(CU&&CU.cpf)||null,ehAssinante:!(window.t12Sai&&t12Sai((CU&&CU.plano)||'mensal'))/*VARREDURA-0112*/});}catch(e){console.warn('rifa kit save:',e);}
+  try{await rifaBumpSalvarParticipantes('kit',{nome:nome,telefone:(CU&&CU.telefone)||'',cpf:(CU&&CU.cpf)||null,ehAssinante:!(window.t12Antigo&&t12Antigo((CU&&CU.plano)||'mensal'))/*VARREDURA-0112 SO-ANUAL-2611*/});}catch(e){console.warn('rifa kit save:',e);}
   const msg='🔵 *PEDIDO KIT ASSINANTE - TKTX SC*\n\n'+
     '👤 *Tatuador:* '+nome+'\n'+
     '👤 *Conta:* @'+CU.usuario+'\n\n'+
-    '📦 *Pedido:* '+k.l+' (R$ '+k.precoUn.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+((window.t12Sai&&t12Sai((CU&&CU.plano)||'mensal'))?'/un — preço normal)\n':'/un — preço assinante)\n')/*VARREDURA-0112*/+
+    '📦 *Pedido:* '+k.l+' (R$ '+k.precoUn.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+((window.t12Antigo&&t12Antigo((CU&&CU.plano)||'mensal'))?'/un — preço normal)\n':'/un — preço assinante)\n')/*VARREDURA-0112 SO-ANUAL-2611*/+
     '🎯 *Modelos:* '+getDivisaoTexto('kit')+'\n'+
     '💰 *Valor do kit:* R$ '+k.p.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'\n\n'+
     '🚚 *Frete:* '+nomeFrete+'\n'+
@@ -14679,8 +14691,8 @@ window.mostrarTabelaPrecos=function(origem,qtd){
     cab+='</tr>';
 
     let aviso='';
-    if(origem==='promo') aviso='<div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:11.5px;color:#92400e;line-height:1.5;">🔥 <b>O preço de HOJE é o da coluna verde (assinante Anual)</b> — liberado 1x por CPF. Nas próximas compras vale a coluna "Sem plano"… a não ser que você assine '+(/*TABELA-0112*/window.T0112?'o plano Anual':'um plano')+'. 😉</div>';
-    else if(origem==='fp'||origem==='cp') aviso='<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:11.5px;color:#166534;line-height:1.5;">'+(/*TABELA-0112*/window.T0112?'💚 Assinante do plano <b>Anual</b> paga menos <b>em toda compra</b>.':'💚 Assinante paga o preço do plano <b>em toda compra</b> — quanto maior o plano, mais barata a pomada.')+'</div>';
+    if(origem==='promo') aviso='<div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:11.5px;color:#92400e;line-height:1.5;">🔥 <b>O preço de HOJE é o da coluna verde (assinante Anual)</b> — liberado 1x por CPF. Nas próximas compras vale a coluna "Sem plano"… a não ser que você assine '+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'o plano Anual':'um plano')+'. 😉</div>';
+    else if(origem==='fp'||origem==='cp') aviso='<div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:9px 12px;margin-bottom:10px;font-size:11.5px;color:#166534;line-height:1.5;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'💚 Assinante do plano <b>Anual</b> paga menos <b>em toda compra</b>.':'💚 Assinante paga o preço do plano <b>em toda compra</b> — quanto maior o plano, mais barata a pomada.')+'</div>';
 
     const ov=document.createElement('div');
     ov.id='tp-modal';
@@ -14751,8 +14763,8 @@ function renderEscadaPrecos(){
   const economia=(fx.precoUn-fx.anualUn)*q;
   const html=
     '<div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:18px;padding:18px 16px;box-shadow:0 10px 30px rgba(15,23,42,0.06);">'+
-      '<div style="text-align:center;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:23px;letter-spacing:0.5px;color:#0f172a;line-height:1.06;">'+(/*TABELA-0112*/window.T0112?'NO PLANO ANUAL,<br>A POMADA SAI MAIS BARATA':'QUANTO MAIOR O PLANO,<br>MAIS BARATA A POMADA')+'</div>'+
-      '<div style="font-size:12px;color:#64748b;margin-top:4px;">'+(/*TABELA-0112*/window.T0112?'Toque na quantidade e veja seu preço com e sem plano 👇':'Toque na quantidade e veja seu preço em cada plano 👇')+'</div></div>'+
+      '<div style="text-align:center;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:23px;letter-spacing:0.5px;color:#0f172a;line-height:1.06;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'NO PLANO ANUAL,<br>A POMADA SAI MAIS BARATA':'QUANTO MAIOR O PLANO,<br>MAIS BARATA A POMADA')+'</div>'+
+      '<div style="font-size:12px;color:#64748b;margin-top:4px;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'Toque na quantidade e veja seu preço com e sem plano 👇':'Toque na quantidade e veja seu preço em cada plano 👇')+'</div></div>'+
       '<div style="font-size:10.5px;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:14px 0 7px;text-align:center;">Quantas pomadas?</div>'+
       '<div style="display:flex;gap:7px;flex-wrap:wrap;justify-content:center;">'+chips+'</div>'+
       rows+
@@ -14969,7 +14981,7 @@ function renderTabelaPrecosVisual(modo, qtdAtiva, onClickFn){
     const labelFaixa=fx.label;
     
     // Plano necessário
-    const planoTag=window.T0112?''/*TABELA-0112*/:(fx.min<=24?'':(fx.min<=49?'⭐ Semestral+':'⭐ Semestral+'));
+    const planoTag=(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?''/*TABELA-0112*/:(fx.min<=24?'':(fx.min<=49?'⭐ Semestral+':'⭐ Semestral+'));
     
     // Card clicável ou estático
     const cursor=onClickFn?'cursor:pointer;':'';
@@ -15017,7 +15029,7 @@ function renderTabelaPrecosVisual(modo, qtdAtiva, onClickFn){
   // Aviso do plano Mensal
   if(modo==='comprar'||modo==='planos'){
     html+='<div style="background:#f0fdf4;border:0.5px solid #16a34a44;border-radius:8px;padding:10px 12px;margin-top:10px;font-size:11px;color:#15803d;line-height:1.5;">';
-    html+=(window.T0112?'💡 No plano Anual você pede <b>quando quiser, qualquer quantidade</b>, com a pomada <b>mais barata</b>.':'💡 Em qualquer plano você pede <b>quando quiser, qualquer quantidade</b>. Quanto maior o plano, <b>mais barata</b> a pomada.')/*TABELA-0112*/;
+    html+=((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'💡 No plano Anual você pede <b>quando quiser, qualquer quantidade</b>, com a pomada <b>mais barata</b>.':'💡 Em qualquer plano você pede <b>quando quiser, qualquer quantidade</b>. Quanto maior o plano, <b>mais barata</b> a pomada.')/*TABELA-0112*/;
     html+='</div>';
   }
   
@@ -15140,7 +15152,7 @@ function renderCpKits(){
 
   // Card ÚNICO (título + quantidade digitável/±/atalhos + 4 planos ao vivo). Sem botão que sai da aba.
   grid.innerHTML='<div style="background:linear-gradient(135deg,#f8fafc,#ffffff);border:1px solid var(--blue);border-radius:14px;padding:18px;">'+
-    '<div style="text-align:center;margin-bottom:12px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;letter-spacing:0.5px;color:#0f172a;line-height:1.06;">'+(/*TABELA-0112*/window.T0112?'NO PLANO ANUAL, A POMADA SAI MAIS BARATA':'QUANTO MAIOR O PLANO, MAIS BARATA A POMADA')+'</div><div style="font-size:11px;color:#64748b;margin-top:3px;">Escolha a quantidade — o preço atualiza sozinho 👇</div></div>'+
+    '<div style="text-align:center;margin-bottom:12px;"><div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;letter-spacing:0.5px;color:#0f172a;line-height:1.06;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'NO PLANO ANUAL, A POMADA SAI MAIS BARATA':'QUANTO MAIOR O PLANO, MAIS BARATA A POMADA')+'</div><div style="font-size:11px;color:#64748b;margin-top:3px;">Escolha a quantidade — o preço atualiza sozinho 👇</div></div>'+
     '<div style="text-align:center;margin-bottom:12px;">'+
       '<div style="font-size:11px;color:#64748b;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;">Quantidade</div>'+
       '<div style="display:flex;justify-content:center;align-items:center;gap:14px;">'+
@@ -15353,7 +15365,7 @@ function atualizaCpResumo(){
         ecoLine.style.display='flex';
         ecoVal.textContent='R$ '+p.economia.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
         ecoVal.style.color='';
-        if(lbl){lbl.textContent=(window.T0112?'💡 Economia no plano Anual':'💡 Economia se assinar')/*VARREDURA-0112*/;lbl.style.color='';}
+        if(lbl){lbl.textContent=((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'💡 Economia no plano Anual':'💡 Economia se assinar')/*VARREDURA-0112*/;lbl.style.color='';}
       }
       
       // Callout "vire assinante" só se: NÃO é assinante já E NÃO selecionou plano ainda
@@ -15557,7 +15569,7 @@ function atualizaCpResumo(){
       if(stickyTotal){stickyTotal.textContent='R$ '+total.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});stickyTotal.style.color='#2563eb';}
       if(stickyEco){
         if(p.economia>0){
-          stickyEco.textContent=(window.T0112?'💡 No Anual economiza R$ ':'💡 Assinante economiza R$ ')/*VARREDURA-0112*/+p.economia.toLocaleString('pt-BR',{maximumFractionDigits:0});
+          stickyEco.textContent=((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'💡 No Anual economiza R$ ':'💡 Assinante economiza R$ ')/*VARREDURA-0112*/+p.economia.toLocaleString('pt-BR',{maximumFractionDigits:0});
           stickyEco.style.color='#fbbf24';
         }else{
           stickyEco.textContent='';
@@ -16634,7 +16646,7 @@ async function finalizarPedido(){
   }catch(e){}
   // === USA AS FAIXAS DE PREÇO (escadinha do plano escolhido) ===
   if(window.t12Sai&&t12Sai(cpPlanoSel)) cpPlanoSel=null;   // TABELA-0112: última porta antes de gravar o pedido
-  if(window.t12Sai&&cpDescontoAtivo&&cpClienteAssData&&t12Sai(cpClienteAssData.plano||'mensal')) cpDescontoAtivo=false;   // VARREDURA-0112: desconto ligado antes da virada não vale para plano antigo
+  if(window.t12Antigo&&cpDescontoAtivo&&cpClienteAssData&&t12Antigo(cpClienteAssData.plano||'mensal')) cpDescontoAtivo=false;   /*SO-ANUAL-2611: só em 01/12*/   // VARREDURA-0112: desconto ligado antes da virada não vale para plano antigo
   const _planoCp=cpPlanoSel||((cpDescontoAtivo&&cpClienteAssData)?(cpClienteAssData.plano||'mensal'):null);
   const precos=calcularPrecos(cpQtd,_planoCp);
   const k={
@@ -16853,7 +16865,7 @@ async function finalizarPedido(){
     bairro+'\n'+
     cidade+'\n'+
     'CEP: '+cep+
-    (cpPlanoSel||cpDescontoAtivo||(k.un<1&&!(eco>0))?'':(window.T0112?vz12EcoLinha(k.un)/*VARREDURA-0112*/:'\n\n_💡 Economizaria R$ '+eco.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' sendo assinante_'))+   //🧩 PEÇAS-BANCADA-1211 (sopeça): sem pomada (só peças/spray) não cita "Economizaria R$ 0,00"
+    (cpPlanoSel||cpDescontoAtivo||(k.un<1&&!(eco>0))?'':((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?vz12EcoLinha(k.un)/*VARREDURA-0112*/:'\n\n_💡 Economizaria R$ '+eco.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' sendo assinante_'))+   //🧩 PEÇAS-BANCADA-1211 (sopeça): sem pomada (só peças/spray) não cita "Economizaria R$ 0,00"
     loginMsg+
     rifaBumpMsg+
     rifaMsg;
@@ -22935,7 +22947,7 @@ function seoRota(rota){
       comprar:{p:'/comprar',t:'Comprar Pomada TKTX Original | Loja Oficial TKTX SC'},
       cartuchos:{p:'/cartuchos',t:'Cartuchos WJX | TKTX SC',d:'Cartuchos WJX a R$ 5 cada: 1007RL, 1009RL, 1013RM, 1027RM e 1215RM.'},/*🔩 CARTUCHO-1911*/
       bancada:{p:'/bancada',t:'Peças para a bancada do tatuador | TKTX SC',d:'Descanso de máquina, porta-batoque, suporte de cartuchos e outras peças para a bancada. Preta, branca ou azul, com o nome do seu estúdio.'},   // 🎯 BANCADA-1811
-      planos:{p:'/planos',t:(window.T0112?'Plano Anual TKTX — Pomada a partir de R$ 28/un':'Planos de Assinatura TKTX — Pomada a partir de R$ 26/un')/*VARREDURA-0112*/},
+      planos:{p:'/planos',t:((window.SO_ANUAL||window.T0112)?'Plano Anual TKTX — Pomada a partir de '+(window.T0112?'R$ 28':'R$ 26')+'/un':'Planos de Assinatura TKTX — Pomada a partir de R$ 26/un')/*VARREDURA-0112 SO-ANUAL-2611*/},
       promo:{p:'/promo',t:'Promoção Anual TKTX — Preço de Atacado pra Todo Mundo | TKTX SC'},
       bf:{p:'/selecionado',t:'Você foi selecionado · TKTX SC',noindex:true},   // 🎃 link oculto da Black Friday Secreta
       rifa:{p:'/rifa',t:'Rifa TKTX SC — Concorra a prêmios | Loja Oficial'},
@@ -25575,7 +25587,7 @@ function showPlanos(){
     if(tab) tab.innerHTML=renderTabelaPrecosVisual('planos',0,null);
   },50);
   // 🎁 Kit Surpresa DESATIVADO (31/07 — TKTX: "não usamos mais"). A função fica, só não é chamada.
-  try{if(typeof fbqAdvanced!=='undefined')fbqAdvanced('track','ViewContent',{content_name:'Página Planos TKTX',content_category:'plano-assinatura',content_type:'product',currency:'BRL',value:(window.T0112?358.80:197.40)/*VARREDURA-0112*/});}catch(e){}
+  try{if(typeof fbqAdvanced!=='undefined')fbqAdvanced('track','ViewContent',{content_name:'Página Planos TKTX',content_category:'plano-assinatura',content_type:'product',currency:'BRL',value:((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?358.80:197.40)/*VARREDURA-0112*/});}catch(e){}
 }
 
 // Banner de Kits Surpresa na página /planos — gera FOMO pra fazer cliente assinar
@@ -25613,13 +25625,13 @@ async function renderBannerKitsSurpresaPlanos(){
     
     html+='<div style="font-family:\'Bebas Neue\',sans-serif;font-size:32px;color:#0f172a;letter-spacing:1.5px;line-height:1;margin-bottom:8px;">'+totalKitsAtivos+' KIT'+(totalKitsAtivos>1?'S':'')+' SURPRESA NO AR</div>';
     
-    html+='<div style="font-size:13px;color:#b45309;line-height:1.5;margin-bottom:14px;">Pomadas com <b style="color:#0f172a;">desconto absurdo</b> que <u>'+(/*TABELA-0112*/window.T0112?'só assinantes do plano Anual':'só assinantes Semestral e Anual')+'</u> conseguem pegar. Estoque super limitado!</div>';
+    html+='<div style="font-size:13px;color:#b45309;line-height:1.5;margin-bottom:14px;">Pomadas com <b style="color:#0f172a;">desconto absurdo</b> que <u>'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'só assinantes do plano Anual':'só assinantes Semestral e Anual')+'</u> conseguem pegar. Estoque super limitado!</div>';
     
     // Lista compacta dos kits
     html+='<div style="display:grid;gap:8px;margin-bottom:14px;">';
     kitsAtivos.forEach(k=>{
       const economia=k.preco_normal&&k.preco_normal>k.preco?k.preco_normal-k.preco:0;
-      const planosArr=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
+      const planosArr=Array.isArray(k.planos_permitidos)?((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
       const planosTxt=planosArr.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join('/');
       const corBorda=k.qtd_disponivel<=2?'#dc2626':'#fbbf2466';
       
@@ -25727,7 +25739,7 @@ function planoCalcResultado(){
   const q=window.PLANO_QTD;
   const f=window.PLANO_FREQ;
   if(!q||!f) return;
-  if(window.T0112){ t12CalcResultado(q,f); return; }   // TABELA-0112
+  if((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)){ t12CalcResultado(q,f); return; }   // TABELA-0112
   
   const qtdMedia={1:7,2:18,3:35,4:50}[q];
   const kitsPorMes={1:4,2:2,3:1,4:0.5}[f];
@@ -27075,7 +27087,7 @@ function quizCalcular(){
     }
   }
   
-  if(window.T0112){ if(planoSugerido==='mensal'){ planoSugerido=null; forcaVenda='nenhuma'; } else if(planoSugerido==='semestral'){ planoSugerido='anual'; } }   // TABELA-0112
+  if((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)){ if(planoSugerido==='mensal'){ planoSugerido=null; forcaVenda='nenhuma'; } else if(planoSugerido==='semestral'){ planoSugerido='anual'; } }   // TABELA-0112
   return {produto,produtoLabel,produtoDesc,qtd,planoSugerido,forcaVenda,modeloId:modeloIdSugerido};
 }
 
@@ -27280,13 +27292,13 @@ function quizArgumentoVenda(rec,precos,planos,economiaKit){
     // PLANO ANUAL — empurrão máximo (revenda + estúdio, 50un)
     const investimento=totalKitAss+p.valor;
     const lucroRevenda=(50*50)-investimento;// vende a R$50/un
-    return '<div style="font-size:13px;color:#0f172a;line-height:1.6;font-weight:500;margin-bottom:8px;">'+(window.T0112?'🔥 Pra quem compra em quantidade:':'🔥 Cenário REVENDA + ESTÚDIO:')/*VARREDURA-0112*/+'</div>'+
+    return '<div style="font-size:13px;color:#0f172a;line-height:1.6;font-weight:500;margin-bottom:8px;">'+((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'🔥 Pra quem compra em quantidade:':'🔥 Cenário REVENDA + ESTÚDIO:')/*VARREDURA-0112*/+'</div>'+
       '<div style="font-size:12px;color:#475569;line-height:1.7;">'+
-      (window.T0112?('Você compra <b style="color:#16a34a;">50 un por R$ '+totalKitAss.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</b> no plano Anual — R$ '+(totalKitNormal-totalKitAss).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' a menos que sem plano.<br><br>')/*VARREDURA-0112: só o fato, sem lucro de revenda*/:(
+      ((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?('Você compra <b style="color:#16a34a;">50 un por R$ '+totalKitAss.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</b> no plano Anual — R$ '+(totalKitNormal-totalKitAss).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' a menos que sem plano.<br><br>')/*VARREDURA-0112: só o fato, sem lucro de revenda*/:(
       'Você compra <b style="color:#16a34a;">50un por R$ '+totalKitAss.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'</b> + R$ '+p.valor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' do plano = <b>R$ '+investimento.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' investido</b>.<br>'+
       'Revendendo a R$ 50/un você fatura <b style="color:#16a34a;">R$ 2.500</b>.<br><br>'+
       '💰 <b style="color:#b45309;">LUCRO LÍQUIDO de R$ '+lucroRevenda.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' já no PRIMEIRO kit</b> — pagando seu plano e ainda sobrando.<br><br>'))/*VARREDURA-0112*/+
-      (window.T0112/*TABELA-0112: conta com a tabela nova*/?('Em 12 meses, se buscar só 1 kit por mês: <b style="color:#16a34a;">economia de R$ '+(economiaKit*12).toLocaleString('pt-BR',{maximumFractionDigits:0})+'</b> contra preço normal.'+(economiaKit*12>p.valor?' Paga seu plano <b>'+(economiaKit*12/p.valor).toLocaleString('pt-BR',{maximumFractionDigits:1})+' vezes</b>.':'')):
+      ((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)/*TABELA-0112: conta com a tabela nova*/?('Em 12 meses, se buscar só 1 kit por mês: <b style="color:#16a34a;">economia de R$ '+(economiaKit*12).toLocaleString('pt-BR',{maximumFractionDigits:0})+'</b> contra preço normal.'+(economiaKit*12>p.valor?' Paga seu plano <b>'+(economiaKit*12/p.valor).toLocaleString('pt-BR',{maximumFractionDigits:1})+' vezes</b>.':'')):
       'Em 12 meses, se buscar só 1 kit por mês: <b style="color:#16a34a;">economia de R$ 1.200</b> contra preço normal. Paga seu plano <b>3 vezes</b>.')+
       '</div>';
   }
@@ -27297,7 +27309,7 @@ function quizArgumentoVenda(rec,precos,planos,economiaKit){
     return '<div style="font-size:13px;color:#0f172a;line-height:1.6;font-weight:500;margin-bottom:8px;">🔥 Pra quem usa TKTX no dia a dia:</div>'+
       '<div style="font-size:12px;color:#475569;line-height:1.7;">'+
       'Você economiza <b style="color:#16a34a;">R$ '+economiaKit.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' a cada kit</b> de '+rec.qtd+' un.<br>'+
-      (window.T0112/*TABELA-0112*/?('Em <b style="color:#b45309;">'+pedidosPaga+' kits você JÁ PAGOU o plano Anual</b>.<br><br>Pagamento único: nada é cobrado sozinho.'):
+      ((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)/*TABELA-0112*/?('Em <b style="color:#b45309;">'+pedidosPaga+' kits você JÁ PAGOU o plano Anual</b>.<br><br>Pagamento único: nada é cobrado sozinho.'):
       ('Em <b style="color:#b45309;">'+pedidosPaga+' kits você JÁ PAGOU os 6 meses do plano</b> e ainda lucrou.<br><br>'+
       'Plano Semestral é <b>11% mais barato</b> que o Mensal e você paga uma vez só (sem mensalidade pra se preocupar).'))+
       '</div>';
@@ -31933,7 +31945,7 @@ function renderAss(lista){
       '<div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;">'+
         '<span class="sp '+(at?'confirmado':'aguardando')+'">'+(at?'Ativo':'Inativo')+'</span>'+
         '<div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;">'+
-          (window.T0112?''/*TABELA-0112: +30d e +6m vendiam Mensal/Semestral*/:'<button class="bok" onclick="renAss(\''+a.id+'\',\'mensal\')" style="background:var(--blue);font-size:10px;padding:4px 8px;">+30d</button>'+
+          ((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?''/*TABELA-0112: +30d e +6m vendiam Mensal/Semestral*/:'<button class="bok" onclick="renAss(\''+a.id+'\',\'mensal\')" style="background:var(--blue);font-size:10px;padding:4px 8px;">+30d</button>'+
           '<button class="bok" onclick="renAss(\''+a.id+'\',\'semestral\')" style="background:#1d4ed8;font-size:10px;padding:4px 8px;">+6m</button>')+
           '<button class="bok" onclick="renAss(\''+a.id+'\',\'anual\')" style="background:#dbeafe;font-size:10px;padding:4px 8px;">+1a</button>'+
         '</div>'+
@@ -32132,7 +32144,7 @@ function _renAssCalc(conta,plano,agora){
   return {venc:base,plano:planoFinal,dias:dias,emDia:emDia};
 }
 async function renAss(id,plano){
-  if(window.t12Sai&&t12Sai(plano)){ alert('Desde 01/12/2026 só existe o plano Anual. Use o +1a.'); return; }   // TABELA-0112
+  if(window.t12Sai&&t12Sai(plano)){ alert('Agora só existe o plano Anual. Use o +1a.'); return; }   // TABELA-0112 SO-ANUAL-2611
   let r; try{ r=await sb.from('assinantes').select('vencimento,plano,nome').eq('id',id).single(); }catch(e){ r={error:e}; }
   if(!r||r.error||!r.data){ alert('⚠️ Não consegui ler a conta. Nada foi gravado.'); return; }
   const c=_renAssCalc(r.data,plano,new Date());
@@ -33272,7 +33284,7 @@ async function loadKitsSurpresaAdmin(){
       w.innerHTML='<div style="background:#f8fafc;border:0.5px solid #f1f5f9;border-radius:12px;padding:2rem 1.25rem;text-align:center;">'+
         '<div style="font-size:42px;margin-bottom:8px;">🎁</div>'+
         '<div style="font-family:\'Bebas Neue\',sans-serif;font-size:20px;color:#0f172a;letter-spacing:1px;margin-bottom:6px;">Nenhum kit surpresa criado</div>'+
-        '<div style="font-size:13px;color:#64748b;line-height:1.5;margin-bottom:14px;">Crie kits promocionais com estoque limitado pra incentivar '+(window.T0112?'o plano Anual':'assinaturas Semestral e Anual')/*VARREDURA-0112*/+'.</div>'+
+        '<div style="font-size:13px;color:#64748b;line-height:1.5;margin-bottom:14px;">Crie kits promocionais com estoque limitado pra incentivar '+((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'o plano Anual':'assinaturas Semestral e Anual')/*VARREDURA-0112*/+'.</div>'+
         '<button onclick="abrirNovoKitSurpresa()" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:\'DM Sans\';">+ Criar primeiro kit</button>'+
         '</div>';
       return;
@@ -33282,7 +33294,7 @@ async function loadKitsSurpresaAdmin(){
     for(const k of data){
       const vendidos=(k.qtd_total||0)-(k.qtd_disponivel||0);
       const pct=k.qtd_total>0?(vendidos/k.qtd_total)*100:0;
-      const planosTxt=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos)/*VARREDURA-0112*/.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' / '):'';
+      const planosTxt=Array.isArray(k.planos_permitidos)?((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos)/*VARREDURA-0112*/.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' / '):'';
       const corStatus=k.ativo?(k.qtd_disponivel<=0?'#fbbf24':'#16a34a'):'#64748b';
       const labelStatus=!k.ativo?'⛔ Desativado':k.qtd_disponivel<=0?'⚠️ Esgotado':'🔥 Ativo';
       
@@ -33341,7 +33353,7 @@ function abrirModalKitSurpresa(kit){
   overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(15,23,42,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto;';
   overlay.onclick=(e)=>{if(e.target.id==='kit-modal-overlay')fecharModalKitSurpresa();};
   
-  const planosArr=Array.isArray(k.planos_permitidos)?k.planos_permitidos:(window.T0112?['anual']:['semestral','anual']);   // VARREDURA-0112
+  const planosArr=Array.isArray(k.planos_permitidos)?k.planos_permitidos:((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?['anual']:['semestral','anual']);   // VARREDURA-0112
   
   overlay.innerHTML='<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:14px;padding:1.5rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">'+
@@ -33381,8 +33393,8 @@ function abrirModalKitSurpresa(kit){
       
       '<div><label style="font-size:10px;color:#2563eb;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">⭐ Planos que podem comprar</label>'+
       '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
-        '<label style="display:'+(window.T0112?'none'/*VARREDURA-0112*/:'flex')+';align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('mensal')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('mensal')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-mensal" '+(planosArr.includes('mensal')?'checked':'')+' style="margin:0;cursor:pointer;"/> Mensal</label>'+
-        '<label style="display:'+(window.T0112?'none'/*VARREDURA-0112*/:'flex')+';align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('semestral')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('semestral')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-semestral" '+(planosArr.includes('semestral')?'checked':'')+' style="margin:0;cursor:pointer;"/> Semestral</label>'+
+        '<label style="display:'+((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'none'/*VARREDURA-0112*/:'flex')+';align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('mensal')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('mensal')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-mensal" '+(planosArr.includes('mensal')?'checked':'')+' style="margin:0;cursor:pointer;"/> Mensal</label>'+
+        '<label style="display:'+((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'none'/*VARREDURA-0112*/:'flex')+';align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('semestral')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('semestral')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-semestral" '+(planosArr.includes('semestral')?'checked':'')+' style="margin:0;cursor:pointer;"/> Semestral</label>'+
         '<label style="display:flex;align-items:center;gap:6px;cursor:pointer;background:'+(planosArr.includes('anual')?'#dcfce7':'#f8fafc')+';border:0.5px solid '+(planosArr.includes('anual')?'#16a34a':'#f1f5f9')+';padding:8px 12px;border-radius:8px;font-size:12px;color:#0f172a;"><input type="checkbox" id="ks-p-anual" '+(planosArr.includes('anual')?'checked':'')+' style="margin:0;cursor:pointer;"/> Anual</label>'+
       '</div></div>'+
 
@@ -33416,7 +33428,7 @@ async function salvarKitSurpresa(id){
   if(document.getElementById('ks-p-mensal').checked) planos.push('mensal');
   if(document.getElementById('ks-p-semestral').checked) planos.push('semestral');
   if(document.getElementById('ks-p-anual').checked) planos.push('anual');
-  if(window.T0112){ for(let i=planos.length-1;i>=0;i--){ if(t12Sai(planos[i])) planos.splice(i,1); } }   // VARREDURA-0112: desde 01/12 só o Anual
+  if((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)){ for(let i=planos.length-1;i>=0;i--){ if(t12Sai(planos[i])) planos.splice(i,1); } }   // VARREDURA-0112: desde 01/12 só o Anual
   const publico=!!(document.getElementById('ks-publico')&&document.getElementById('ks-publico').checked);
 
   if(!titulo){alert('⚠️ Digite um título.');return;}
@@ -33571,10 +33583,10 @@ async function loadKitsSurpresaCliente(){
     for(const k of kits){
       const vendidos=(k.qtd_total||0)-(k.qtd_disponivel||0);
       const pct=k.qtd_total>0?(vendidos/k.qtd_total)*100:0;
-      const planosArr=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
+      const planosArr=Array.isArray(k.planos_permitidos)?((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
       const planosTxt=k.publico?'🌎 Todos os clientes':planosArr.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' / ');
       // 🌎 Kit PÚBLICO: qualquer cliente logado pode pegar (1 por CPF). Senão, gate por plano.
-      const podeComprar=k.publico===true?true:(planoReal&&planosArr.includes(planoReal));
+      const podeComprar=k.publico===true?true:saKitPode(k,planoReal,planosArr);   // SO-ANUAL-2611
       const jaConfirmado=kitsConfirmados.has(k.id);
       const aguardandoPagto=kitsAguardando.has(k.id);
       const esgotado=k.qtd_disponivel<=0;
@@ -34360,7 +34372,7 @@ async function loadFazerPedido(){
     html+='<span style="background:#fef3c7;color:#b45309;font-size:10px;font-weight:600;padding:4px 10px;border-radius:6px;border:0.5px solid #fbbf2466;">Preço normal</span>';
   }
   html+='</div>';
-  if(ehAssinante&&window.t12Sai&&t12Sai(planoReal)){   // VARREDURA-0112: plano antigo paga o preço sem plano
+  if(ehAssinante&&window.t12Antigo&&t12Antigo(planoReal)){   // VARREDURA-0112: plano antigo paga o preço sem plano · SO-ANUAL-2611: só em 01/12
     html+='<div style="font-size:12px;color:#b45309;line-height:1.5;">Seu plano atual não dá mais desconto: desde 01/12 o preço de assinante é só do plano <b>Anual</b>.<button type="button" onclick="irParaPlanos()" style="display:block;margin-top:8px;min-height:44px;width:100%;background:#fbbf24;color:#0f172a;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Ver o plano Anual →</button></div>';
   } else if(ehAssinante){
     const regras=getRegrasPlano(planoReal);
@@ -34950,7 +34962,7 @@ function fpAtualizar(){
         titulo='⚠️ Limite do plano '+regras.label;
         texto='Acima de <b style="color:#0f172a;">'+regras.maxUnComDesconto+' unidades</b> não tem desconto de assinante. '+
           'Você pode comprar sim, mas pagará o preço normal.'+
-          (fp.planoReal!=='anual'?'<br><br>💡 Quer descontos maiores em qualquer quantidade? Vire <b style="color:#15803d;">'+((fp.planoReal==='mensal'&&!window.T0112)?'Semestral ou Anual':'Anual')/*TABELA-0112*/+'</b>.':'');
+          (fp.planoReal!=='anual'?'<br><br>💡 Quer descontos maiores em qualquer quantidade? Vire <b style="color:#15803d;">'+((fp.planoReal==='mensal'&&!(window.SO_ANUAL||window.T0112))?'Semestral ou Anual':'Anual')/*TABELA-0112 SO-ANUAL-2611*/+'</b>.':'');
       }
       
       aviso.style.display='block';
@@ -35580,7 +35592,7 @@ async function fpFinalizar(){
       cupom_frete_gratis:!!_cupRF.freteGratis,
       frete_servico:str(fp.frete.nome),
       frete_prazo:fp.frete.prazo?num(fp.frete.prazo):null,
-      tem_desconto_assinante:!!((fp.ehAssinante&&!(window.t12Sai&&t12Sai(fp.planoReal)))/*VARREDURA-0112*/||(fp.assinaturaVencida&&fp.renovarPlano&&valorPlanoF>0)),
+      tem_desconto_assinante:!!((fp.ehAssinante&&!(window.t12Antigo&&t12Antigo(fp.planoReal)))/*VARREDURA-0112 SO-ANUAL-2611*/||(fp.assinaturaVencida&&fp.renovarPlano&&valorPlanoF>0)),
       ...(valorPlanoF>0?{plano:str(fp.planoVencido||'mensal'),valor_plano:num(valorPlanoF)}:{}),
       assinante_id:assinanteId,
       pagamento:(fp.pay==='cartao'?'Cartão':'Pix'),
@@ -35675,7 +35687,7 @@ async function fpFinalizar(){
     }
 
     // Rifa (order bump): salva as cotas escolhidas junto do pedido
-    try{await rifaBumpSalvarParticipantes('fp',{nome:CU.nome,telefone:telLimpo,cpf:fp.cpf?fp.cpf.replace(/\D/g,''):null,ehAssinante:!!(fp.ehAssinante&&!(window.t12Sai&&t12Sai(fp.planoReal)))/*VARREDURA-0112*/,pedidoId:pedidoId});}catch(e){console.warn('rifa fp save:',e);}
+    try{await rifaBumpSalvarParticipantes('fp',{nome:CU.nome,telefone:telLimpo,cpf:fp.cpf?fp.cpf.replace(/\D/g,''):null,ehAssinante:!!(fp.ehAssinante&&!(window.t12Antigo&&t12Antigo(fp.planoReal)))/*VARREDURA-0112 SO-ANUAL-2611*/,pedidoId:pedidoId});}catch(e){console.warn('rifa fp save:',e);}
 
     // 🎁 16/10: o brinde da trilha entrou NESTE pedido? (o gatilho decide no INSERT; aqui só lemos o carimbo)
     let _vipPosUn=0;
@@ -35692,7 +35704,7 @@ async function fpFinalizar(){
     if(fp.cpf) msg+='🆔 *'+rotuloDoc(fp.cpf)+':* '+fp.cpf+'\n';
     if(fp.ehAssinante){
       const planoLabel={mensal:'Mensal',semestral:'Semestral',anual:'Anual'}[fp.planoReal];
-      msg+=((window.t12Sai&&t12Sai(fp.planoReal))?'⭐ *Plano antigo* (preço normal: desconto só no plano Anual)\n':'⭐ *Assinante '+planoLabel+'* (preço de assinante aplicado)\n');   // VARREDURA-0112
+      msg+=((window.t12Antigo&&t12Antigo(fp.planoReal))/*SO-ANUAL-2611*/?'⭐ *Plano antigo* (preço normal: desconto só no plano Anual)\n':'⭐ *Assinante '+planoLabel+'* (preço de assinante aplicado)\n');   // VARREDURA-0112
     }
     msg+='\n';
     msg+='📦 *PEDIDO*\n';
@@ -35862,13 +35874,13 @@ async function loadContaCliente(){
     html+='<div style="font-size:10px;color:#64748b;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">SEU PLANO</div>';
     html+='<div style="display:flex;align-items:baseline;gap:8px;margin-top:4px;"><span style="font-size:24px;">'+planoEmoji+'</span><span style="font-family:\'Bebas Neue\',sans-serif;font-size:24px;color:'+corPlano+';letter-spacing:1px;">'+planoLabel.toUpperCase()+'</span></div>';
     if(vencData) html+='<div style="font-size:11px;color:'+(vencDias<=30?'#fbbf24':'#64748b')+';margin-top:6px;">'+venceTxt+' · '+vencData+'</div>';
-    if(window.t12Sai&&t12Sai(planoReal)) html+='<div style="font-size:12px;color:#b45309;margin-top:6px;line-height:1.5;">Seu plano atual não dá mais desconto: desde 01/12 o preço de assinante é só do plano Anual.</div><button onclick="irParaPlanos()" style="margin-top:8px;min-height:44px;width:100%;background:#fbbf24;color:#0f172a;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Ver o plano Anual →</button>';   // VARREDURA-0112
+    if(window.t12Antigo&&t12Antigo(planoReal)/*SO-ANUAL-2611*/) html+='<div style="font-size:12px;color:#b45309;margin-top:6px;line-height:1.5;">Seu plano atual não dá mais desconto: desde 01/12 o preço de assinante é só do plano Anual.</div><button onclick="irParaPlanos()" style="margin-top:8px;min-height:44px;width:100%;background:#fbbf24;color:#0f172a;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Ver o plano Anual →</button>';   // VARREDURA-0112
     html+='</div>';
   } else {
     html+='<div onclick="irParaPlanos()" style="background:linear-gradient(135deg,#fef3c7,#ffffff);border:1px solid #fbbf2455;border-radius:14px;padding:14px 16px;margin-bottom:1rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;">';
     html+='<div><div style="font-size:10px;color:#b45309;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">SEM PLANO ATIVO</div>';
     html+='<div style="font-size:13px;color:#0f172a;margin-top:4px;">Assine: pomada a partir de '+(/*TABELA-0112*/window.T0112?'R$ 28':'R$ 26')+'/un</div></div>';
-    html+='<div style="background:#fbbf24;color:#0f172a;padding:8px 14px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:0.5px;">'+(/*TABELA-0112*/window.T0112?'VER O PLANO →':'VER PLANOS →')+'</div>';
+    html+='<div style="background:#fbbf24;color:#0f172a;padding:8px 14px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:0.5px;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'VER O PLANO →':'VER PLANOS →')+'</div>';
     html+='</div>';
   }
   
@@ -35890,7 +35902,7 @@ async function loadContaCliente(){
   html+='<div style="font-size:10px;color:#15803d;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px;">⚙️ Configurações</div>';
   html+='<div style="display:grid;gap:0;">';
   html+='<button onclick="bnGo(\'meus-pedidos\')" style="background:transparent;border:none;color:#0f172a;padding:12px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #f1f5f9;font-family:\'DM Sans\';font-size:13px;">📋 Histórico de pedidos <span style="color:#64748b;">→</span></button>';
-  if(!planoReal) html+='<button onclick="irParaPlanos()" style="background:transparent;border:none;color:#0f172a;padding:12px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #f1f5f9;font-family:\'DM Sans\';font-size:13px;">'+(/*TABELA-0112*/window.T0112?'⭐ Ver o plano Anual':'⭐ Ver planos disponíveis')+' <span style="color:#64748b;">→</span></button>';
+  if(!planoReal) html+='<button onclick="irParaPlanos()" style="background:transparent;border:none;color:#0f172a;padding:12px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #f1f5f9;font-family:\'DM Sans\';font-size:13px;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'⭐ Ver o plano Anual':'⭐ Ver planos disponíveis')+' <span style="color:#64748b;">→</span></button>';
   html+='<a href="https://wa.me/554792444477?text=Ol%C3%A1%2C+preciso+de+ajuda" target="_blank" style="background:transparent;border:none;color:#0f172a;padding:12px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;border-bottom:0.5px solid #f1f5f9;font-family:\'DM Sans\';font-size:13px;text-decoration:none;">💬 Falar com suporte <span style="color:#64748b;">→</span></a>';
   html+='<button onclick="doLogout()" style="background:transparent;border:none;color:#dc2626;padding:12px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:\'DM Sans\';font-size:13px;">🚪 Sair da conta <span style="color:#64748b;">→</span></button>';
   html+='</div>';
@@ -35928,7 +35940,7 @@ async function loadHomeCliente(){
   const planoReal=temAssinatura?(CU.plano||'mensal'):null;
   const planoLabel={mensal:'Mensal',semestral:'Semestral',anual:'Anual'}[planoReal]||'Sem plano';
   const planoIcon={mensal:'📅',semestral:'⭐',anual:'🏆'}[planoReal]||'⚪';
-  const planoVig=(CU.vencimento&&new Date(CU.vencimento)>new Date())?(window.t12Escolha?t12Escolha(CU.plano||'mensal'):(CU.plano||'mensal')):null;   // ASSIN-2311 A3: a faixa do topo só para plano em dia · VARREDURA-0112: plano antigo não é 'assinante'
+  const planoVig=(CU.vencimento&&new Date(CU.vencimento)>new Date())?(window.t12Vig?t12Vig(CU.plano||'mensal'):(CU.plano||'mensal')):null;   /*SO-ANUAL-2611*/ // ASSIN-2311 A3: a faixa do topo só para plano em dia · VARREDURA-0112: plano antigo não é 'assinante'
   
   // Calcula dias até vencimento se tem plano
   let vencDias=null;
@@ -35976,7 +35988,7 @@ async function loadHomeCliente(){
     html+='<div class="home-plan-label">Seu plano</div>';
     html+='<div class="home-plan-name">'+planoIcon+' '+planoLabel.toUpperCase()+'</div>';
     if(vencTxt) html+='<div class="home-plan-status'+(ehWarn?' warn':'')+'">'+vencTxt+'</div>';
-    if(window.t12Sai&&t12Sai(planoReal)) html+='<div class="home-plan-status warn" style="font-size:12px;">Sem desconto desde 01/12 · só o Anual tem</div>';   // VARREDURA-0112
+    if(window.t12Antigo&&t12Antigo(planoReal)/*SO-ANUAL-2611*/) html+='<div class="home-plan-status warn" style="font-size:12px;">Sem desconto desde 01/12 · só o Anual tem</div>';   // VARREDURA-0112
     html+='</div>';
     if(ehWarn) html+='<button class="home-plan-btn warn" onclick="bnGo(\'conta\')">RENOVAR</button>';
     else html+='<button class="home-plan-btn" onclick="bnGo(\'conta\')">VER</button>';
@@ -35991,10 +36003,10 @@ async function loadHomeCliente(){
     html+='<div style="background:linear-gradient(135deg,#0f172a,#1e3a8a);border-radius:16px;padding:18px;margin-bottom:1rem;color:#fff;position:relative;overflow:hidden;">';
     html+='<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#fbbf24;font-weight:800;margin-bottom:6px;">⭐ Vire assinante</div>';
     html+='<div style="font-family:\'Bebas Neue\',sans-serif;font-size:24px;line-height:1.05;margin-bottom:8px;">PARE DE PAGAR PREÇO CHEIO</div>';
-    html+='<div style="font-size:12px;color:#dbeafe;line-height:1.55;margin-bottom:14px;">'+(/*TABELA-0112*/window.T0112?'A pomada cai de <b style="color:#fca5a5;">R$ 60</b> até <b style="color:#86efac;">R$ 28/un</b> no <b>plano Anual</b>.':'A pomada cai de <b style="color:#fca5a5;">R$ 50</b> até <b style="color:#86efac;">R$ 26/un</b> — quanto maior o plano, mais barato.')+' Peça <b>quando quiser, sem espera</b>, qualquer quantidade, e ganhe <b>1 pomada grátis</b> na adesão. 🎁</div>';
+    html+='<div style="font-size:12px;color:#dbeafe;line-height:1.55;margin-bottom:14px;">'+(/*TABELA-0112 SO-ANUAL-2611: plano pelo SO_ANUAL, número pelo T0112*/'A pomada cai de <b style="color:#fca5a5;">'+(window.T0112?'R$ 60':'R$ 50')+'</b> até <b style="color:#86efac;">'+(window.T0112?'R$ 28':'R$ 26')+'/un</b>'+((window.SO_ANUAL||window.T0112)?' no <b>plano Anual</b>.':' — quanto maior o plano, mais barato.'))+' Peça <b>quando quiser, sem espera</b>, qualquer quantidade, e ganhe <b>1 pomada grátis</b> na adesão. 🎁</div>';
     html+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
     html+='<button onclick="irParaComprar()" style="flex:1;min-width:150px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:10px;padding:13px;font-size:13px;font-weight:800;cursor:pointer;font-family:\'DM Sans\';box-shadow:0 4px 12px rgba(22,163,74,.3);">Assinar e pedir junto →</button>';
-    html+='<button onclick="irParaPlanos()" style="background:rgba(255,255,255,0.12);color:#fff;border:0.5px solid rgba(255,255,255,0.3);border-radius:10px;padding:13px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\';">'+(/*TABELA-0112*/window.T0112?'Ver o plano':'Ver planos')+'</button>';
+    html+='<button onclick="irParaPlanos()" style="background:rgba(255,255,255,0.12);color:#fff;border:0.5px solid rgba(255,255,255,0.3);border-radius:10px;padding:13px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\';">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'Ver o plano':'Ver planos')+'</button>';
     html+='</div>';
     // 🔥 21/09: a linha da promoção saiu daqui (a empresa: "acho melhor tirar a promo do logado")
     html+='</div>';
@@ -36073,7 +36085,7 @@ async function loadHomeCliente(){
         '<span class="home-atalho-badge" id="home-badge-pedidos" style="display:none;"></span></button>';
   html+='<button class="home-atalho" onclick="irParaPlanos()">'+
         '<div class="home-atalho-icon">⭐</div>'+
-        '<div><div class="home-atalho-title">'+(window.T0112?'Plano Anual':'Planos')/*VARREDURA-0112*/+'</div>'+
+        '<div><div class="home-atalho-title">'+((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'Plano Anual':'Planos')/*VARREDURA-0112*/+'</div>'+
         '<div class="home-atalho-sub">Vire assinante e economize</div></div></button>';
   html+='<button class="home-atalho" onclick="sp(\'rifa\');try{smn(\'rifa\')}catch(e){}">'+
         '<div class="home-atalho-icon">🎯</div>'+
@@ -36135,8 +36147,8 @@ async function loadHomeCliente(){
       
       // Pega os 2 melhores kits
       kits.slice(0,2).forEach(k=>{
-        const planosArr=Array.isArray(k.planos_permitidos)?(window.T0112?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
-        const podeComprar=planoReal&&planosArr.includes(planoReal);
+        const planosArr=Array.isArray(k.planos_permitidos)?((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?[...new Set(k.planos_permitidos.map(t12Renova))]:k.planos_permitidos):[];   // VARREDURA-0112: Mensal/Semestral → Anual
+        const podeComprar=saKitPode(k,planoReal,planosArr);   // SO-ANUAL-2611
         const economia=k.preco_normal&&k.preco_normal>k.preco?k.preco_normal-k.preco:0;
         const urgente=k.qtd_disponivel<=2;
         conteudo+='<div class="home-oferta-card" onclick="sp(\'kits-surpresa\');try{smn(\'kits-surpresa\')}catch(e){}">';
@@ -36190,7 +36202,7 @@ async function loadHomeCliente(){
     }
     
     // === CTA VIRAR ASSINANTE (só se não tem plano) - REFORMULADO bombado ===
-    if(!planoReal||(window.t12Sai&&t12Sai(planoReal))){   // VARREDURA-0112: plano antigo vê a oferta do Anual, não 'seu preço de assinante'
+    if(!planoReal||(window.t12Antigo&&t12Antigo(planoReal))){   /*SO-ANUAL-2611*/ // VARREDURA-0112: plano antigo vê a oferta do Anual, não 'seu preço de assinante'
       conteudo+='<div onclick="irParaPlanos()" style="cursor:pointer;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 60%,#1d4ed8 100%);border:none;border-radius:18px;padding:1.5rem 1.25rem;margin-top:0.75rem;position:relative;overflow:hidden;box-shadow:0 16px 40px rgba(37,99,235,0.35);">';
       // Decoração: círculos brilhantes
       conteudo+='<div style="position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,0.18),transparent 70%);border-radius:50%;"></div>';
@@ -36200,7 +36212,7 @@ async function loadHomeCliente(){
       conteudo+='<div style="display:inline-flex;align-items:center;gap:6px;background:rgba(251,191,36,0.95);color:#92400e;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:12px;">⭐ Vire assinante</div>';
       // Headline
       conteudo+='<div style="font-family:\'Bebas Neue\',sans-serif;font-size:30px;color:#ffffff;letter-spacing:1.5px;line-height:1;margin-bottom:8px;">POMADA ATÉ <span style="color:#fbbf24;">'+(/*TABELA-0112*/window.T0112?'R$ 28/UN':'R$ 26/UN')+'</span></div>';
-      conteudo+='<div style="font-size:13px;color:rgba(255,255,255,0.92);line-height:1.5;margin-bottom:14px;">'+(/*TABELA-0112*/window.T0112?'No plano Anual a pomada sai mais barata':'Quanto maior o plano, mais barato')+' — e você pede quando quiser, sem espera.</div>';
+      conteudo+='<div style="font-size:13px;color:rgba(255,255,255,0.92);line-height:1.5;margin-bottom:14px;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'No plano Anual a pomada sai mais barata':'Quanto maior o plano, mais barato')+' — e você pede quando quiser, sem espera.</div>';
       // Benefícios compactos
       conteudo+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">';
       conteudo+='<div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:8px 10px;backdrop-filter:blur(4px);"><div style="font-size:18px;line-height:1;">🎁</div><div style="font-size:10px;color:#fff;font-weight:700;margin-top:3px;">1 pomada grátis na adesão</div></div>';
@@ -36210,7 +36222,7 @@ async function loadHomeCliente(){
       conteudo+='</div>';
       // CTA button forte
       conteudo+='<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#ffffff;padding:12px 16px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.15);">';
-      conteudo+='<div><div style="font-size:10px;color:#64748b;letter-spacing:1px;text-transform:uppercase;font-weight:700;">'+(/*TABELA-0112*/window.T0112?'Plano Anual':'A partir de')+'</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:#0f172a;letter-spacing:0.5px;line-height:1;">'+(/*TABELA-0112*/window.T0112?'R$ 358,80':'R$ 36,90<span style="font-size:12px;color:#64748b;font-family:\'DM Sans\';font-weight:500;">/mês</span>')+'</div></div>';
+      conteudo+='<div><div style="font-size:10px;color:#64748b;letter-spacing:1px;text-transform:uppercase;font-weight:700;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'Plano Anual':'A partir de')+'</div><div style="font-family:\'Bebas Neue\',sans-serif;font-size:22px;color:#0f172a;letter-spacing:0.5px;line-height:1;">'+(/*TABELA-0112*/(window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?'R$ 358,80':'R$ 36,90<span style="font-size:12px;color:#64748b;font-family:\'DM Sans\';font-weight:500;">/mês</span>')+'</div></div>';
       conteudo+='<div style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:0.5px;box-shadow:0 6px 16px rgba(22,163,74,0.4);">ASSINAR →</div>';
       conteudo+='</div>';
       // Footnote
@@ -41889,8 +41901,8 @@ async function criarAss(){
   else if(plano==='semestral'){venc=new Date();venc.setDate(agora.getDate()+180);}
   else if(plano==='anual'){venc=new Date();venc.setDate(agora.getDate()+365);}
   
-  if(window.t12Sai&&t12Sai(plano)){ alert('Desde 01/12/2026 só existe o plano Anual (ou o Trial). Escolha um deles.'); return; }   // TABELA-0112
-  const planoSalvar=plano==='trial'?(window.T0112?null:'mensal')/*TABELA-0112: trial nasce sem plano, igual ao cadastro do site*/:plano;
+  if(window.t12Sai&&t12Sai(plano)){ alert('Agora só existe o plano Anual (ou o Trial). Escolha um deles.'); return; }   // TABELA-0112 SO-ANUAL-2611
+  const planoSalvar=plano==='trial'?((window.SO_ANUAL||window.T0112/*SO-ANUAL-2611*/)?null:'mensal')/*TABELA-0112: trial nasce sem plano, igual ao cadastro do site*/:plano;
   const ativo=status==='ativo';
   
   const {error}=await sb.from('assinantes').insert({
@@ -43833,7 +43845,7 @@ function pvSecClientes(H){
 /* ============================================================================
    SEÇÃO 5 — COMPRAR: o lado da loja, e o único lugar com botão de comprar
    ============================================================================ */
-function pvPlanoVigente(){ var c=cu(); if(!c) return null; var vig=!!(c.vencimento&&new Date(c.vencimento)>new Date()); return vig?(window.t12Escolha?t12Escolha(c.plano||'mensal'):(c.plano||'mensal')):null; }   /*VARREDURA-0112: plano antigo = sem plano*/
+function pvPlanoVigente(){ var c=cu(); if(!c) return null; var vig=!!(c.vencimento&&new Date(c.vencimento)>new Date()); return vig?(window.t12Vig?t12Vig(c.plano||'mensal'):(c.plano||'mensal')):null; /*SO-ANUAL-2611*/ }   /*VARREDURA-0112: plano antigo = sem plano*/
 function pvFaixas(){ try{ if(typeof FAIXAS_PRECO!=='undefined'&&Array.isArray(FAIXAS_PRECO)) return FAIXAS_PRECO; }catch(e){} return []; }
 function pvPrecoUn(q){ try{ if(typeof precoUnCliente==='function') return pvNum(precoUnCliente(q,pvPlanoVigente())); }catch(e){} return 0; }
 function pvUltimoPedidoUn(H){ var l=(H.loja&&H.loja.lista)||[]; return l.length?pvNum(l[0].un):0; }
