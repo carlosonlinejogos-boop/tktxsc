@@ -336,7 +336,7 @@ html.so-anual .lp-plans-grid, html.so-anual .np-plans-grid{grid-template-columns
         document.documentElement.classList.add('um-capa');
         setTimeout(function(){ try{ document.documentElement.classList.remove('um-capa'); }catch(e){} },3000);
       }
-      var l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=um?('/hero-'+um+'.png'):'/hero-4-modelos.png';
+      var l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=um?('/hero-'+um+'.png'):(window.T0112?'/hero-gold.png':'/hero-4-modelos.png');   // CAPA-75-0112
       l.setAttribute('fetchpriority','high'); document.head.appendChild(l);
     }
   }catch(e){}
@@ -2685,6 +2685,11 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
     <video class="bnrv-video" data-autoplay muted loop playsinline preload="none" data-poster="/hero-4-modelos.png" aria-hidden="true">
       <source src="/video-estudio.mp4" type="video/mp4">
     </video>
+    <script>/* CAPA-75-0112: de 01/12 em diante a capa da home continua a da Gold 75% até existir a foto nova com os 4 modelos */
+    (function(){ try{ if(!window.T0112) return; var c='/hero-gold.png';
+      var i=document.querySelector('#lpCarouselTrack .lp-slide img'); if(i&&/hero-4-modelos/.test(i.getAttribute('src')||'')){ i.setAttribute('src',c); i.setAttribute('alt','Pomada TKTX original: creme rosa, 6 a 8 horas de efeito'); }
+      var v=document.querySelector('.bnrv-wrap video.bnrv-video'); if(v&&/hero-4-modelos/.test(v.getAttribute('data-poster')||'')) v.setAttribute('data-poster',c);
+    }catch(e){} })();</script>
     <div class="bnrv-overlay"></div>
     <div class="bnrv-content">
       <div class="bnrv-title">TATUE SEM SENTIR</div>
@@ -4134,6 +4139,180 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
 .p3s-data{color:#64748b;font-size:12px;white-space:nowrap;}
 .p3s-tx{font-size:14px;color:#1e293b;line-height:1.5;margin-top:6px;white-space:pre-wrap;overflow-wrap:anywhere;}
 .p3s-wa{display:inline-flex;align-items:center;text-decoration:none;}
+/* 🖤 VISUAL-2611 (26/11/2026, empresa: "é de extrema importância ter animações, ser chamativo"; "não precisa ter tanta opção"):
+   chamada pequena e animada + catálogo de uma peça por vez, em PRETO E BRANCO. Peça branca em fundo preto; peça preta ou azul em
+   fundo branco. Alvos de toque de 44 px, letra de 12 px ou mais, foco visível, e nada se mexe para quem pediu menos movimento. */
+#promo-pecas3d-chamada,#cp-pecas3d-chamada,#fp-pecas3d-chamada,#rp-pecas3d-chamada,#home-pecas3d-chamada{color:#0b0b0c;}
+.p3t{position:relative;overflow:hidden;border-radius:18px;background:#0b0b0c;color:#ffffff;padding:14px;font-family:'DM Sans',sans-serif;text-align:left;animation:p3Entra .6s cubic-bezier(.2,.7,.2,1) both;}
+.p3t *{box-sizing:border-box;}
+@keyframes p3Entra{0%{opacity:0;transform:translateY(14px);}100%{opacity:1;transform:none;}}
+.p3t-lin{display:grid;grid-template-columns:104px minmax(0,1fr);gap:12px 14px;align-items:center;cursor:pointer;}
+.p3-palco{position:relative;border-radius:14px;aspect-ratio:1/1;overflow:hidden;background:radial-gradient(circle at 50% 36%,#ffffff 0%,#e4e4e7 100%);transition:background .3s;}
+.p3-palco.esc{background:radial-gradient(circle at 50% 36%,#3f3f46 0%,#0b0b0c 100%);}
+.p3-palco::before{content:"";position:absolute;left:22%;right:22%;bottom:8%;height:10%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.3),transparent);}
+.p3-palco.esc::before{background:radial-gradient(closest-side,rgba(255,255,255,.2),transparent);}
+.p3-flut{position:absolute;inset:0;animation:p3Flut 4.5s ease-in-out infinite;}
+@keyframes p3Flut{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-6px) rotate(-1.5deg);}}
+.p3-flut .p3-svg,.p3-flut img{width:100%;height:100%;display:block;object-fit:contain;}
+.p3-flut .p3-svg-semimg{background:transparent;}
+.p3-flut.troca{animation:p3Troca .45s cubic-bezier(.2,.7,.2,1),p3Flut 4.5s .45s ease-in-out infinite;}
+@keyframes p3Troca{0%{transform:scale(.88);opacity:.3;}60%{transform:scale(1.05);opacity:1;}100%{transform:scale(1);}}
+.p3t-tag{display:inline-block;white-space:nowrap;font-size:12px;font-weight:800;letter-spacing:.8px;color:#0b0b0c;background:#ffffff;border-radius:999px;padding:3px 9px;}
+.p3t-h{font-size:21px;font-weight:800;letter-spacing:-.3px;line-height:1.15;margin-top:8px;color:#ffffff;}
+.p3t-sub{font-size:14px;line-height:1.4;color:#d4d4d8;margin-top:4px;}
+.p3t-sub b{color:#ffffff;font-size:15px;white-space:nowrap;}
+.p3t .p3-de{color:#a1a1aa;}
+.p3t-btn{position:relative;overflow:hidden;grid-column:1/-1;width:100%;min-height:50px;border:none;border-radius:14px;background:#ffffff;color:#0b0b0c;font-size:16px;font-weight:800;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;padding:0 14px;}
+.p3t-btn::after,.p3-ov .p3-promo::after,#bancada-pecas .p3-promo::after,.bnc-cta::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.8),transparent);transform:skewX(-20deg);animation:p3Brilho 3.2s ease-in-out infinite;pointer-events:none;}
+.p3t-btn::after{background:linear-gradient(100deg,transparent,rgba(0,0,0,.14),transparent);}
+@keyframes p3Brilho{0%,55%{left:-60%;}85%,100%{left:130%;}}
+.p3t-itens{display:grid;gap:6px;margin-top:10px;}
+.p3t-it{display:flex;align-items:center;min-height:44px;font-size:13px;line-height:1.35;color:#f4f4f5;background:#1c1c1f;border-radius:10px;padding:6px 12px;overflow-wrap:anywhere;}
+.p3t-sec{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin-top:10px;padding:10px 14px;border:1.5px solid #a1a1aa;border-radius:12px;background:transparent;color:#ffffff;font-size:14px;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:center;line-height:1.25;}
+.p3t-ok{font-size:13px;color:#d4d4d8;font-weight:700;line-height:1.4;margin-top:10px;}
+.p3t-btn:focus-visible,.p3t-sec:focus-visible{outline:3px solid #ffffff;outline-offset:2px;box-shadow:0 0 0 6px #0b0b0c;}
+@media (min-width:760px){ .p3t-lin{grid-template-columns:120px minmax(0,1fr);} }   /* a coluna do pedido é estreita também no computador: o botão fica sempre na linha de baixo */
+/* ── o catálogo: uma peça por vez (palco + vitrine + detalhe). Vale por cima da página (.p3-ov) e aberto na /bancada (#bancada-pecas) ── */
+.p3-ov{background:rgba(11,11,12,0.6);color:#0b0b0c;}
+.p3-cab{padding:10px 10px 10px 16px;border-bottom:1px solid #e4e4e7;}
+.p3-cab-tx{min-width:0;}
+.p3-tit{font-size:18px;font-weight:800;color:#0b0b0c;}
+.p3-cab-s{font-size:12.5px;color:#52525b;line-height:1.35;margin-top:2px;}
+.p3-x{background:#f4f4f5;color:#0b0b0c;}
+.p3-lista{padding:0 16px 16px;}
+.p3-ov .p3-sempomada{margin-top:10px;}
+.p3-cat{color:#0b0b0c;font-family:'DM Sans',sans-serif;}
+.p3-cat *{box-sizing:border-box;}
+/* no celular a peça fica presa no topo do catálogo: o nome aparece nela enquanto a pessoa digita */
+.p3-cat .p3-palco{aspect-ratio:auto;height:180px;position:sticky;top:0;z-index:2;margin:0 -16px;border-radius:0;box-shadow:0 10px 14px -10px rgba(0,0,0,.35);}
+.p3-cat .p3-flut{left:50%;right:auto;width:180px;margin-left:-90px;}
+@media (max-height:560px){ .p3-cat .p3-palco{height:118px;} .p3-cat .p3-flut{width:118px;margin-left:-59px;} .p3-ov .p3-cab-s,.p3-ov .p3-volta{display:none;} }
+.p3-vit{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;margin:10px -16px 0;padding:2px 16px 6px;scrollbar-width:none;}
+.p3-vit::-webkit-scrollbar{display:none;}
+.p3-vit.todas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible;margin:10px 0 0;padding:0;}
+.p3v-card{position:relative;flex:none;width:96px;scroll-snap-align:start;text-align:left;border-radius:12px;border:1.5px solid #e4e4e7;background:#ffffff;padding:6px 6px 8px;color:#0b0b0c;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.p3-vit.todas .p3v-card{width:auto;}
+.p3v-card[aria-pressed=true]{border-color:#0b0b0c;box-shadow:0 0 0 1.5px #0b0b0c;}
+.p3v-mp{display:block;border-radius:8px;aspect-ratio:1/1;background:#f4f4f5;overflow:hidden;}
+.p3v-mp.esc{background:#18181b;}
+.p3v-mp img{width:100%;height:100%;display:block;object-fit:contain;}
+.p3v-n{display:block;font-size:12px;font-weight:700;line-height:1.2;min-height:29px;margin-top:5px;overflow-wrap:anywhere;}
+.p3v-pp{display:block;font-size:13px;font-weight:800;margin-top:2px;}
+.p3v-q{position:absolute;top:4px;right:4px;min-width:22px;height:22px;border-radius:11px;background:#16a34a;color:#ffffff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 5px;}
+.p3v-mais .p3v-mp{display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#0b0b0c;}
+.p3v-mais .p3v-n{min-height:0;}
+.p3v-dica{font-size:12px;color:#52525b;margin:2px 0 0;line-height:1.35;}
+.p3-det{scroll-margin-top:190px;}
+.p3-np{font-size:18px;font-weight:800;line-height:1.2;margin-top:12px;}
+.p3-como{font-size:13px;color:#52525b;line-height:1.4;margin:2px 0 0;}
+.p3-precos{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-top:8px;}
+.p3-precos .p3-de{font-size:15px;color:#71717a;font-weight:600;text-decoration-thickness:2px;}
+.p3-precos b{font-size:30px;font-weight:800;letter-spacing:-.6px;line-height:1;color:#0b0b0c;}
+.p3-precos .p3-un{font-size:13px;color:#52525b;font-weight:600;}
+.p3-ov .p3-promo,#bancada-pecas .p3-promo{position:relative;overflow:hidden;font-size:12px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#ffffff;background:#15803d;border-radius:8px;padding:5px 9px;}
+.p3-semnome{font-size:13px;color:#52525b;line-height:1.4;margin:4px 0 0;}
+.p3-rot{display:block;font-size:13px;font-weight:700;color:#0b0b0c;margin:14px 0 6px;line-height:1.3;}
+.p3-ov input.p3-inp,#bancada-pecas input.p3-inp{width:100%;min-height:50px;border:1.5px solid #a1a1aa;border-radius:12px;padding:0 14px;font-size:18px;font-weight:700;letter-spacing:1px;color:#0b0b0c;background:#ffffff;font-family:'DM Sans',sans-serif;text-transform:uppercase;outline:none;}
+.p3-ov input.p3-inp::placeholder,#bancada-pecas input.p3-inp::placeholder{color:#71717a;font-weight:600;letter-spacing:0;text-transform:none;}
+.p3-ov input.p3-inp:focus-visible,#bancada-pecas input.p3-inp:focus-visible,.p3-pixi:focus-visible,.p3-ov .p3-sug .p3-inp:focus-visible,#bancada-pecas .p3-sug .p3-inp:focus-visible{border-color:#0b0b0c;box-shadow:0 0 0 3px rgba(0,0,0,.18);}
+.p3-ov input.p3-inp.p3-inp-erro,#bancada-pecas input.p3-inp.p3-inp-erro{border-color:#dc2626;background:#fef2f2;}
+.p3-conta{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#52525b;margin-top:4px;line-height:1.35;}
+.p3-cores{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.p3-cores.p3-c2{grid-template-columns:repeat(2,minmax(0,1fr));}
+.p3-cor{display:flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:4px 6px;border-radius:12px;border:1.5px solid #d4d4d8;background:#ffffff;color:#0b0b0c;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;line-height:1.2;cursor:pointer;text-align:center;}
+.p3-cor i{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid #a1a1aa;}
+.p3-cor[aria-checked=true]{border-color:#0b0b0c;background:#0b0b0c;color:#ffffff;}
+.p3-qtl{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;}
+.p3-qtl .p3-rot{margin:0;}
+.p3-cat .p3-qt{border-color:#a1a1aa;border-radius:12px;}
+.p3-cat .p3-qb{color:#0b0b0c;}
+.p3-cat .p3-combos{border-top:1px dashed #d4d4d8;margin-top:10px;}
+.p3-cat .p3-aviso{margin-top:8px;}
+.p3-ov .p3-add,#bancada-pecas .p3-add{min-height:54px;border-radius:14px;background:#0b0b0c;color:#ffffff;font-size:17px;}
+.p3-ov .p3-add:disabled,#bancada-pecas .p3-add:disabled{background:#a1a1aa;}
+.p3-add.pop{animation:p3Pop .5s cubic-bezier(.2,.7,.2,1);}
+@keyframes p3Pop{0%{transform:scale(1);}35%{transform:scale(.95);}70%{transform:scale(1.04);}100%{transform:scale(1);}}
+.p3-volta{display:block;width:100%;min-height:44px;margin-top:4px;border:none;background:transparent;color:#0b0b0c;font-size:14px;font-weight:800;font-family:'DM Sans',sans-serif;text-decoration:underline;cursor:pointer;}
+.p3-ov .p3-rod{border-top:1px solid #e4e4e7;}
+.p3-ov .p3-sug,#bancada-pecas .p3-sug{border-color:#a1a1aa;background:#fafafa;margin-top:22px;}
+.p3-ov .p3-btn,#bancada-pecas .p3-btn{background:#0b0b0c;border-radius:12px;}
+.p3-ov .p3-link,#bancada-pecas .p3-link{color:#0b0b0c;}
+.p3-ov .p3-btn:focus-visible,.p3-ov .p3-link:focus-visible,.p3-ov .p3-x:focus-visible,.p3-ov .p3-qb:focus-visible,.p3-ov .p3-tirar:focus-visible,.p3-ov .p3-add:focus-visible,.p3v-card:focus-visible,.p3-cor:focus-visible,.p3-volta:focus-visible,.p3-pixb:focus-visible,.p3-pixl:focus-visible,#bancada-pecas .p3-btn:focus-visible,#bancada-pecas .p3-link:focus-visible,#bancada-pecas .p3-qb:focus-visible,#bancada-pecas .p3-tirar:focus-visible,#bancada-pecas .p3-add:focus-visible{outline:3px solid #0b0b0c;outline-offset:2px;}
+.p3-cor[aria-checked=true]:focus-visible,.p3-ov .p3-add:focus-visible,.p3-ov .p3-btn:focus-visible{box-shadow:0 0 0 2px #ffffff inset;}
+/* 🔑 PIX-MOLDURA-2611: a chave Pix da Moldura de QR (só com site_config.pecas3d_pix_chave = 'on') */
+.p3-pix{border:1.5px solid #d4d4d8;border-radius:14px;padding:12px;margin-top:16px;background:#fafafa;}
+.p3-pix-t{font-size:15px;font-weight:800;line-height:1.25;}
+.p3-pix-s{font-size:13px;color:#52525b;line-height:1.4;margin:3px 0 0;}
+.p3-pixb{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:10px;padding:10px 16px;border:none;border-radius:12px;background:#0b0b0c;color:#ffffff;font-size:14px;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.p3-pixb.sec{background:#ffffff;color:#0b0b0c;border:1.5px solid #a1a1aa;}
+.p3-pixl{display:inline-flex;align-items:center;min-height:44px;margin:6px 0 0 12px;padding:0;border:none;background:transparent;color:#0b0b0c;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;text-decoration:underline;cursor:pointer;}
+.p3-pixi{display:block;width:100%;min-height:48px;border:1.5px solid #a1a1aa;border-radius:12px;padding:0 12px;font-size:16px;font-weight:600;color:#0b0b0c;background:#ffffff;font-family:'DM Sans',sans-serif;outline:none;}
+.p3-pixv{font-size:12px;color:#52525b;margin-top:4px;line-height:1.35;overflow-wrap:anywhere;}
+.p3-pixv b{color:#0b0b0c;}
+.p3-pix .p3-erro{margin:10px 0 0;}
+.p3-pixconf{background:#ffffff;border:1.5px solid #0b0b0c;border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px;line-height:1.5;overflow-wrap:anywhere;}
+.p3-pixconf b{display:block;font-size:13px;}
+.p3-pixok{background:#f0fdf4;border:1.5px solid #15803d;border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px;color:#14532d;line-height:1.5;overflow-wrap:anywhere;}
+@media (min-width:760px){
+  .p3-ov .p3-painel{max-width:940px;}
+  .p3-ov .p3-lista{padding:16px 20px 20px;}
+  .p3-ov .p3-cat{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:22px;align-items:start;}
+  .p3-ov .p3-cat > .p3-palco{grid-column:1;grid-row:1;}
+  .p3-ov .p3-cat > .p3-vit{grid-column:1;grid-row:2;}
+  .p3-ov .p3-cat > .p3v-dica{grid-column:1;grid-row:3;}
+  .p3-ov .p3-cat > .p3-cat-b{grid-column:2;grid-row:1 / span 3;}
+  .p3-ov .p3-cat .p3-palco{height:250px;position:relative;box-shadow:none;margin:0;border-radius:14px;}
+  .p3-ov .p3-cat .p3-flut{width:250px;margin-left:-125px;}
+  .p3-ov .p3-vit,.p3-ov .p3-vit.todas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));overflow:visible;margin:12px 0 0;padding:0;}
+  .p3-ov .p3v-card{width:auto;}
+  .p3-ov .p3v-dica{display:none;}
+  .p3-ov .p3-np{margin-top:0;}
+  .p3-ov .p3-rod{display:flex;flex-direction:row-reverse;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:12px 20px 14px;}
+  .p3-ov .p3-rod .p3-erro{flex:1 0 100%;margin:0;order:3;}
+  .p3-ov .p3-rod .p3-add{flex:1;width:auto;}
+  .p3-ov .p3-rod .p3-volta{width:auto;margin:0;padding:0 4px;}
+}
+/* a página /bancada segue o mesmo preto e branco (a foto do topo é a peça preta: fundo branco) */
+#bancada-topo .bnc-hero{background:#ffffff;border-color:#e4e4e7;}
+#bancada-topo .bnc-preco b{color:#0b0b0c;}
+#bancada-topo .bnc-cta{position:relative;overflow:hidden;background:#0b0b0c;}
+#bancada-topo .bnc-cta::after{background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);}
+#bancada-pecas .p3-cat .p3-palco{top:var(--p3-topo,0px);}
+#bancada-pecas .p3-det{scroll-margin-top:250px;}
+html.bancada #bancada-lp #bancada-pecas input:focus-visible,html.bancada #bancada-lp #bancada-pecas textarea:focus-visible{outline-color:#0b0b0c !important;}
+html.bancada #bancada-lp #bancada-pecas button:focus-visible{outline-color:#0b0b0c;}
+/* 🧩 painel: aviso da 1ª unidade das peças novas e o cartão do Pix (só admin) */
+.p3a-1a{display:block;margin:6px 0 2px;padding:8px 10px;border-radius:9px;background:#fef3c7;border:2px solid #b45309;color:#78350f;font-size:13px;font-weight:800;line-height:1.4;}
+.p3a-1a .p3f-bt{margin:6px 0 0;background:#b45309;}
+.p3a-1a,.p3f-pix{min-width:210px;}
+.p3f-pix{display:block;margin-top:6px;font-size:13px;font-weight:700;color:#0f172a;line-height:1.4;}
+.p3f-pix .p3f-bt{margin-top:4px;background:#0b0b0c;}
+.p3pix-ov{position:fixed;inset:0;z-index:100200;background:rgba(11,11,12,0.6);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:16px;font-family:'DM Sans',sans-serif;color:#0b0b0c;}
+.p3pix-ov *{box-sizing:border-box;}
+.p3pix-cx{background:#ffffff;border-radius:16px;width:100%;max-width:460px;padding:16px;}
+.p3pix-t{font-size:17px;font-weight:800;line-height:1.25;}
+.p3pix-conf{font-size:14px;line-height:1.5;margin-top:8px;overflow-wrap:anywhere;}
+.p3pix-frase{margin-top:10px;padding:10px 12px;border-radius:10px;background:#fef3c7;border:2px solid #b45309;color:#78350f;font-size:14px;font-weight:800;line-height:1.4;}
+.p3pix-cartao{margin:12px auto 0;width:100%;max-width:320px;border:1px solid #d4d4d8;line-height:0;}
+.p3pix-cartao .p3pix-svg{width:100%;height:auto;display:block;}
+.p3pix-info{font-size:12px;color:#52525b;line-height:1.4;margin-top:8px;}
+.p3pix-cod{display:block;width:100%;min-height:76px;margin-top:6px;border:1.5px solid #a1a1aa;border-radius:10px;padding:8px;font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace;color:#0b0b0c;background:#fafafa;resize:vertical;}
+.p3pix-bts{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.p3pix-bt{flex:1;min-height:48px;padding:10px 14px;border:none;border-radius:12px;background:#0b0b0c;color:#ffffff;font-size:15px;font-weight:800;font-family:'DM Sans',sans-serif;cursor:pointer;}
+.p3pix-bt.sec{background:#ffffff;color:#0b0b0c;border:1.5px solid #a1a1aa;}
+.p3pix-bt:focus-visible,.p3pix-cod:focus-visible{outline:3px solid #0b0b0c;outline-offset:2px;}
+@media print{
+  body.p3pix-imprimindo > *:not(#p3pix-ov){display:none !important;}
+  body.p3pix-imprimindo #p3pix-ov{position:static;display:block;background:#ffffff;padding:0;overflow:visible;}
+  body.p3pix-imprimindo .p3pix-cx{max-width:none;padding:0;border-radius:0;}
+  body.p3pix-imprimindo .p3pix-nao{display:none !important;}
+  body.p3pix-imprimindo .p3pix-cartao{margin:0;border:none;width:100mm;max-width:none;}
+  body.p3pix-imprimindo .p3pix-cartao .p3pix-svg{width:100mm;height:100mm;}
+}
+@media (prefers-reduced-motion: reduce){
+  .p3t,.p3-flut,.p3-flut.troca,.p3t-btn::after,.p3-ov .p3-promo::after,#bancada-pecas .p3-promo::after,.bnc-cta::after,.p3-add.pop{animation:none !important;}
+  .p3-palco{transition:none;}
+}
 </style>
 <div id="page-promo" style="display:none;background:#ffffff;min-height:100vh;">
 
@@ -10490,15 +10669,16 @@ function aplicarModeloSugerido(id){
 async function carregarModeloSugerido(){
   try{
     // 13/09: a mesma leitura traz o interruptor do aviso de greve dos Correios (1 ida ao banco só).
-    var r=await sb.from('site_config').select('chave,valor').in('chave',['modelo_sugerido','aviso_greve_correios','estoque_oculto_loja','mp_pix','mp_cartao','pecas3d','pecas3d_promo']);   // 🏁 MP-100: interruptores do Mercado Pago
+    var r=await sb.from('site_config').select('chave,valor').in('chave',['modelo_sugerido','aviso_greve_correios','estoque_oculto_loja','mp_pix','mp_cartao','pecas3d','pecas3d_promo','pecas3d_fora','pecas3d_pix_chave','pecas3d_conferidas'/*🖤 VISUAL-2611*/]);   // 🏁 MP-100: interruptores do Mercado Pago
     var linhas=(r&&!r.error&&Array.isArray(r.data))?r.data:[];
     // 🚫 OCULTO-1910: modelo reservado pela empresa (site_config.estoque_oculto_loja) some do seletor do cliente
     if(r&&!r.error) window.MODELOS_OCULTOS=[];
-    var _p3p=null;
+    var _p3p=null, _p3x={};   // 🖤 VISUAL-2611: pecas3d_fora, pecas3d_pix_chave, pecas3d_conferidas (ausentes = padrão seguro)
     var _p3=null;   // 🧩 PEÇAS-BANCADA-1211: chave ausente, valor estranho ou leitura que falhou = DESLIGADO
     linhas.forEach(function(x){
       if(x.chave==='pecas3d') _p3=x.valor;
       if(x.chave==='pecas3d_promo') _p3p=x.valor;   // 🏷️ COR-NOME-2411
+      if(x.chave==='pecas3d_fora') _p3x.fora=x.valor; if(x.chave==='pecas3d_pix_chave') _p3x.pix=x.valor; if(x.chave==='pecas3d_conferidas') _p3x.conferidas=x.valor;   // 🖤 VISUAL-2611 · 🔑 PIX-MOLDURA-2611
       if(x.chave==='modelo_sugerido'&&x.valor) aplicarModeloSugerido(x.valor);
       if(x.chave==='aviso_greve_correios') window.AVISO_GREVE_CORREIOS=(String(x.valor==null?'1':x.valor).trim()!=='0');
       if(x.chave==='estoque_oculto_loja') window.MODELOS_OCULTOS=String(x.valor||'').replace(/\s+/g,'').split(',').filter(function(k){ return MOD_IDS.indexOf(k)>=0; });
@@ -10509,6 +10689,7 @@ async function carregarModeloSugerido(){
     try{ ocultoRedesenhar(); }catch(e){}
     if(r&&!r.error) window._msLidoEm=Date.now();   // 🎯 UM-MODELO-1910: hora da última leitura (aba velha do admin relê)
     try{ umModeloAplicar(); }catch(e){}            // 🎯 UM-MODELO-1910: vitrine, capa e textos fixos
+    try{ if(r&&!r.error) pecas3dLeExtras(_p3x); }catch(e){}   // 🖤 VISUAL-2611: antes do interruptor principal, que é quem pinta
     try{ if(r&&!r.error) pecas3dLePromo(_p3p); }catch(e){}   // 🏷️ COR-NOME-2411: chave ausente = promoção ligada; só 'off' volta à tabela
     try{ pecas3dAplicarInterruptor((r&&!r.error)?_p3:null); }catch(e){}   // 🧩 PEÇAS-BANCADA-1211
   }catch(e){ try{ pecas3dAplicarInterruptor(null); }catch(_){} }
@@ -19131,13 +19312,25 @@ function promoFreteValor(){ return (window.PROMOA&&window.PROMOA.frete&&window.P
 //   A cor da peça vai no item (`cor`) e no nome do item (`nome_produto` = "Descanso de máquina, cor branca"): assim o
 //   e-mail e a etiqueta JÁ PUBLICADOS (email-pedido v42, melhorenvio v34) mostram a cor sem precisar de versão nova
 //   (a etiqueta calcula tudo pelo `slug`). O passa-fio continua com as variantes dele (tamanho + cor), sem `cor` de peça.
+// • 🖤 VISUAL-2611 (26/11, empresa: "é de extrema importância ter animações, ser chamativo"; "não precisa ter tanta opção"):
+//   a chamada virou um bloco preto pequeno e animado ("Peças com a sua marca") e o catálogo mostra UMA peça por vez
+//   (palco + vitrine de 6 em destaque + "ver todas"). Entraram a Plaquinha de balcão e a Moldura de QR (de UMA cor só: sem
+//   "cor do nome"), com o interruptor site_config.pecas3d_fora (slugs fora da venda; sem a chave = todas à venda).
+// • 🔑 PIX-MOLDURA-2611: chave Pix opcional na Moldura de QR (site_config.pecas3d_pix_chave = 'on'; sem a chave = desligado).
+//   A chave vive só no item do pedido (pecas3d[i].pix) e no cartão do painel; em texto nenhum (só "com chave Pix informada").
 // ============================================================
-window.PECAS3D_CAT={"marca":"TKTXSC","acrescimo":5.0,"limite_nome":12,"cores":[{"nome":"Preto","hex":"#161616","sufixo":"","adj":"preta","fundo":"#060606","luz":"#5E5E5E"},{"nome":"Branco","hex":"#F2F2F2","sufixo":"-branco","adj":"branca","fundo":"#9A9A9A","luz":"#FFFFFF"},{"nome":"Azul","hex":"#0A66D8","sufixo":"-azul","adj":"azul","fundo":"#032C68","luz":"#5A9BEE"}],"caixas":{"P":{"cm":[17,12,4],"cabe":571},"M":{"cm":[20,15,8],"cabe":1680},"G":{"cm":[25,20,8],"cabe":2800}},"vol_pomada":0,"produtos":[{"slug":"descanso","nome":"Descanso de máquina","como_usa":"Entre um traço e outro, a máquina deita nos dois apoios. Fica inclinada e não rola.","imagem":"descanso.png","preco_padrao":10.9,"preco_personalizado":15.9,"personaliza":true,"gramas":21.5,"max":5,"limite_nome":8,"previa":{"imagem":"descanso-liso.png","cx":0.473,"cy":0.5555,"vx":[0.0057,0.004],"vy":[0.0057,-0.0041],"larg_mm":38,"alt_mm":8.75},"caixa":"P","vol":151.6,"promo_padrao":6.9,"promo_personalizado":11.9},{"slug":"porta-batoque","nome":"Porta-batoque 4 furos","como_usa":"Os copinhos de tinta encaixam nos furos em funil, que servem os tamanhos P, M e G, e não tombam.","imagem":"porta-batoque.png","preco_padrao":10.9,"preco_personalizado":15.9,"personaliza":true,"gramas":23.3,"max":5,"limite_nome":16,"previa":{"imagem":"porta-batoque-liso.png","cx":0.4416,"cy":0.55,"vx":[0.0052,0.0037],"vy":[0.0052,-0.0037],"larg_mm":104,"alt_mm":8.75},"caixa":"P","vol":69.1,"promo_padrao":6.9,"promo_personalizado":11.9},{"slug":"espremedor","nome":"Espremedor de tubo","como_usa":"A ponta do tubo entra na fenda; deslizando, a pomada vai toda para a frente.","imagem":"espremedor.png","preco_padrao":5.0,"preco_personalizado":10.0,"personaliza":true,"gramas":9.9,"max":5,"limite_nome":11,"previa":{"imagem":"espremedor-liso.png","cx":0.586,"cy":0.4132,"vx":[0.0081,0.0057],"vy":[0.0081,-0.0057],"larg_mm":50,"alt_mm":7.65},"caixa":"P","vol":14.1,"promo_padrao":2.9,"promo_personalizado":7.9},{"slug":"kit-bancada","nome":"Kit bancada","como_usa":"Descanso, porta-batoque e espremedor juntos: o básico da bancada.","imagem":"kit-bancada.png","preco_padrao":20.9,"preco_personalizado":25.9,"personaliza":true,"gramas":49.4,"max":5,"limite_nome":8,"previa":{"imagem":"kit-bancada-liso.png","cx":0.4452,"cy":0.4017,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":38,"alt_mm":8.75,"outros":[{"cx":0.3116,"cy":0.5751,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":104,"alt_mm":8.75},{"cx":0.771,"cy":0.5827,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":50,"alt_mm":7.65}]},"caixa":"P","vol":234.9,"promo_padrao":12.9,"promo_personalizado":17.9},{"slug":"suporte-cartuchos","nome":"Suporte de cartuchos","como_usa":"Os cartuchos da sessão ficam em pé nos 10 furos, na ordem de uso.","imagem":"suporte-cartuchos.png","preco_padrao":12.9,"preco_personalizado":17.9,"personaliza":true,"gramas":35.5,"max":5,"limite_nome":16,"previa":{"imagem":"suporte-cartuchos-liso.png","cx":0.3999,"cy":0.584,"vx":[0.0049,0.0035],"vy":[0.0049,-0.0035],"larg_mm":94,"alt_mm":8.75},"caixa":"P","vol":106.9,"promo_padrao":8.9,"promo_personalizado":13.9},{"slug":"suporte-celular","nome":"Suporte de celular","como_usa":"O celular com o desenho de referência fica em pé, de frente para o tatuador.","imagem":"suporte-celular.png","preco_padrao":22.9,"preco_personalizado":27.9,"personaliza":true,"gramas":58.1,"max":5,"limite_nome":14,"previa":{"imagem":"suporte-celular-liso.png","cx":0.3589,"cy":0.7494,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":64,"alt_mm":8.02},"caixa":"M","vol":840.0,"promo_padrao":14.9,"promo_personalizado":19.9},{"slug":"suporte-frasco","nome":"Suporte de frasco","como_usa":"O frasco de sabão ou de água fica dentro do copo e não tomba.","imagem":"suporte-frasco.png","preco_padrao":14.9,"preco_personalizado":19.9,"personaliza":true,"gramas":41.5,"max":5,"limite_nome":15,"previa":{"imagem":"suporte-frasco-liso.png","cx":0.3115,"cy":0.6721,"vx":[0.0044,0.0031],"vy":[0.0044,-0.0031],"larg_mm":68,"alt_mm":8.02},"caixa":"P","vol":247.0,"promo_padrao":9.9,"promo_personalizado":14.9},{"slug":"guia-de-cabo","nome":"Guia de cabo","como_usa":"Os cabos passam pelos rasgos e param de atravessar a bancada. Prende com fita dupla-face.","imagem":"guia-de-cabo.png","preco_padrao":5.9,"preco_personalizado":10.9,"personaliza":true,"gramas":13.8,"max":5,"limite_nome":9,"previa":{"imagem":"guia-de-cabo-liso.png","cx":0.3693,"cy":0.608,"vx":[0.0086,0.0061],"vy":[0.0086,-0.0061],"larg_mm":42,"alt_mm":6.56},"caixa":"P","vol":35.2,"promo_padrao":3.9,"promo_personalizado":8.9},{"slug":"expositor-pomada","nome":"Expositor de pomada","como_usa":"Fica no balcão com 6 tubos em pé, para o tatuador revender ao cliente.","imagem":"expositor-pomada.png","preco_padrao":24.9,"preco_personalizado":29.9,"personaliza":true,"gramas":70.0,"max":5,"limite_nome":16,"previa":{"imagem":"expositor-pomada-liso.png","cx":0.3735,"cy":0.6426,"vx":[0.0042,0.0029],"vy":[0.0042,-0.003],"larg_mm":104,"alt_mm":8.75},"caixa":"P","vol":337.4,"promo_padrao":15.9,"promo_personalizado":20.9},{"slug":"suporte-copo","nome":"Suporte de copo de enxágue","como_usa":"O copo de água encaixa pelo fundo e não tomba; ao lado ficam 2 cartuchos.","imagem":"suporte-copo.png","preco_padrao":22.9,"preco_personalizado":27.9,"personaliza":true,"gramas":62.0,"max":5,"limite_nome":16,"previa":{"imagem":"suporte-copo-liso.png","cx":0.3451,"cy":0.648,"vx":[0.0036,0.0026],"vy":[0.0036,-0.0026],"larg_mm":100,"alt_mm":8.75},"caixa":"P","vol":413.2,"promo_padrao":13.9,"promo_personalizado":18.9},{"slug":"ganchos-de-lixo","nome":"Ganchos de lixo (par)","como_usa":"Os dois ganchos colam na lateral da bancada e seguram o saquinho de lixo aberto.","imagem":"ganchos-de-lixo.png","preco_padrao":5.9,"preco_personalizado":10.9,"personaliza":true,"gramas":11.6,"max":5,"limite_nome":9,"previa":{"imagem":"ganchos-de-lixo-liso.png","cx":0.2778,"cy":0.4727,"vx":[0.006,0.0043],"vy":[0.006,-0.0043],"larg_mm":38,"alt_mm":4.37,"outros":[{"cx":0.6053,"cy":0.7047,"vx":[0.006,0.0042],"vy":[0.006,-0.0043],"larg_mm":38,"alt_mm":4.37}]},"caixa":"P","vol":71.9,"promo_padrao":3.9,"promo_personalizado":8.9},{"slug":"rack-de-tintas","nome":"Rack de tintas (4 frascos)","como_usa":"Quatro frascos de tinta em pé e em ordem. Vários racks ficam lado a lado.","imagem":"rack-de-tintas.png","preco_padrao":23.9,"preco_personalizado":28.9,"personaliza":true,"gramas":63.4,"max":5,"limite_nome":16,"previa":{"imagem":"rack-de-tintas-liso.png","cx":0.4172,"cy":0.5821,"vx":[0.0035,0.0025],"vy":[0.0035,-0.0025],"larg_mm":140,"alt_mm":8.75},"caixa":"P","vol":262.1,"promo_padrao":14.9,"promo_personalizado":19.9},{"slug":"suporte-pomada","nome":"Suporte de pomada","como_usa":"Dois tubos de pomada em pé na bancada, ao alcance da mão de trabalho.","imagem":"suporte-pomada.png","preco_padrao":11.9,"preco_personalizado":16.9,"personaliza":true,"gramas":27.7,"max":5,"limite_nome":13,"previa":{"imagem":"suporte-pomada-liso.png","cx":0.3584,"cy":0.6658,"vx":[0.0061,0.0043],"vy":[0.0061,-0.0043],"larg_mm":60,"alt_mm":8.02},"caixa":"P","vol":146.9,"promo_padrao":7.9,"promo_personalizado":12.9},{"slug":"porta-bandagem","nome":"Porta-rolo de bandagem","como_usa":"O rolo da fita de grip fica deitado no berço e não rola pela bancada.","imagem":"porta-bandagem.png","preco_padrao":13.9,"preco_personalizado":18.9,"personaliza":true,"gramas":36.3,"max":5,"limite_nome":12,"previa":{"imagem":"porta-bandagem-liso.png","cx":0.2931,"cy":0.6806,"vx":[0.0051,0.0036],"vy":[0.0051,-0.0036],"larg_mm":54,"alt_mm":8.02},"caixa":"P","vol":156.4,"promo_padrao":8.9,"promo_personalizado":13.9},{"slug":"bandeja-de-pele","nome":"Bandeja de pele de treino","como_usa":"A pele sintética de 20 × 15 cm fica firme dentro da bandeja para treinar.","imagem":"bandeja-de-pele.png","preco_padrao":29.9,"preco_personalizado":34.9,"personaliza":true,"gramas":92.4,"max":5,"limite_nome":16,"previa":{"imagem":"bandeja-de-pele-liso.png","cx":0.6689,"cy":0.619,"vx":[0.0021,-0.0015],"vy":[-0.0021,-0.0015],"larg_mm":120,"alt_mm":8.02},"caixa":"G","vol":223.9,"promo_padrao":18.9,"promo_personalizado":23.9},{"slug":"passa-fio","nome":"Passa-fio de bancada","como_usa":"Encaixa num furo de 5 ou 6 cm no tampo; os cabos descem por ele.","imagem":"passa-fio.jpg","preco_padrao":4.0,"preco_personalizado":null,"personaliza":false,"gramas":15,"max":20,"variantes":{"tamanho":["50 mm","60 mm"],"cor":["Preto","Branco","Cinza"]},"caixa":"P","vol":129.6}]};
+window.PECAS3D_CAT={"marca":"TKTXSC","acrescimo":5.0,"limite_nome":12,"cores":[{"nome":"Preto","hex":"#161616","sufixo":"","adj":"preta","fundo":"#060606","luz":"#5E5E5E"},{"nome":"Branco","hex":"#F2F2F2","sufixo":"-branco","adj":"branca","fundo":"#9A9A9A","luz":"#FFFFFF"},{"nome":"Azul","hex":"#0A66D8","sufixo":"-azul","adj":"azul","fundo":"#032C68","luz":"#5A9BEE"}],"caixas":{"P":{"cm":[17,12,4],"cabe":571},"M":{"cm":[20,15,8],"cabe":1680},"G":{"cm":[25,20,8],"cabe":2800}},"vol_pomada":0,"produtos":[{"slug":"descanso","nome":"Descanso de máquina","como_usa":"Entre um traço e outro, a máquina deita nos dois apoios. Fica inclinada e não rola.","imagem":"descanso.png","preco_padrao":10.9,"preco_personalizado":15.9,"personaliza":true,"gramas":21.5,"max":5,"limite_nome":8,"previa":{"imagem":"descanso-liso.png","cx":0.473,"cy":0.5555,"vx":[0.0057,0.004],"vy":[0.0057,-0.0041],"larg_mm":38,"alt_mm":8.75},"caixa":"P","vol":151.6,"promo_padrao":6.9,"promo_personalizado":11.9},{"slug":"porta-batoque","nome":"Porta-batoque 4 furos","como_usa":"Os copinhos de tinta encaixam nos furos em funil, que servem os tamanhos P, M e G, e não tombam.","imagem":"porta-batoque.png","preco_padrao":10.9,"preco_personalizado":15.9,"personaliza":true,"gramas":23.3,"max":5,"limite_nome":16,"previa":{"imagem":"porta-batoque-liso.png","cx":0.4416,"cy":0.55,"vx":[0.0052,0.0037],"vy":[0.0052,-0.0037],"larg_mm":104,"alt_mm":8.75},"caixa":"P","vol":69.1,"promo_padrao":6.9,"promo_personalizado":11.9},{"slug":"espremedor","nome":"Espremedor de tubo","como_usa":"A ponta do tubo entra na fenda; deslizando, a pomada vai toda para a frente.","imagem":"espremedor.png","preco_padrao":5.0,"preco_personalizado":10.0,"personaliza":true,"gramas":9.9,"max":5,"limite_nome":11,"previa":{"imagem":"espremedor-liso.png","cx":0.586,"cy":0.4132,"vx":[0.0081,0.0057],"vy":[0.0081,-0.0057],"larg_mm":50,"alt_mm":7.65},"caixa":"P","vol":14.1,"promo_padrao":2.9,"promo_personalizado":7.9},{"slug":"kit-bancada","nome":"Kit bancada","como_usa":"Descanso, porta-batoque e espremedor juntos: o básico da bancada.","imagem":"kit-bancada.png","preco_padrao":20.9,"preco_personalizado":25.9,"personaliza":true,"gramas":49.4,"max":5,"limite_nome":8,"previa":{"imagem":"kit-bancada-liso.png","cx":0.4452,"cy":0.4017,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":38,"alt_mm":8.75,"outros":[{"cx":0.3116,"cy":0.5751,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":104,"alt_mm":8.75},{"cx":0.771,"cy":0.5827,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":50,"alt_mm":7.65}]},"caixa":"P","vol":234.9,"promo_padrao":12.9,"promo_personalizado":17.9},{"slug":"suporte-cartuchos","nome":"Suporte de cartuchos","como_usa":"Os cartuchos da sessão ficam em pé nos 10 furos, na ordem de uso.","imagem":"suporte-cartuchos.png","preco_padrao":12.9,"preco_personalizado":17.9,"personaliza":true,"gramas":35.5,"max":5,"limite_nome":16,"previa":{"imagem":"suporte-cartuchos-liso.png","cx":0.3999,"cy":0.584,"vx":[0.0049,0.0035],"vy":[0.0049,-0.0035],"larg_mm":94,"alt_mm":8.75},"caixa":"P","vol":106.9,"promo_padrao":8.9,"promo_personalizado":13.9},{"slug":"suporte-celular","nome":"Suporte de celular","como_usa":"O celular com o desenho de referência fica em pé, de frente para o tatuador.","imagem":"suporte-celular.png","preco_padrao":22.9,"preco_personalizado":27.9,"personaliza":true,"gramas":58.1,"max":5,"limite_nome":14,"previa":{"imagem":"suporte-celular-liso.png","cx":0.3589,"cy":0.7494,"vx":[0.0032,0.0023],"vy":[0.0032,-0.0023],"larg_mm":64,"alt_mm":8.02},"caixa":"M","vol":840.0,"promo_padrao":14.9,"promo_personalizado":19.9},{"slug":"suporte-frasco","nome":"Suporte de frasco","como_usa":"O frasco de sabão ou de água fica dentro do copo e não tomba.","imagem":"suporte-frasco.png","preco_padrao":14.9,"preco_personalizado":19.9,"personaliza":true,"gramas":41.5,"max":5,"limite_nome":15,"previa":{"imagem":"suporte-frasco-liso.png","cx":0.3115,"cy":0.6721,"vx":[0.0044,0.0031],"vy":[0.0044,-0.0031],"larg_mm":68,"alt_mm":8.02},"caixa":"P","vol":247.0,"promo_padrao":9.9,"promo_personalizado":14.9},{"slug":"guia-de-cabo","nome":"Guia de cabo","como_usa":"Os cabos passam pelos rasgos e param de atravessar a bancada. Prende com fita dupla-face.","imagem":"guia-de-cabo.png","preco_padrao":5.9,"preco_personalizado":10.9,"personaliza":true,"gramas":13.8,"max":5,"limite_nome":9,"previa":{"imagem":"guia-de-cabo-liso.png","cx":0.3693,"cy":0.608,"vx":[0.0086,0.0061],"vy":[0.0086,-0.0061],"larg_mm":42,"alt_mm":6.56},"caixa":"P","vol":35.2,"promo_padrao":3.9,"promo_personalizado":8.9},{"slug":"expositor-pomada","nome":"Expositor de pomada","como_usa":"Fica no balcão com 6 tubos em pé, para o tatuador revender ao cliente.","imagem":"expositor-pomada.png","preco_padrao":24.9,"preco_personalizado":29.9,"personaliza":true,"gramas":70.0,"max":5,"limite_nome":16,"previa":{"imagem":"expositor-pomada-liso.png","cx":0.3735,"cy":0.6426,"vx":[0.0042,0.0029],"vy":[0.0042,-0.003],"larg_mm":104,"alt_mm":8.75},"caixa":"P","vol":337.4,"promo_padrao":15.9,"promo_personalizado":20.9},{"slug":"suporte-copo","nome":"Suporte de copo de enxágue","como_usa":"O copo de água encaixa pelo fundo e não tomba; ao lado ficam 2 cartuchos.","imagem":"suporte-copo.png","preco_padrao":22.9,"preco_personalizado":27.9,"personaliza":true,"gramas":62.0,"max":5,"limite_nome":16,"previa":{"imagem":"suporte-copo-liso.png","cx":0.3451,"cy":0.648,"vx":[0.0036,0.0026],"vy":[0.0036,-0.0026],"larg_mm":100,"alt_mm":8.75},"caixa":"P","vol":413.2,"promo_padrao":13.9,"promo_personalizado":18.9},{"slug":"ganchos-de-lixo","nome":"Ganchos de lixo (par)","como_usa":"Os dois ganchos colam na lateral da bancada e seguram o saquinho de lixo aberto.","imagem":"ganchos-de-lixo.png","preco_padrao":5.9,"preco_personalizado":10.9,"personaliza":true,"gramas":11.6,"max":5,"limite_nome":9,"previa":{"imagem":"ganchos-de-lixo-liso.png","cx":0.2778,"cy":0.4727,"vx":[0.006,0.0043],"vy":[0.006,-0.0043],"larg_mm":38,"alt_mm":4.37,"outros":[{"cx":0.6053,"cy":0.7047,"vx":[0.006,0.0042],"vy":[0.006,-0.0043],"larg_mm":38,"alt_mm":4.37}]},"caixa":"P","vol":71.9,"promo_padrao":3.9,"promo_personalizado":8.9},{"slug":"rack-de-tintas","nome":"Rack de tintas (4 frascos)","como_usa":"Quatro frascos de tinta em pé e em ordem. Vários racks ficam lado a lado.","imagem":"rack-de-tintas.png","preco_padrao":23.9,"preco_personalizado":28.9,"personaliza":true,"gramas":63.4,"max":5,"limite_nome":16,"previa":{"imagem":"rack-de-tintas-liso.png","cx":0.4172,"cy":0.5821,"vx":[0.0035,0.0025],"vy":[0.0035,-0.0025],"larg_mm":140,"alt_mm":8.75},"caixa":"P","vol":262.1,"promo_padrao":14.9,"promo_personalizado":19.9},{"slug":"suporte-pomada","nome":"Suporte de pomada","como_usa":"Dois tubos de pomada em pé na bancada, ao alcance da mão de trabalho.","imagem":"suporte-pomada.png","preco_padrao":11.9,"preco_personalizado":16.9,"personaliza":true,"gramas":27.7,"max":5,"limite_nome":13,"previa":{"imagem":"suporte-pomada-liso.png","cx":0.3584,"cy":0.6658,"vx":[0.0061,0.0043],"vy":[0.0061,-0.0043],"larg_mm":60,"alt_mm":8.02},"caixa":"P","vol":146.9,"promo_padrao":7.9,"promo_personalizado":12.9},{"slug":"porta-bandagem","nome":"Porta-rolo de bandagem","como_usa":"O rolo da fita de grip fica deitado no berço e não rola pela bancada.","imagem":"porta-bandagem.png","preco_padrao":13.9,"preco_personalizado":18.9,"personaliza":true,"gramas":36.3,"max":5,"limite_nome":12,"previa":{"imagem":"porta-bandagem-liso.png","cx":0.2931,"cy":0.6806,"vx":[0.0051,0.0036],"vy":[0.0051,-0.0036],"larg_mm":54,"alt_mm":8.02},"caixa":"P","vol":156.4,"promo_padrao":8.9,"promo_personalizado":13.9},{"slug":"bandeja-de-pele","nome":"Bandeja de pele de treino","como_usa":"A pele sintética de 20 × 15 cm fica firme dentro da bandeja para treinar.","imagem":"bandeja-de-pele.png","preco_padrao":29.9,"preco_personalizado":34.9,"personaliza":true,"gramas":92.4,"max":5,"limite_nome":16,"previa":{"imagem":"bandeja-de-pele-liso.png","cx":0.6689,"cy":0.619,"vx":[0.0021,-0.0015],"vy":[-0.0021,-0.0015],"larg_mm":120,"alt_mm":8.02},"caixa":"G","vol":223.9,"promo_padrao":18.9,"promo_personalizado":23.9},{"slug":"plaquinha-balcao","nome":"Plaquinha de balcão","como_usa":"Fica em pé no balcão com o nome do estúdio grande na frente, inclinada para quem chega ler.","imagem":"plaquinha-balcao.png","preco_padrao":21.9,"preco_personalizado":26.9,"personaliza":true,"uma_cor":true,"gramas":52.5,"max":5,"limite_nome":16,"previa":{"imagem":"plaquinha-balcao-liso.png","cx":0.4368,"cy":0.5415,"vx":[0.0044,0.0031],"vy":[0.0016,-0.0051],"larg_mm":120,"alt_mm":18.0},"caixa":"M","vol":271.0,"promo_padrao":12.9,"promo_personalizado":17.9},{"slug":"moldura-qr","nome":"Moldura de QR","como_usa":"Encaixe por cima um cartão de 10 × 10 cm com o QR do seu Pix, Instagram ou WhatsApp. Troca quando quiser.","imagem":"moldura-qr.png","preco_padrao":28.9,"preco_personalizado":33.9,"personaliza":true,"uma_cor":true,"pix":true,"gramas":74.5,"max":5,"limite_nome":16,"previa":{"imagem":"moldura-qr-liso.png","cx":0.4096,"cy":0.7093,"vx":[0.003,0.0021],"vy":[0.001,-0.0034],"larg_mm":92,"alt_mm":12.0},"caixa":"M","vol":987.8,"promo_padrao":17.9,"promo_personalizado":22.9},{"slug":"passa-fio","nome":"Passa-fio de bancada","como_usa":"Encaixa num furo de 5 ou 6 cm no tampo; os cabos descem por ele.","imagem":"passa-fio.jpg","preco_padrao":4.0,"preco_personalizado":null,"personaliza":false,"gramas":15,"max":20,"variantes":{"tamanho":["50 mm","60 mm"],"cor":["Preto","Branco","Cinza"]},"caixa":"P","vol":129.6}]};
 window.PECAS3D_MODO='off';          // 'off' | 'teste' | 'on' — quem liga é o banco (carregarModeloSugerido)
 window.PECAS3D_EMBALAGEM_G=20;      // gramas de embalagem por pedido que leva peça
 window.PECAS3D_MARCA='🧩 PEÇAS:';   // marcador em observacoes e na mensagem do pedido
 // o carrinho de peças de CADA tela: [{slug,nome_produto,qtd,tipo:'padrao'|'nome',nome,cor,preco_un,variante?}] — cor = cor da PEÇA
 window.PECAS3D_SEL={promo:[],cp:[],fp:[],rp:[]};
+// 🖤 VISUAL-2611 + 🔑 PIX-MOLDURA-2611: interruptores novos, lidos de site_config junto com os outros (carregarModeloSugerido → pecas3dLeExtras)
+window.PECAS3D_FORA=[];            // site_config.pecas3d_fora: slugs fora da venda, separados por vírgula. Sem a chave = todas à venda
+window.PECAS3D_PIX_LIGADO=false;   // site_config.pecas3d_pix_chave = 'on': campo da chave Pix na Moldura de QR. Sem a chave = DESLIGADO
+window.PECAS3D_CONFERIDAS=[];      // site_config.pecas3d_conferidas: peças novas cuja 1ª unidade a empresa já conferiu (painel)
+window.PECAS3D_DESTAQUES=['kit-bancada','plaquinha-balcao','moldura-qr','descanso','suporte-cartuchos','porta-batoque','suporte-celular','espremedor'];   // a vitrine mostra as 6 primeiras que estiverem à venda
+window.PECAS3D_1A_UNIDADE={'plaquinha-balcao':'1ª unidade: antes de embalar, confira se a peça fica em pé.','moldura-qr':'1ª unidade: antes de embalar, confira o encaixe do cartão 10 x 10.'};
 window._p3R=null;                   // rascunho do catálogo aberto (guarda de qual tela ele é: _p3R.ctx)
 try{ if(new URLSearchParams(location.search).get('pecas3d')==='1') sessionStorage.setItem('tktx_pecas3d_teste','1'); }catch(e){}
 
@@ -19239,6 +19432,35 @@ function pecas3dArqCor(arq,cor){ var c=pecas3dCorPeca(cor), a=String(arq||''), k
 // cliente) também tem cor — Preto, Branco ou Azul, mesmo preço. Mesma cor da peça = nome afundado (como era); outra cor = nome em relevo.
 // Padrão = contraste (peça preta → nome branco; branca → preto; azul → branco). Item gravado: `cor_nome`. Item antigo sem `cor_nome` = mesma cor da peça.
 function pecas3dTemNome(p){ return !!(pecas3dTemCor(p)&&p.previa); }
+// 🖤 VISUAL-2611: peça de UMA cor só (`uma_cor` no catálogo: plaquinha e moldura) não tem "cor do nome": o nome vai afundado na cor da peça
+function pecas3dTemCorNome(p){ return !!(pecas3dTemNome(p)&&!p.uma_cor); }
+// texto "a, b, c" → só os slugs que existem no catálogo, sem repetir (qualquer outra coisa é ignorada)
+function pecas3dSlugs(v){
+  var ok={}, out=[]; ((window.PECAS3D_CAT&&window.PECAS3D_CAT.produtos)||[]).forEach(function(p){ ok[p.slug]=1; });
+  String(v==null?'':v).toLowerCase().split(',').forEach(function(s){ s=s.trim(); if(s&&ok[s]===1&&out.indexOf(s)<0) out.push(s); });
+  return out;
+}
+function pecas3dFora(slug){ return window.PECAS3D_FORA.indexOf(String(slug))>=0; }
+// o catálogo À VENDA (sem as peças de site_config.pecas3d_fora). O painel e os pedidos antigos continuam conhecendo todas (pecas3dProduto).
+function pecas3dCatVenda(){ return ((window.PECAS3D_CAT&&window.PECAS3D_CAT.produtos)||[]).filter(function(p){ return !pecas3dFora(p.slug); }); }
+function pecas3dDestaques(){
+  var l=pecas3dCatVenda(), out=[];
+  window.PECAS3D_DESTAQUES.forEach(function(s){ if(out.length>=6) return; for(var i=0;i<l.length;i++){ if(l[i].slug===s){ out.push(l[i]); break; } } });
+  return out;
+}
+// os 3 interruptores novos de site_config. Valor ausente = padrão seguro: nada fora da venda, campo do Pix DESLIGADO, nada conferido.
+function pecas3dLeExtras(o){
+  o=o||{};
+  var antes=window.PECAS3D_FORA.join(',')+'|'+window.PECAS3D_PIX_LIGADO+'|'+window.PECAS3D_CONFERIDAS.join(',');
+  window.PECAS3D_FORA=pecas3dSlugs(o.fora);
+  window.PECAS3D_PIX_LIGADO=(String(o.pix==null?'':o.pix).trim().toLowerCase()==='on');
+  window.PECAS3D_CONFERIDAS=pecas3dSlugs(o.conferidas);
+  if(antes===window.PECAS3D_FORA.join(',')+'|'+window.PECAS3D_PIX_LIGADO+'|'+window.PECAS3D_CONFERIDAS.join(',')) return;
+  // a leitura chegou com a tela já pintada: o catálogo aberto e as chamadas acompanham
+  try{ if(window._p3R&&document.getElementById('p3-cat')) pecas3dCatPintar(); }catch(e){}
+  try{ pecas3dPintarChamada(); }catch(e){}
+  try{ pecas3dPintarHome(); }catch(e){}
+}
 function pecas3dCnPadrao(cor){ var c=pecas3dCorPeca(cor), a=pecas3dCor(c.nome==='Branco'?'Preto':'Branco'); return (a||c).nome; }
 function pecas3dCnVal(cn,cor){ var n=pecas3dCor(cn); return n?n.nome:pecas3dCorPeca(cor).nome; }   // vazio/desconhecido = mesma cor da peça
 function pecas3dCnExp(x,cor){ var c=pecas3dCorPeca(cor), e=x&&x.cn&&x.cn[c.nome]; return (e&&pecas3dCor(e))?pecas3dCor(e).nome:''; }   // o que o cliente escolheu ('' = ainda não mexeu)
@@ -19278,10 +19500,11 @@ function pecas3dNormalizar(lista){
   lista.forEach(function(it){
     if(!it||typeof it!=='object') return;
     var p=pecas3dProduto(it.slug); if(!p) return;
+    if(pecas3dFora(p.slug)) return;   // 🖤 VISUAL-2611: peça desligada em site_config.pecas3d_fora não é vendida
     var q=Math.floor(Number(it.qtd)||0); if(q<1) return;
     var teto=(p.tipo==='cartucho')?cartDisp(p.modelo):(Number(p.max)||5); if(q>teto) q=teto; if(q<1) return;   // 🔩 CARTUCHO-1911: cartucho: teto = estoque lido (sem leitura = 0)
     var o={slug:p.slug,nome_produto:p.nome,qtd:q,tipo:'padrao',nome:'',cor:'',preco_un:0};
-    if(pecas3dTemCor(p)){ o.cor=pecas3dCorPeca(it.cor).nome; if(pecas3dTemNome(p)) o.cor_nome=pecas3dCnVal(it.cor_nome,o.cor); o.nome_produto=pecas3dNomeItem(p,o.cor,o.cor_nome); }   // cor da peça: sempre preenchida, nunca muda o preço · 🎨 COR-NOME-2411: cor_nome idem (item sem ela = mesma cor da peça)
+    if(pecas3dTemCor(p)){ o.cor=pecas3dCorPeca(it.cor).nome; if(pecas3dTemNome(p)) o.cor_nome=p.uma_cor?o.cor:pecas3dCnVal(it.cor_nome,o.cor)/*🖤 VISUAL-2611: peça de uma cor = nome na cor da peça*/; o.nome_produto=pecas3dNomeItem(p,o.cor,o.cor_nome); }   // cor da peça: sempre preenchida, nunca muda o preço · 🎨 COR-NOME-2411: cor_nome idem (item sem ela = mesma cor da peça)
     if(p.variantes){
       var v=(it.variante&&typeof it.variante==='object')?it.variante:{};
       var tam=pecas3dAcha(p.variantes.tamanho,v.tamanho), cr=pecas3dAcha(p.variantes.cor,v.cor);
@@ -19294,7 +19517,8 @@ function pecas3dNormalizar(lista){
     }
     o.preco_un=pecas3dPrecoUn(p,o.tipo);
     if(p.tipo==='cartucho') o.tipo='cartucho';   // 🔩 CARTUCHO-1911
-    var k=[o.slug,o.tipo,o.nome,o.cor,o.cor_nome||'',o.variante?o.variante.tamanho:'',o.variante?o.variante.cor:''].join('|');   // 🎨 COR-NOME-2411: cor do nome faz parte da chave
+    if(p.pix&&window.PECAS3D_PIX_LIGADO&&it.pix){ var _px=pecas3dPixLimpa(it.pix); if(_px) o.pix=_px; }   // 🔑 PIX-MOLDURA-2611: só chave conferida e confirmada, só na peça que aceita, só com o interruptor ligado
+    var k=[o.slug,o.tipo,o.nome,o.cor,o.cor_nome||'',o.variante?o.variante.tamanho:'',o.variante?o.variante.cor:'',o.pix?(o.pix.tipo+':'+o.pix.chave+':'+o.pix.nome+':'+o.pix.cidade):''].join('|');   // 🎨 COR-NOME-2411: cor do nome faz parte da chave
     if(idx[k]){ idx[k].qtd=Math.min(teto,idx[k].qtd+o.qtd); return; }
     idx[k]=o; out.push(o);
   });
@@ -19368,6 +19592,7 @@ function pecas3dTextoItem(i){
   if(i.variante){ d.push(String(i.variante.tamanho||'')); d.push(String(i.variante.cor||'').toLowerCase()); }
   if(i.tipo==='nome') d.push('nome '+String(i.nome||''));
   else if(!i.variante) d.push('padrão');
+  if(i.pix||i.tem_pix) d.push('com chave Pix informada');   // 🔑 PIX-MOLDURA-2611: a chave NUNCA entra em texto
   d=d.filter(Boolean);
   return (Number(i.qtd)||0)+'x '+pecas3dNomeComCor(i)+(d.length?' ('+d.join(', ')+')':'');
 }
@@ -19435,7 +19660,12 @@ function pecas3dErroLista(lista){
   }
   return null;
 }
-function pecas3dErroNome(ctx){ var e=pecas3dErroLista(pecas3dItens(ctx)); return e?e.msg:''; }
+function pecas3dErroNome(ctx){
+  var e=pecas3dErroLista(pecas3dItens(ctx)); if(e) return e.msg;
+  // 🔑 PIX-MOLDURA-2611: na /bancada (catálogo aberto na página) chave começada e não confirmada não deixa o pedido fechar calado sem ela
+  try{ var r=window._p3R; if(r&&r.inline&&r.ctx===ctx){ var s=pecas3dPixPendente(); if(s) return pecas3dPixPendenteMsg(s); } }catch(x){}
+  return '';
+}
 
 // ───── peças de um pedido que veio do banco (Meus Pedidos, painel, cobrança) ─────
 function pecas3dDoPedido(p){
@@ -19445,6 +19675,7 @@ function pecas3dDoPedido(p){
   return l.filter(function(i){ return i&&typeof i==='object'&&Number(i.qtd)>0&&i.nome_produto; }).map(function(i){
     var o={slug:String(i.slug||''),nome_produto:String(i.nome_produto),qtd:Math.floor(Number(i.qtd)),tipo:(i.tipo==='nome'?'nome':(i.tipo==='cartucho'?'cartucho':'padrao')),/*🔩 CARTUCHO-1911*/nome:String(i.nome||''),cor:String(i.cor||''),preco_un:Number(i.preco_un)||0};
     if(i.cor_nome) o.cor_nome=String(i.cor_nome);   // 🎨 COR-NOME-2411
+    if(i.pix&&pecas3dPixLimpa(i.pix)) o.tem_pix=true;   // 🔑 PIX-MOLDURA-2611: só a marca; a chave não sai daqui (o painel lê com pecas3dPixDoPedido)
     if(i.variante&&typeof i.variante==='object') o.variante={tamanho:String(i.variante.tamanho||''),cor:String(i.variante.cor||'')};
     return o;
   });
@@ -19474,7 +19705,7 @@ function pecas3dEstadoPedido(p){
 function pecas3dComoFazer(i){
   if(i.variante) return i.qtd+'× '+i.nome_produto+' — '+String(i.variante.tamanho||'')+' · '+String(i.variante.cor||'').toLowerCase();
   var c=pecas3dCorPeca(i.cor), base=pecas3dSemCor(i.nome_produto);
-  return i.qtd+'× '+base+' — peça '+c.adj+' · '+(i.tipo==='nome'?('nome '+i.nome):'padrão TKTXSC')+' '+pecas3dCnTxt(i);   // 🎨 COR-NOME-2411
+  return i.qtd+'× '+base+' — peça '+c.adj+' · '+(i.tipo==='nome'?('nome '+i.nome):'padrão TKTXSC')+' '+pecas3dCnTxt(i)+(i.tem_pix?' · com chave Pix (cartão na fila das peças)':'');   // 🎨 COR-NOME-2411 · 🔑 PIX-MOLDURA-2611
 }
 function pecas3dFaixaAdmin(p){ return pecas3dFaixaPecas(p)+cartSepararHtml(p); }   // 🔩 CARTUCHO-1911: faixa das peças (só peças) + linha de separar dos cartuchos
 function pecas3dFaixaPecas(p){
@@ -19487,7 +19718,7 @@ function pecas3dFaixaPecas(p){
     if(e==='espera') return '<div class="p3a p3a-espera" data-p3a="espera" role="note">🧩 Tem peça (fazer só depois de pago) · '+pecas3dEsc(qt)+'</div>';
     if(e==='feita') return '<div class="p3a p3a-feita" data-p3a="feita" role="note">🧩 Peças feitas ✓ · '+pecas3dEsc(qt)+'</div>';
     return '<div class="p3a p3a-fazer" data-p3a="fazer" role="note"><div class="p3a-t">🧩 TEM PEÇA PARA FAZER · '+pecas3dEsc(qt)+'</div>'+
-      '<ul class="p3a-l">'+l.map(function(i){ return '<li>'+pecas3dEsc(pecas3dComoFazer(i))+'</li>'; }).join('')+'</ul>'+
+      '<ul class="p3a-l">'+l.map(function(i){ return '<li>'+pecas3dEsc(pecas3dComoFazer(i))+pecas3dAviso1aHtml(i.slug,false)/*🖤 VISUAL-2611: 1ª unidade*/+'</li>'; }).join('')+'</ul>'+
       '<button type="button" class="p3a-bt" onclick="sp(\'pecas3d\')" aria-label="Ver a fila das peças (pedido #'+id+')">Ver a fila das peças →</button></div>';
   }catch(x){ return ''; }
 }
@@ -19539,9 +19770,49 @@ function pecas3dTextoCurto(i){
   var d=[];
   if(i.variante){ d.push(String(i.variante.tamanho||'')); d.push(String(i.variante.cor||'').toLowerCase()); }
   if(i.tipo==='nome') d.push('nome '+String(i.nome||''));
+  if(i.pix||i.tem_pix) d.push('com chave Pix informada');   // 🔑 PIX-MOLDURA-2611
   d=d.filter(Boolean);
   return (Number(i.qtd)||0)+'× '+pecas3dNomeComCor(i)+(d.length?', '+d.join(', '):'');
 }
+// 🖤 VISUAL-2611: a chamada (uma por tela + a do Início). Bloco preto, peça branca no palco, título "Peças com a sua marca",
+// preço "a partir de" calculado do catálogo e um botão só. A peça do palco troca sozinha a cada 2,6 s (pecas3dGiro) — menos
+// para quem pediu menos movimento (prefers-reduced-motion): aí fica parada e sem brilho (o CSS desliga as animações).
+function pecas3dGiroLista(){ return pecas3dDestaques().filter(function(p){ return !!p.previa; }); }
+function pecas3dGiroSvg(i){
+  var l=pecas3dGiroLista(); if(!l.length) return '';
+  var b=pecas3dCor('Branco')||pecas3dCores()[0], n=pecas3dCor(pecas3dCnPadrao(b.nome))||b;
+  return pecas3dSvgHtml(l[((i%l.length)+l.length)%l.length],'SEU NOME',b.nome,'p3-svg-cta',false,n.nome);
+}
+function pecas3dMinComNome(){
+  var m=Infinity; pecas3dCatVenda().forEach(function(p){ var v=Number(p.preco_personalizado); if(p.personaliza&&v>0&&v<m) m=v; });
+  return isFinite(m)?m:0;
+}
+function pecas3dChamadaHtml(idBotao,acao,ctx){
+  var n=pecas3dCatVenda().length, min=pecas3dMinComNome();
+  return '<div class="p3t" data-p3t="cta">'+
+    '<div class="p3t-lin" onclick="'+acao+'">'+
+      '<div class="p3-palco esc p3t-palco" aria-hidden="true"><div class="p3-flut" data-p3giro="0">'+pecas3dGiroSvg(0)+'</div></div>'+
+      '<div class="p3t-tx"><span class="p3t-tag">✦ NOVO</span>'+
+        '<div class="p3t-h">Peças com a sua marca</div>'+
+        '<div class="p3t-sub">O nome do seu estúdio gravado na peça.'+(min>0?(' <b>A partir de '+pecas3dBRL(min)+'</b>'):'')+'</div></div>'+
+      '<button type="button" class="p3t-btn" id="'+idBotao+'" aria-haspopup="dialog" onclick="event.stopPropagation();'+acao+'">Abrir catálogo · '+n+' peças <span aria-hidden="true">→</span></button>'+
+    '</div>'+
+  '</div>';
+}
+function pecas3dMenosMovimento(){ try{ return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
+function pecas3dGiro(){
+  try{
+    if(pecas3dMenosMovimento()||document.hidden||document.getElementById('pecas3d-overlay')) return;
+    var l=pecas3dGiroLista(); if(l.length<2) return;
+    document.querySelectorAll('.p3-flut[data-p3giro]').forEach(function(f){
+      if(!f.getClientRects().length) return;   // chamada escondida não gira
+      var i=((parseInt(f.getAttribute('data-p3giro'),10)||0)+1)%l.length;
+      f.setAttribute('data-p3giro',String(i)); f.innerHTML=pecas3dGiroSvg(i);
+      f.classList.remove('troca'); void f.offsetWidth; f.classList.add('troca');
+    });
+  }catch(e){}
+}
+function pecas3dGiroLigar(){ if(window._p3GiroT||pecas3dMenosMovimento()) return; try{ window._p3GiroT=setInterval(pecas3dGiro,2600); }catch(e){} }
 function pecas3dPintarChamada(ctx){
   if(ctx===undefined||ctx===null){ pecas3dTelas().forEach(function(c){ try{ pecas3dPintarChamada(c); }catch(e){} }); return; }
   var tela=pecas3dTela(ctx); if(!tela) return;
@@ -19558,29 +19829,28 @@ function pecas3dPintarChamada(ctx){
         '<div class="p3-semp-s">Você escolheu '+guardadas+' peça'+(guardadas!==1?'s':'')+', mas o pedido está sem pomada: elas <b>não estão sendo cobradas</b>. Adicione pomadas e elas voltam para o pedido.</div>'+
       '</div>';
   }else if(!l.length){
-    h='<div class="p3-cta" onclick="pecas3dAbrir(\''+ctx+'\')">'+
-        '<div class="p3-cta-img"><img src="/pecas3d/kit-bancada.png" alt="" width="74" height="74" onerror="this.style.display=\'none\'"/></div>'+
-        '<div class="p3-cta-tx">'+
-          '<div class="p3-cta-t">É tatuador? Peças para a sua bancada</div>'+
-          '<div class="p3-cta-s">Com a nossa marca ou com o seu nome. Preta, branca ou azul. '+(tela.soPecas?'Pode pedir só as peças, sem pomada.':'Vai no mesmo envio.')+'</div>'+
-          '<button type="button" class="p3-btn" id="'+ctx+'-pecas3d-abrir" onclick="event.stopPropagation();pecas3dAbrir(\''+ctx+'\')">Ver as peças</button>'+
-        '</div>'+
-      '</div>';
+    h=pecas3dChamadaHtml(ctx+'-pecas3d-abrir','pecas3dAbrir(\''+ctx+'\')',ctx);   // 🖤 VISUAL-2611: chamada pequena, em preto e branco, com a peça girando
   }else{
-    var n=pecas3dQtdDe(l);
-    h='<div class="p3-escolhido">'+
-        '<div class="p3-esc-t">✓ '+n+' peça'+(n!==1?'s':'')+' no pedido <span class="p3-esc-v">· '+pecas3dBRL(pecas3dValorDe(l))+pecas3dPromoNota(l)+'</span></div>'+
-        '<div class="p3-esc-l">'+l.map(function(i){ return pecas3dEsc(pecas3dTextoCurto(i)); }).join('<br>')+'</div>'+
-        '<button type="button" class="p3-link" id="'+ctx+'-pecas3d-abrir" onclick="pecas3dAbrir(\''+ctx+'\')">Editar peças</button>'+
+    var n=pecas3dQtdDe(l), p0=pecas3dProduto(l[0].slug), pal='';
+    try{ if(p0&&p0.previa&&l[0].cor){ var c0=pecas3dCorPeca(l[0].cor); pal='<div class="p3-palco p3t-palco'+(pecas3dCorClara(c0)?' esc':'')+'" aria-hidden="true"><div class="p3-flut">'+pecas3dSvgHtml(p0,l[0].tipo==='nome'?l[0].nome:String(window.PECAS3D_CAT.marca||'TKTXSC'),c0.nome,'p3-svg-cta',false,pecas3dCnVal(l[0].cor_nome,c0.nome))+'</div></div>'; } }catch(e){ pal=''; }
+    if(!pal) pal='<div class="p3-palco p3t-palco" aria-hidden="true"><div class="p3-flut">'+(p0?'<img src="/pecas3d/'+pecas3dEsc(p0.imagem)+'" alt="" onerror="this.style.display=\'none\'"/>':'')+'</div></div>';
+    h='<div class="p3t p3t-esc" data-p3t="escolhido">'+
+        '<div class="p3t-lin" onclick="pecas3dAbrir(\''+ctx+'\')">'+pal+
+          '<div class="p3t-tx"><div class="p3t-h">✓ '+n+' peça'+(n!==1?'s':'')+' no pedido</div>'+
+            '<div class="p3t-sub"><b>'+pecas3dBRL(pecas3dValorDe(l))+'</b>'+pecas3dPromoNota(l)+'</div></div>'+
+          '<button type="button" class="p3t-btn" id="'+ctx+'-pecas3d-abrir" aria-haspopup="dialog" onclick="event.stopPropagation();pecas3dAbrir(\''+ctx+'\')">Editar peças</button>'+
+        '</div>'+
+        '<div class="p3t-itens">'+l.map(function(i){ return '<div class="p3t-it">'+pecas3dEsc(pecas3dTextoCurto(i))+'</div>'; }).join('')+'</div>'+
         // 🧺 atalho para quem quer SÓ as peças (só onde a peça vale sozinha); sem pomada, a tela diz como voltar
         (tela.soPecas?(pecas3dPomadas(ctx)>0
-          ?'<button type="button" class="p3-sopeca" id="'+ctx+'-pecas3d-sopecas" onclick="pecas3dSemPomada(\''+ctx+'\',\'pecas\')">Quero só as peças, sem pomada</button>'
-          :'<div class="p3-sopeca-ok" id="'+ctx+'-pecas3d-sopomada" role="status">Pedido sem pomada. Para pôr pomada, use o + da quantidade.</div>'):'')+
+          ?'<button type="button" class="p3t-sec" id="'+ctx+'-pecas3d-sopecas" onclick="pecas3dSemPomada(\''+ctx+'\',\'pecas\')">Quero só as peças, sem pomada</button>'
+          :'<div class="p3t-ok" id="'+ctx+'-pecas3d-sopomada" role="status">Pedido sem pomada. Para pôr pomada, use o + da quantidade.</div>'):'')+
       '</div>';
   }
   // só reescreve quando mudou (os resumos chamam isto a cada tecla: sem piscar e sem tirar o foco do botão)
   if(w._p3h!==h){ w.innerHTML=h; w._p3h=h; }
   w.style.display='block';
+  pecas3dGiroLigar();   // 🖤 VISUAL-2611: a peça da chamada troca sozinha (parada para quem pediu menos movimento)
   try{
     window._p3Viu=window._p3Viu||{};
     if(!window._p3Viu[ctx]&&tela.visivel()){ window._p3Viu[ctx]=true; pecas3dEvento('pecas3d_viu',ctx); }
@@ -19618,14 +19888,8 @@ function pecas3dPintarHome(){
   var w=document.getElementById('home-pecas3d-chamada'); if(!w) return;
   var adm=(typeof IA!=='undefined'&&IA);
   if(!pecas3dLigado()||adm){ w.style.display='none'; if(w.innerHTML!=='') w.innerHTML=''; w._p3h=''; return; }
-  var h='<div class="p3-cta p3-cta-home" onclick="pecas3dIrDoInicio()">'+
-      '<div class="p3-cta-img"><img src="/pecas3d/kit-bancada.png" alt="" width="74" height="74" onerror="this.style.display=\'none\'"/></div>'+
-      '<div class="p3-cta-tx">'+
-        '<div class="p3-cta-t">É tatuador? Peças para a sua bancada</div>'+
-        '<div class="p3-cta-s">Com a nossa marca ou com o seu nome. Preta, branca ou azul. Pode pedir só as peças, sem pomada.</div>'+
-        '<button type="button" class="p3-btn" id="home-pecas3d-abrir" onclick="event.stopPropagation();pecas3dIrDoInicio()">Ver as peças</button>'+
-      '</div>'+
-    '</div>';
+  var h=pecas3dChamadaHtml('home-pecas3d-abrir','pecas3dIrDoInicio()','home');   // 🖤 VISUAL-2611: a mesma chamada das telas
+  pecas3dGiroLigar();
   if(w._p3h!==h){ w.innerHTML=h; w._p3h=h; }
   w.style.display='block';
   try{ window._p3Viu=window._p3Viu||{}; if(!window._p3Viu.home&&pecas3dNaTela('home-pecas3d-chamada')){ window._p3Viu.home=true; pecas3dEvento('pecas3d_viu','home'); } }catch(e){}
@@ -19658,7 +19922,7 @@ function pecas3dRascDe(lista){
   pecas3dNormalizar(lista).forEach(function(i){
     var p=pecas3dProduto(i.slug); if(!p) return;
     if(p.variantes){ r.va[p.slug].combos[i.variante.tamanho+'|'+i.variante.cor]=i.qtd; }
-    else{ var x=r.it[p.slug]; x.tipo=i.tipo; x.nome=i.nome; x.cor=i.cor; x.qtds[i.cor]=(Number(x.qtds[i.cor])||0)+i.qtd; if(i.cor_nome) x.cn[i.cor]=i.cor_nome; }
+    else{ var x=r.it[p.slug]; x.tipo=i.tipo; x.nome=i.nome; x.cor=i.cor; x.qtds[i.cor]=(Number(x.qtds[i.cor])||0)+i.qtd; if(i.cor_nome) x.cn[i.cor]=i.cor_nome; if(i.pix) x.pix={aberto:true,tipo:((i.pix.tipo==='cpf'||i.pix.tipo==='cnpj')?'doc':i.pix.tipo),chave:pecas3dPixFmt(i.pix),nome:i.pix.nome,cidade:i.pix.cidade,conf:null,val:i.pix};/*🔑 PIX-MOLDURA-2611*/ }
   });
   return r;
 }
@@ -19674,7 +19938,7 @@ function pecas3dRascLista(){
       }); });
     }else{
       var x=r.it[p.slug]; if(!x) return;
-      pecas3dCores().forEach(function(c){ var q=Number(x.qtds[c.nome])||0; if(q>0){ var it={slug:p.slug,qtd:q,tipo:x.tipo,nome:x.nome,cor:c.nome}; if(pecas3dTemNome(p)) it.cor_nome=pecas3dCnDe(x,c.nome); out.push(it); } });
+      pecas3dCores().forEach(function(c){ var q=Number(x.qtds[c.nome])||0; if(q>0){ var it={slug:p.slug,qtd:q,tipo:x.tipo,nome:x.nome,cor:c.nome}; if(pecas3dTemNome(p)) it.cor_nome=pecas3dCnDe(x,c.nome); if(p.pix&&x.pix&&x.pix.val) it.pix=x.pix.val;/*🔑 PIX-MOLDURA-2611: só a chave confirmada*/ out.push(it); } });
     }
   });
   return out;
@@ -19742,16 +20006,32 @@ function pecas3dQtHtml(rotulo,valor,fnMenos,fnMais){
     '<button type="button" class="p3-qb" data-p3f="mais" aria-label="Pôr 1" onclick="'+fnMais+'">+</button>'+
   '</div>';
 }
+// 🖤 VISUAL-2611 (26/11, empresa: "não precisa ter tanta opção pra n perder o tatuador com muita informação"): o catálogo mostra
+// UMA peça por vez. Palco (a peça escolhida, com o nome ao vivo; no celular fica preso no topo), vitrine (6 em destaque + "ver
+// todas") e o detalhe da peça (este cartão: #p3-card-<slug>). O rascunho, o portão, os preços e os botões (data-p3f) são os de sempre.
+// Não existe mais o par "Padrão TKTXSC / Com seu nome": escreveu o nome = com nome; campo vazio = padrão TKTXSC.
+function pecas3dCorClara(c){ var h=String((c&&c.hex)||'#000000').replace('#',''); return (0.2126*(parseInt(h.substr(0,2),16)||0)+0.7152*(parseInt(h.substr(2,2),16)||0)+0.0722*(parseInt(h.substr(4,2),16)||0))>150; }
+// cor do nome que vale para a peça nessa cor (peça de uma cor só: sempre a da peça)
+function pecas3dCnPeca(p,x,cor){ var c=pecas3dCorPeca(cor); return pecas3dTemCorNome(p)?(pecas3dCor(pecas3dCnDe(x,c.nome))||c):c; }
+function pecas3dPrecosHtml(p,nm){
+  return pecas3dPrecoHtml(nm?p.preco_de_personalizado:p.preco_de_padrao,nm?p.preco_personalizado:p.preco_padrao)+(pecas3dTemPromo(p)?' <span class="p3-promo">Promoção</span>':'');
+}
+function pecas3dSemNomeTxt(p,nm){
+  if(!p.personaliza) return '';
+  if(nm) return 'Com o seu nome gravado.';
+  return 'Sem nome, sai com '+pecas3dEsc(String((window.PECAS3D_CAT&&window.PECAS3D_CAT.marca)||'TKTXSC'))+'. Com o seu nome: '+pecas3dBRL(p.preco_personalizado)+'.';
+}
 function pecas3dCardHtml(p){
   var r=window._p3R, s=p.slug, h='';
+  h+='<div class="p3-np" id="p3-np-'+s+'">'+pecas3dEsc(p.nome)+'</div><p class="p3-como">'+pecas3dEsc(p.como_usa)+'</p>';
   if(p.variantes){
     var v=r.va[s], k=(v.tamanho&&v.cor)?(v.tamanho+'|'+v.cor):'', qSel=k?(Number(v.combos[k])||0):0;
-    h+='<div class="p3-top">'+pecas3dImgHtml(p,70)+'<div class="p3-info"><div class="p3-nome">'+pecas3dEsc(p.nome)+'</div><div class="p3-uso">'+pecas3dEsc(p.como_usa)+'</div><div class="p3-preco">'+pecas3dBRL(p.preco_padrao)+' a unidade</div></div></div>';
-    h+='<div class="p3-lab" id="p3-lt-'+s+'">Tamanho</div><div class="p3-pills" role="radiogroup" aria-labelledby="p3-lt-'+s+'">'+
-      p.variantes.tamanho.map(function(t,i){ var on=(v.tamanho===t); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-pill p3-pill-1'+(on?' on':'')+'" data-p3f="tam'+i+'" onclick="pecas3dVarSel(\''+s+'\',\'tamanho\','+i+')">'+pecas3dEsc(t)+'</button>'; }).join('')+'</div>';
-    h+='<div class="p3-lab" id="p3-lc-'+s+'">Cor</div><div class="p3-pills" role="radiogroup" aria-labelledby="p3-lc-'+s+'">'+
-      p.variantes.cor.map(function(c,i){ var on=(v.cor===c); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-pill p3-pill-1'+(on?' on':'')+'" data-p3f="cor'+i+'" onclick="pecas3dVarSel(\''+s+'\',\'cor\','+i+')">'+pecas3dEsc(c)+'</button>'; }).join('')+'</div>';
-    h+='<div class="p3-linha"><div class="p3-varsel">'+(k?('Quantos de '+pecas3dEsc(v.tamanho)+', '+pecas3dEsc(String(v.cor).toLowerCase())+'?'):'Escolha o tamanho e a cor')+'</div>'+
+    h+='<div class="p3-precos"><b>'+pecas3dBRL(p.preco_padrao)+'</b><span class="p3-un">a unidade</span></div>';
+    h+='<span class="p3-rot" id="p3-lt-'+s+'">Tamanho do furo</span><div class="p3-cores p3-c2" role="radiogroup" aria-labelledby="p3-lt-'+s+'">'+
+      p.variantes.tamanho.map(function(t,i){ var on=(v.tamanho===t); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-cor'+(on?' on':'')+'" data-p3f="tam'+i+'" onclick="pecas3dVarSel(\''+s+'\',\'tamanho\','+i+')">'+pecas3dEsc(t)+'</button>'; }).join('')+'</div>';
+    h+='<span class="p3-rot" id="p3-lc-'+s+'">Cor</span><div class="p3-cores" role="radiogroup" aria-labelledby="p3-lc-'+s+'">'+
+      p.variantes.cor.map(function(c,i){ var on=(v.cor===c); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-cor'+(on?' on':'')+'" data-p3f="cor'+i+'" onclick="pecas3dVarSel(\''+s+'\',\'cor\','+i+')">'+pecas3dEsc(c)+'</button>'; }).join('')+'</div>';
+    h+='<div class="p3-qtl"><span class="p3-rot p3-varsel">'+(k?('Quantos de '+pecas3dEsc(v.tamanho)+', '+pecas3dEsc(String(v.cor).toLowerCase())+'?'):'Escolha o tamanho e a cor')+'</span>'+
       pecas3dQtHtml('Quantidade de '+p.nome,qSel,'pecas3dVarQtd(\''+s+'\',-1)','pecas3dVarQtd(\''+s+'\',1)')+'</div>';
     if(v.aviso&&!k) h+='<div class="p3-aviso" role="alert">Escolha o tamanho e a cor antes de pôr a quantidade.</div>';
     var linhas='';
@@ -19762,52 +20042,135 @@ function pecas3dCardHtml(p){
     if(linhas) h+='<div class="p3-combos">'+linhas+'</div>';
     return h;
   }
-  var x=r.it[s], cores=pecas3dCores(), cz=pecas3dCorPeca(x.cor), nm=!!(p.personaliza&&x.tipo==='nome'), tot=pecas3dRascTotal(x);
-  var tn=pecas3dTemNome(p), cnE=pecas3dCor(pecas3dCnDe(x,cz.nome))||cz, cnDif=(cnE.nome!==cz.nome), cnExp=(!!x.vc||!!pecas3dCnExp(x,cz.nome));   // 🎨 COR-NOME-2411
-  var marca=String((window.PECAS3D_CAT&&window.PECAS3D_CAT.marca)||'TKTXSC');
-  // imagem do cartão: no padrão, a foto da peça na cor escolhida (TKTXSC afundado); com nome, o desenho com o nome do cliente
-  h+='<div class="p3-top">'+(((nm&&p.previa)||(tn&&cnDif))?('<div class="p3-img" style="width:70px;height:70px;">'+pecas3dSvgHtml(p,nm?x.nome:marca,cz.nome,'p3-svg-mini',nm&&!x.nome,cnE.nome)+'</div>'):pecas3dImgHtml(p,70,cz.nome))+'<div class="p3-info"><div class="p3-nome">'+pecas3dEsc(p.nome)+'</div>'+(pecas3dTemPromo(p)?'<div class="p3-promol"><span class="p3-promo">Promoção</span></div>':'')+'<div class="p3-uso">'+pecas3dEsc(p.como_usa)+'</div>'+
-     pecas3dQtHtml('Quantidade de '+p.nome+', cor '+cz.adj,pecas3dRascQtd(x),'pecas3dQtd(\''+s+'\',-1)','pecas3dQtd(\''+s+'\',1)')+'</div></div>';
+  var x=r.it[s], cores=pecas3dCores(), cz=pecas3dCorPeca(x.cor), nm=!!(p.personaliza&&x.tipo==='nome');
+  var tcn=pecas3dTemCorNome(p), cnE=pecas3dCnPeca(p,x,cz.nome);
+  h+='<div class="p3-precos" id="p3-precos-'+s+'">'+pecas3dPrecosHtml(p,nm)+'</div>';
   if(p.personaliza){
-    h+='<div class="p3-pills" role="radiogroup" aria-label="Como você quer '+pecas3dEsc(p.nome)+'">'+
-      '<button type="button" role="radio" aria-checked="'+(nm?'false':'true')+'" class="p3-pill'+(nm?'':' on')+'" data-p3f="padrao" onclick="pecas3dTipo(\''+s+'\',\'padrao\')">Padrão TKTXSC<br>'+pecas3dPrecoHtml(p.preco_de_padrao,p.preco_padrao)+'</button>'+
-      '<button type="button" role="radio" aria-checked="'+(nm?'true':'false')+'" class="p3-pill'+(nm?' on':'')+'" data-p3f="nome" onclick="pecas3dTipo(\''+s+'\',\'nome\')">✏️ Com seu nome<br>'+pecas3dPrecoHtml(p.preco_de_personalizado,p.preco_personalizado)+'</button>'+
-    '</div>';
-  }
-  // 🎨 cor da PEÇA (não é cor de letra: a peça inteira é dessa cor, e o nome vai afundado nela)
-  h+='<div class="p3-lab" id="p3-lpc-'+s+'">Cor da peça</div>'+
-    '<div class="p3-dots p3-pcores" role="radiogroup" aria-labelledby="p3-lpc-'+s+'">'+
-      cores.map(function(c,i){ var on=(cz.nome===c.nome), q=pecas3dRascQtd(x,c.nome); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-dot'+(on?' on':'')+'" data-p3f="pc'+i+'" onclick="pecas3dCorSel(\''+s+'\','+i+')"><span class="p3-bola" style="background:'+c.hex+';"></span><span class="p3-cn">'+pecas3dEsc(c.nome)+(q>0?(' · '+q):'')+'</span></button>'; }).join('')+
-    '</div>';
-  // 🎨 COR-NOME-2411: cor do NOME (vale também para o TKTXSC do padrão). Mesma cor da peça = afundado; outra = relevo.
-  if(tn){
-    h+='<div class="p3-lab" id="p3-lnc-'+s+'">Cor do nome</div>'+
-      '<div class="p3-dots p3-ncores" role="radiogroup" aria-labelledby="p3-lnc-'+s+'">'+
-        cores.map(function(c,i){ var on=(cnE.nome===c.nome); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-dot'+(on?' on':'')+'" data-p3f="nc'+i+'" onclick="pecas3dCorNomeSel(\''+s+'\','+i+')"><span class="p3-bola" style="background:'+c.hex+';"></span><span class="p3-cn">'+pecas3dEsc(c.nome)+'</span></button>'; }).join('')+
-      '</div>';
-  }
-  if(nm){
     var lim=Number(p.limite_nome)||12;
-    h+='<div class="p3-pers">'+
-      '<label class="p3-lab" for="p3-nome-'+s+'">Nome na peça</label>'+
-      '<div class="p3-inpw"><input type="text" class="p3-inp" id="p3-nome-'+s+'" data-p3f="campo" maxlength="'+lim+'" value="'+pecas3dEsc(x.nome)+'" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-describedby="p3-dica-'+s+'" oninput="pecas3dNomeInput(\''+s+'\',this,event)" onblur="pecas3dNomeFim(\''+s+'\',this)"/><span class="p3-cont" id="p3-cont-'+s+'">'+String(x.nome||'').length+' / '+lim+'</span></div>'+
-      '<div class="p3-dica" id="p3-dica-'+s+'">Nesta peça cabem até '+lim+' letras. O nome fica na própria peça, na cor que você escolher acima.</div>'+
-      (p.previa?'':('<div class="p3-prev'+(x.nome?'':' vazio')+'" id="p3-prev-'+s+'" aria-hidden="true">'+(x.nome?pecas3dEsc(x.nome):'SEU NOME')+'</div>'))+
+    h+='<p class="p3-semnome" id="p3-semnome-'+s+'">'+pecas3dSemNomeTxt(p,nm)+'</p>'+
+      '<label class="p3-rot" for="p3-nome-'+s+'">Nome do estúdio</label>'+
+      '<input type="text" class="p3-inp" id="p3-nome-'+s+'" data-p3f="campo" maxlength="'+lim+'" value="'+pecas3dEsc(x.nome)+'" placeholder="Ex.: INK STUDIO" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-describedby="p3-dica-'+s+'" oninput="pecas3dNomeInput(\''+s+'\',this,event)" onblur="pecas3dNomeFim(\''+s+'\',this)"/>'+
+      '<div class="p3-conta"><span id="p3-dica-'+s+'">Nesta peça cabem até '+lim+' letras.</span><span id="p3-cont-'+s+'">'+String(x.nome||'').length+' / '+lim+'</span></div>';
+  }
+  // 🎨 as 3 cores na mesma linha: cor da PEÇA e, onde existe, cor do NOME (mesma cor = nome afundado; outra = em relevo)
+  h+='<span class="p3-rot" id="p3-lpc-'+s+'">Cor da peça</span>'+
+    '<div class="p3-cores p3-pcores" role="radiogroup" aria-labelledby="p3-lpc-'+s+'">'+
+      cores.map(function(c,i){ var on=(cz.nome===c.nome); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-cor'+(on?' on':'')+'" data-p3f="pc'+i+'" onclick="pecas3dCorSel(\''+s+'\','+i+')"><i style="background:'+c.hex+';"></i><span>'+pecas3dEsc(c.nome)+'</span></button>'; }).join('')+
     '</div>';
+  if(tcn){
+    h+='<span class="p3-rot" id="p3-lnc-'+s+'">Cor do nome</span>'+
+      '<div class="p3-cores p3-ncores" role="radiogroup" aria-labelledby="p3-lnc-'+s+'">'+
+        cores.map(function(c,i){ var on=(cnE.nome===c.nome); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-cor'+(on?' on':'')+'" data-p3f="nc'+i+'" onclick="pecas3dCorNomeSel(\''+s+'\','+i+')"><i style="background:'+c.hex+';"></i><span>'+pecas3dEsc(c.nome)+'</span></button>'; }).join('')+
+      '</div>';
+  }else if(pecas3dTemNome(p)){
+    h+='<p class="p3-semnome p3-umacor">O nome vai gravado na própria peça, na mesma cor.</p>';
   }
-  // prévia grande: com nome, ou quando a peça já está no pedido (mostra a cor escolhida com o nome que vai nela)
-  if(p.previa&&(nm||tot>0||cnExp)){
-    var legCn=cnDif?(', nome em '+cnE.nome.toLowerCase()):', nome na mesma cor';
-    h+='<div class="p3-previa-img" id="p3-previa-'+s+'">'+pecas3dSvgHtml(p,nm?x.nome:marca,cz.nome,'p3-svg-grande',nm&&!x.nome,cnE.nome)+'<div class="p3-previa-leg">'+(nm?('Assim fica o nome na peça'+(cnDif?(', em '+cnE.nome.toLowerCase()):', na mesma cor')+'.'):('Assim fica a peça, cor '+pecas3dEsc(cz.adj)+legCn+'.'))+'</div></div>';
-  }
+  h+='<div class="p3-qtl"><span class="p3-rot">Quantidade</span>'+
+     pecas3dQtHtml('Quantidade de '+p.nome+', cor '+cz.adj,pecas3dRascQtd(x),'pecas3dQtd(\''+s+'\',-1)','pecas3dQtd(\''+s+'\',1)')+'</div>';
   // a mesma peça em mais de uma cor: uma linha por cor, cada uma com o seu "Tirar"
   var linhas2='', ncor=0; cores.forEach(function(c){ if(pecas3dRascQtd(x,c.nome)>0) ncor++; });
   if(ncor>1||(ncor===1&&pecas3dRascQtd(x)<1)){
     cores.forEach(function(c,ci){ var q=pecas3dRascQtd(x,c.nome); if(q<1) return;
-      linhas2+='<div class="p3-combo"><span><b>'+q+'×</b> cor '+pecas3dEsc(c.adj)+(tn?(pecas3dCnDe(x,c.nome)===c.nome?', nome na mesma cor':(', nome em '+pecas3dCnDe(x,c.nome).toLowerCase())):'')+'</span><button type="button" class="p3-tirar" data-p3f="ctirar'+ci+'" onclick="pecas3dCorTirar(\''+s+'\','+ci+')" aria-label="Tirar '+pecas3dEsc(p.nome)+' cor '+pecas3dEsc(c.adj)+'">Tirar</button></div>'; });
+      var cnL=pecas3dCnPeca(p,x,c.nome).nome;
+      linhas2+='<div class="p3-combo"><span><b>'+q+'×</b> cor '+pecas3dEsc(c.adj)+(pecas3dTemNome(p)?(cnL===c.nome?', nome na mesma cor':(', nome em '+cnL.toLowerCase())):'')+'</span><button type="button" class="p3-tirar" data-p3f="ctirar'+ci+'" onclick="pecas3dCorTirar(\''+s+'\','+ci+')" aria-label="Tirar '+pecas3dEsc(p.nome)+' cor '+pecas3dEsc(c.adj)+'">Tirar</button></div>'; });
     h+='<div class="p3-combos">'+linhas2+'</div>';
   }
+  if(p.pix&&window.PECAS3D_PIX_LIGADO) h+=pecas3dPixHtml(p);   // 🔑 PIX-MOLDURA-2611
   return h;
+}
+// o palco: a peça escolhida na cor escolhida. Peça clara (branca) em fundo preto; peça preta ou azul em fundo branco.
+// O nome no palco: o que o cliente escreveu; sem nome, TKTXSC se a peça já está no pedido, senão "SEU NOME" apagado.
+function pecas3dPalcoDe(p){
+  var r=window._p3R; if(!p||!r) return {cls:'',h:''};
+  if(p.variantes||!r.it[p.slug]) return {cls:'',h:'<img src="/pecas3d/'+pecas3dEsc(p.imagem)+'" alt="'+pecas3dEsc(p.nome)+'" onerror="this.style.display=\'none\'"/>'};
+  var x=r.it[p.slug], cz=pecas3dCorPeca(x.cor), cls=pecas3dCorClara(cz)?' esc':'';
+  if(!p.previa) return {cls:cls,h:'<img src="/pecas3d/'+pecas3dEsc(pecas3dArqCor(p.imagem,cz.nome))+'" alt="'+pecas3dEsc(p.nome+', cor '+cz.adj)+'" onerror="this.style.display=\'none\'"/>'};
+  var txt=(p.personaliza&&x.tipo==='nome'&&x.nome)?x.nome:(pecas3dRascTotal(x)>0?String((window.PECAS3D_CAT&&window.PECAS3D_CAT.marca)||'TKTXSC'):'');
+  if(!txt&&p.uma_cor) txt='SEU NOME';   // peça de uma cor: o nome afundado já é discreto, não precisa aparecer apagado
+  return {cls:cls,h:pecas3dSvgHtml(p,txt,cz.nome,'p3-svg-grande',!txt,pecas3dCnPeca(p,x,cz.nome).nome)};
+}
+function pecas3dPalcoPintar(troca){
+  var r=window._p3R, pl=document.getElementById('p3-palco'), f=document.getElementById('p3-flut'); if(!r||!pl||!f) return;
+  var d=pecas3dPalcoDe(pecas3dProduto(r.sel));
+  pl.className='p3-palco'+d.cls; f.innerHTML=d.h;
+  if(troca){ try{ f.classList.remove('troca'); void f.offsetWidth; f.classList.add('troca'); }catch(e){} }
+}
+// a peça que abre escolhida: a 1ª que já está no pedido; sem nenhuma, a 1ª em destaque
+function pecas3dSelInicial(){
+  var l=pecas3dCatVenda(), i;
+  for(i=0;i<l.length;i++){ if(pecas3dCardLigado(l[i])) return l[i].slug; }
+  var d=pecas3dDestaques(); return d.length?d[0].slug:(l.length?l[0].slug:'');
+}
+// o que a vitrine mostra: as 6 em destaque (mais o que já está no pedido e a peça aberta) ou, depois do "ver todas", o catálogo inteiro
+function pecas3dVitLista(){
+  var r=window._p3R, l=pecas3dCatVenda(), d=pecas3dDestaques(), tem={}; d.forEach(function(p){ tem[p.slug]=1; });
+  l.forEach(function(p){ if(!tem[p.slug]&&(!r||r.todas||pecas3dCardLigado(p)||r.sel===p.slug)){ d.push(p); tem[p.slug]=1; } });   // "ver todas": as em destaque primeiro, depois as outras na ordem do catálogo
+  return d;
+}
+function pecas3dVitHtml(){
+  var r=window._p3R, l=pecas3dVitLista(), tot=pecas3dCatVenda().length, h='';
+  l.forEach(function(p){
+    var on=(r.sel===p.slug), q=0, cz=null;
+    if(p.variantes){ var v=r.va[p.slug]; for(var k in v.combos){ q+=Number(v.combos[k])||0; } }
+    else { q=pecas3dRascTotal(r.it[p.slug]); cz=pecas3dCorPeca(r.it[p.slug].cor); }
+    h+='<button type="button" class="p3v-card" data-p3v="'+p.slug+'" aria-pressed="'+(on?'true':'false')+'" onclick="pecas3dSel(\''+p.slug+'\')">'+
+      '<span class="p3v-mp'+((cz&&pecas3dCorClara(cz))?' esc':'')+'"><img src="/pecas3d/'+pecas3dEsc(cz?pecas3dArqCor(p.imagem,cz.nome):p.imagem)+'" alt="" width="84" height="84" loading="lazy" onerror="this.style.display=\'none\'"/></span>'+
+      '<span class="p3v-n">'+pecas3dEsc(p.nome)+'</span><span class="p3v-pp">'+pecas3dBRL(p.preco_padrao)+'</span>'+
+      (q>0?'<span class="p3v-q" aria-label="'+q+' no pedido">'+q+'</span>':'')+
+    '</button>';
+  });
+  if(!r.todas&&l.length<tot) h+='<button type="button" class="p3v-card p3v-mais" id="p3-vertodas" data-p3v="+" onclick="pecas3dVerTodas()"><span class="p3v-mp" aria-hidden="true">+'+(tot-l.length)+'</span><span class="p3v-n">Ver todas as '+tot+' peças</span></button>';
+  return h;
+}
+function pecas3dVitDica(){ var r=window._p3R, tot=pecas3dCatVenda().length; return (r&&r.todas)?('As '+tot+' peças.'):(Math.min(6,pecas3dDestaques().length)+' em destaque · deslize para o lado ›'); }
+function pecas3dVitPintar(){
+  var r=window._p3R, w=document.getElementById('p3-vit'); if(!r||!w) return;
+  var foco=''; try{ var a=document.activeElement; if(a&&w.contains(a)&&a.getAttribute) foco=a.getAttribute('data-p3v')||''; }catch(e){}
+  w.className='p3-vit'+(r.todas?' todas':''); w.innerHTML=pecas3dVitHtml();
+  var d=document.getElementById('p3v-dica'); if(d) d.textContent=pecas3dVitDica();
+  if(foco){ try{ var b=w.querySelector('[data-p3v="'+foco+'"]'); if(b) b.focus({preventScroll:true}); }catch(e){} }
+}
+// o miolo do catálogo (vai dentro de #p3-cat: por cima da página e na /bancada)
+function pecas3dCatHtml(){
+  var r=window._p3R; if(!r) return '';
+  if(!pecas3dCatVenda().length) return '<p class="p3-como" id="p3-cat-vazio">Nenhuma peça disponível agora.</p>';
+  if(!r.sel||pecas3dFora(r.sel)||!(r.it[r.sel]||r.va[r.sel])) r.sel=pecas3dSelInicial();
+  var p=pecas3dProduto(r.sel), pc=pecas3dPalcoDe(p);
+  return '<div class="p3-palco'+pc.cls+'" id="p3-palco"><div class="p3-flut" id="p3-flut">'+pc.h+'</div></div>'+
+    '<div class="p3-vit'+(r.todas?' todas':'')+'" id="p3-vit" role="group" aria-label="Escolha a peça">'+pecas3dVitHtml()+'</div>'+
+    '<p class="p3v-dica" id="p3v-dica">'+pecas3dVitDica()+'</p>'+
+    '<div class="p3-cat-b" id="p3-det"><div class="p3-det" id="p3-card-'+p.slug+'" data-slug="'+p.slug+'">'+pecas3dCardHtml(p)+'</div></div>';
+}
+function pecas3dCatPintar(troca){
+  var c=document.getElementById('p3-cat'); if(!c||!window._p3R) return;
+  c.innerHTML=pecas3dCatHtml();
+  if(troca){ try{ var f=document.getElementById('p3-flut'); if(f) f.classList.add('troca'); }catch(e){} }
+  pecas3dErroTela('');
+  pecas3dRodape();
+}
+// toca numa peça da vitrine: ela vai para o palco e o detalhe passa a ser o dela (não põe nada no pedido)
+function pecas3dSel(slug){
+  var r=window._p3R, p=pecas3dProduto(slug); if(!r||!p||pecas3dFora(slug)||!(r.it[slug]||r.va[slug])) return;
+  if(r.sel!==slug){ r.sel=slug; pecas3dCatPintar(true); }
+  try{ var b=document.querySelector('#p3-vit [data-p3v="'+slug+'"]'); if(b) b.focus({preventScroll:true}); }catch(e){}
+  try{ if(r.todas){ var d=document.getElementById('p3-card-'+slug); if(d&&d.scrollIntoView&&(window.innerWidth<760||r.inline)) d.scrollIntoView({block:'start'}); } }catch(e){}
+}
+function pecas3dVerTodas(){
+  var r=window._p3R; if(!r||r.todas) return;
+  r.todas=true; pecas3dVitPintar();
+  try{ var b=document.querySelector('#p3-vit [data-p3v="'+r.sel+'"]')||document.querySelector('#p3-vit .p3v-card'); if(b) b.focus({preventScroll:true}); }catch(e){}
+  pecas3dEvento('pecas3d_todas',r.inline?'bancada':r.ctx);
+}
+// "Adicionar" com o rascunho vazio = quer a peça que está na tela: entra 1 unidade dela (o passa-fio pede tamanho e cor antes)
+function pecas3dPorUma(slug){
+  var r=window._p3R, p=pecas3dProduto(slug); if(!r||!p) return false;
+  if(p.variantes){
+    var v=r.va[slug]; if(!v) return false;
+    if(!v.tamanho||!v.cor){ v.aviso=true; pecas3dRedesenhaCard(slug); pecas3dErroTela('Escolha o tamanho e a cor de "'+p.nome+'".'); return false; }
+    v.combos[v.tamanho+'|'+v.cor]=1; return true;
+  }
+  var x=r.it[slug]; if(!x) return false;
+  x.qtds[x.cor]=1; return true;
 }
 function pecas3dCardLigado(p){
   var r=window._p3R; if(!r) return false;
@@ -19817,19 +20180,27 @@ function pecas3dCardLigado(p){
 function pecas3dRodape(){
   if(window._p3R&&window._p3R.inline){ try{ bancadaAplicar(); }catch(e){} return; }   // 🎯 BANCADA-1811: na página, cada toque já vale para o pedido
   var b=document.getElementById('p3-add'); if(!b) return;
-  var l=pecas3dNormalizar(pecas3dRascLista()), v=pecas3dValorDe(l);
-  var ctx=window._p3R&&window._p3R.ctx, semPomada=(!pecas3dSoPecas(ctx)&&pecas3dPomadas(ctx)<1);   // 🧺 no /comprar e no Fazer Pedido a peça vai sozinha
+  var r=window._p3R, l=pecas3dNormalizar(pecas3dRascLista()), v=pecas3dValorDe(l);
+  var ctx=r&&r.ctx, semPomada=(!pecas3dSoPecas(ctx)&&pecas3dPomadas(ctx)<1);   // 🧺 no /comprar e no Fazer Pedido a peça vai sozinha
   b.disabled=semPomada;
-  b.textContent=l.length?('Adicionar ao pedido · '+pecas3dBRL(v)):(pecas3dNormalizar(window.PECAS3D_SEL[ctx]).length?'Tirar as peças do pedido':'Continuar sem peças');
+  // 🖤 VISUAL-2611: com peça no rascunho, o botão fecha com o total; rascunho vazio = "Adicionar" põe 1 da peça que está na tela
+  if(l.length){ b.textContent='Adicionar ao pedido · '+pecas3dBRL(v); return; }
+  if(pecas3dNormalizar(window.PECAS3D_SEL[ctx]).length){ b.textContent='Tirar as peças do pedido'; return; }
+  var p=r?pecas3dProduto(r.sel):null, x=(p&&r.it)?r.it[p.slug]:null;
+  b.textContent=p?('Adicionar ao pedido · '+pecas3dBRL(p.variantes?p.preco_padrao:pecas3dPrecoUn(p,x?x.tipo:'padrao'))):'Adicionar ao pedido';
 }
 function pecas3dErroTela(msg){ var e=document.getElementById('p3-erro'); if(e){ e.textContent=msg||''; e.style.display=msg?'block':'none'; } }
+// redesenha o detalhe da peça (se é ela que está aberta), o palco e a vitrine; devolve o foco ao mesmo botão
 function pecas3dRedesenhaCard(slug,focar){
-  var p=pecas3dProduto(slug), c=document.getElementById('p3-card-'+slug); if(!p||!c) return;
-  var f=null; try{ var a=document.activeElement; if(a&&c.contains(a)&&a.getAttribute) f=a.getAttribute('data-p3f'); }catch(e){}
-  c.innerHTML=pecas3dCardHtml(p);
-  c.className='p3-card'+(pecas3dCardLigado(p)?' p3-on':'');
-  f=focar||f;
-  if(f){ try{ var n=c.querySelector('[data-p3f="'+f+'"]'); if(n) n.focus({preventScroll:(f!=='campo')}); }catch(e){} }
+  var p=pecas3dProduto(slug), r=window._p3R; if(!p||!r) return;
+  var c=document.getElementById('p3-card-'+slug);
+  if(c){
+    var f=null; try{ var a=document.activeElement; if(a&&c.contains(a)&&a.getAttribute) f=a.getAttribute('data-p3f'); }catch(e){}
+    c.innerHTML=pecas3dCardHtml(p);
+    f=focar||f;
+    if(f){ try{ var n=c.querySelector('[data-p3f="'+f+'"]'); if(n) n.focus({preventScroll:(f!=='campo')}); }catch(e){} }
+  }
+  try{ pecas3dPalcoPintar(); pecas3dVitPintar(); }catch(e){}
   pecas3dErroTela('');
   pecas3dRodape();
 }
@@ -19852,27 +20223,39 @@ function pecas3dTipo(slug,tipo){
 // ao sair do campo (pecas3dNomeFim) o texto do campo vira o nome guardado.
 function pecas3dNomeInput(slug,el,ev,quieto){
   var p=pecas3dProduto(slug), r=window._p3R; if(!p||!r||!r.it[slug]||!el) return;
-  var v=pecas3dLimpaNome(el.value,p.limite_nome);
+  var x=r.it[slug], v=pecas3dLimpaNome(el.value,p.limite_nome);
   if(!(ev&&ev.isComposing)&&String(el.value).toUpperCase()!==v) el.value=v;
-  r.it[slug].nome=v;
+  var tipoA=x.tipo, totA=pecas3dRascTotal(x);
+  x.nome=v;
+  // 🖤 VISUAL-2611: escreveu = com nome (e quer a peça, na cor escolhida); apagou = padrão TKTXSC
+  if(p.personaliza){ x.tipo=v?'nome':'padrao'; if(v&&totA<1) x.qtds[x.cor]=1; }
+  var tot=pecas3dRascTotal(x), mudou=(x.tipo!==tipoA||tot!==totA);
   var c=document.getElementById('p3-cont-'+slug); if(c) c.textContent=v.length+' / '+(Number(p.limite_nome)||12);
-  var pv=document.getElementById('p3-prev-'+slug); if(pv){ pv.textContent=v||'SEU NOME'; pv.className='p3-prev'+(v?'':' vazio'); }
   try{
     if(p.previa){
-      var cd=document.getElementById('p3-card-'+slug), tx=v||'SEU NOME';
+      var cd=document.getElementById('p3-palco'), cheio=!!(v||tot>0||p.uma_cor), tx=v||(tot>0?String((window.PECAS3D_CAT&&window.PECAS3D_CAT.marca)||'TKTXSC'):'SEU NOME');
       // o miolo (.p3-svgt) e o fio de luz (.p3-svgl) de cada ponto acompanham juntos: mesmo texto, mesma matriz
       (cd?cd.querySelectorAll('.p3-svgt,.p3-svgl'):[]).forEach(function(t){
         var mt=pecas3dPreviaMatriz(p,tx,Number(t.getAttribute('data-p3i'))||0); if(!mt) return;
-        t.textContent=tx; t.setAttribute('transform','matrix('+mt.join(' ')+')'); t.setAttribute('fill-opacity',v?'1':'0.5');
+        t.textContent=tx; t.setAttribute('transform','matrix('+mt.join(' ')+')'); t.setAttribute('fill-opacity',cheio?'1':'0.5');
       });
-      var cz=pecas3dCorPeca(r.it[slug].cor);
-      var cnx=pecas3dCor(pecas3dCnDe(r.it[slug],cz.nome))||cz;
-      (cd?cd.querySelectorAll('.p3-svg'):[]).forEach(function(sv){ sv.setAttribute('aria-label',pecas3dAriaPrevia(p,cz,cnx,v,!v)); try{ sv.querySelectorAll('.p3-svgt').forEach(function(q){ if(sv.getAttribute('data-p3rel')==='relevo') q.setAttribute('stroke-opacity',v?pecas3dRelevo(cnx).bordaOp:'0.3'); }); }catch(e2){} });
+      var cz=pecas3dCorPeca(x.cor), cnx=pecas3dCnPeca(p,x,cz.nome);
+      (cd?cd.querySelectorAll('.p3-svg'):[]).forEach(function(sv){ sv.setAttribute('aria-label',pecas3dAriaPrevia(p,cz,cnx,tx,!cheio)); try{ sv.querySelectorAll('.p3-svgt').forEach(function(q){ if(sv.getAttribute('data-p3rel')==='relevo') q.setAttribute('stroke-opacity',cheio?pecas3dRelevo(cnx).bordaOp:'0.3'); }); }catch(e2){} });
     }
   }catch(e){}
+  if(mudou){   // o preço (padrão ↔ com nome), a quantidade e a vitrine acompanham SEM redesenhar o campo (o cursor fica onde está)
+    try{
+      var nm=(x.tipo==='nome'), pr=document.getElementById('p3-precos-'+slug), sn=document.getElementById('p3-semnome-'+slug), cdt=document.getElementById('p3-card-'+slug), qn=cdt?cdt.querySelector('.p3-qn'):null;
+      if(pr) pr.innerHTML=pecas3dPrecosHtml(p,nm);
+      if(sn) sn.innerHTML=pecas3dSemNomeTxt(p,nm);
+      if(qn) qn.textContent=String(pecas3dRascQtd(x));
+      pecas3dVitPintar();
+    }catch(e){}
+  }
   // só quem DIGITA limpa o aviso de erro; sair do campo (quieto) não apaga uma mensagem que acabou de aparecer
   if(!quieto){ el.classList.remove('p3-inp-erro'); pecas3dErroTela(''); }
-  if(r.inline){ try{ bancadaAplicar(); }catch(e){} }   // 🎯 BANCADA-1811
+  if(mudou) pecas3dRodape();   // (na /bancada o rodapé é o próprio "vale para o pedido")
+  else if(r.inline){ try{ bancadaAplicar(); }catch(e){} }   // 🎯 BANCADA-1811
 }
 function pecas3dNomeFim(slug,el){
   var p=pecas3dProduto(slug), r=window._p3R; if(!p||!r||!r.it[slug]||!el) return;
@@ -19966,16 +20349,15 @@ function pecas3dAbrir(ctx,origem){
   ov.id='pecas3d-overlay'; ov.className='p3-ov';
   ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-labelledby','p3-titulo');
   ov.innerHTML='<div class="p3-painel">'+
-    '<div class="p3-cab"><div class="p3-tit" id="p3-titulo">Peças para a sua bancada</div><button type="button" class="p3-x" id="p3-fechar" aria-label="Fechar sem mudar o pedido" onclick="pecas3dFechar()">✕</button></div>'+
+    '<div class="p3-cab"><div class="p3-cab-tx"><div class="p3-tit" id="p3-titulo">Peças com a sua marca</div><div class="p3-cab-s">Sob encomenda: o envio pode levar 1 dia útil a mais.</div></div><button type="button" class="p3-x" id="p3-fechar" aria-label="Fechar sem mudar o pedido" onclick="pecas3dFechar()">✕</button></div>'+
     '<div class="p3-lista" id="p3-lista">'+
       (semPom?'<div class="p3-sempomada" role="alert">Adicione pomadas ao pedido para levar peças.</div>':'')+
-      '<div class="p3-faixa"><b>✏️ Quer com o nome do seu estúdio?</b><span>Toque em "Com seu nome" e escreva. Você escolhe a cor da peça e a cor do nome (preto, branco ou azul), pelo mesmo preço. Só '+pecas3dBRL(window.PECAS3D_CAT.acrescimo).replace(',00','')+' a mais por peça com o seu nome.</span>'+
-        '<button type="button" class="p3-faixa-sug" id="p3-sug-ir" onclick="pecas3dSugIr()">💡 Quer uma peça diferente? Veja no fim da lista.</button></div>'+
-      cat.map(function(p){ return '<div class="p3-card'+(pecas3dCardLigado(p)?' p3-on':'')+'" id="p3-card-'+p.slug+'" data-slug="'+p.slug+'">'+pecas3dCardHtml(p)+'</div>'; }).join('')+
+      '<div class="p3-cat" id="p3-cat">'+pecas3dCatHtml()+'</div>'+   // 🖤 VISUAL-2611: uma peça por vez (palco + vitrine + detalhe)
       '<div class="p3-sug" id="p3-sug">'+pecas3dSugHtml()+'</div>'+
     '</div>'+
-    '<div class="p3-rod"><div class="p3-nota">Peças feitas sob encomenda: o envio pode levar 1 dia útil a mais.</div><div class="p3-erro" id="p3-erro" role="alert" style="display:none;"></div><button type="button" class="p3-add" id="p3-add" onclick="pecas3dConfirmar()">Adicionar ao pedido</button></div>'+
+    '<div class="p3-rod"><div class="p3-erro" id="p3-erro" role="alert" style="display:none;"></div><button type="button" class="p3-add" id="p3-add" onclick="pecas3dConfirmar()">Adicionar ao pedido</button><button type="button" class="p3-volta" id="p3-volta" onclick="pecas3dFechar()">Voltar ao pedido</button></div>'+
   '</div>';
+  try{ ov.addEventListener('click',function(e){ if(e.target===ov) pecas3dFechar(); }); }catch(e){}   // tocar fora do catálogo (computador) fecha sem mudar o pedido
   document.body.appendChild(ov);
   try{ window._p3Overflow=document.body.style.overflow; document.body.style.overflow='hidden'; }catch(e){}
   try{ document.addEventListener('keydown',pecas3dTecla,true); }catch(e){}
@@ -20013,8 +20395,14 @@ function pecas3dConfirmar(){
   if(!pecas3dLigado()){ pecas3dFechar(); return; }      // o recurso foi desligado com o catálogo aberto: fecha sem gravar
   var ctx=window._p3R.ctx, tela=pecas3dTela(ctx); if(!tela){ pecas3dFechar(); return; }
   if(!tela.soPecas&&pecas3dPomadas(ctx)<1){ pecas3dErroTela('Adicione pomadas ao pedido para levar peças.'); return; }
+  // 🖤 VISUAL-2611: rascunho vazio e nada no pedido = "Adicionar" põe 1 unidade da peça que está na tela
+  if(!pecas3dNormalizar(pecas3dRascLista()).length&&!pecas3dNormalizar(window.PECAS3D_SEL[ctx]).length){ if(!pecas3dPorUma(window._p3R.sel)) return; }
+  // 🔑 PIX-MOLDURA-2611: chave começada e não confirmada não fecha calada (confirma, ou toca em "Não informar a chave")
+  var pxp=pecas3dPixPendente();
+  if(pxp){ try{ pecas3dSel(pxp); }catch(e){} pecas3dErroTela(pecas3dPixPendenteMsg(pxp)); try{ var pw=document.getElementById('p3-pix-'+pxp); if(pw) pw.scrollIntoView({block:'center'}); }catch(e){} return; }
   var l=pecas3dNormalizar(pecas3dRascLista()), er=pecas3dErroLista(l);
   if(er){
+    try{ pecas3dSel(er.slug); }catch(e){}   // 🖤 VISUAL-2611: a peça com o erro vai para a tela
     pecas3dErroTela(er.msg);
     try{
       var c=document.getElementById('p3-card-'+er.slug); if(c) c.scrollIntoView({block:'center'});
@@ -20203,6 +20591,7 @@ function pecas3dQuandoPago(p){ return p.pago_em||p.confirmado_em||p.criado_em||n
 async function loadPecas3d(){
   try{ cartPintarAdmin(); }catch(e){}/*🔩 CARTUCHO-1911*/
   try{ loadPecas3dSug(); }catch(e){}   // 💡 a lista das sugestões (no alto da aba) carrega junto, por conta própria
+  try{ pecas3dLerConferidas(); }catch(e){}   // 🖤 VISUAL-2611: quais peças novas já tiveram a 1ª unidade conferida
   var w=document.getElementById('lista-pecas3d'); if(!w) return;
   if(!(typeof IA!=='undefined'&&IA)){ w.innerHTML='<div class="es">Só o admin vê esta lista.</div>'; return; }
   var ver=!!((document.getElementById('pecas3d-ver-impressas')||{}).checked);
@@ -20239,6 +20628,7 @@ function pecas3dFilaPintar(){
     var id=String(p.id).replace(/[^0-9a-zA-Z_-]/g,''), itens=pecas3dDoPedido(p).filter(cartNao), feita=!!p.pecas3d_impressa_em;/*🔩 CARTUCHO-1911*/
     h+='<div class="p3f-ped'+(feita?' feita':'')+'" data-pedido="'+id+'">'+
       '<div class="p3f-tw"><table class="p3f-tab"><thead><tr><th>Pedido</th><th>Cliente</th><th>Peça</th><th>Qtd</th><th>Como fazer</th><th>Pago em</th></tr></thead><tbody>';
+    var pixL=pecas3dPixDoPedido(p), nPix=0;   // 🔑 PIX-MOLDURA-2611: as chaves deste pedido, na ordem dos itens
     itens.forEach(function(i){
       var como='';
       if(i.variante) como+=pecas3dEsc(i.variante.tamanho)+' · '+pecas3dEsc(i.variante.cor);
@@ -20247,6 +20637,7 @@ function pecas3dFilaPintar(){
         var c=pecas3dCorPeca(i.cor);
         como='<span class="p3f-bola" style="background:'+c.hex+';" aria-hidden="true"></span> Peça '+pecas3dEsc(c.adj)+' · '+(i.tipo==='nome'?('Nome: <b>'+pecas3dEsc(i.nome)+'</b>'):'Padrão TKTXSC')+' '+pecas3dEsc(pecas3dCnTxt(i));   // 🎨 COR-NOME-2411: "Peça preta · Nome: X em branco"
       }
+      if(!i.variante) como+=pecas3dFilaExtra(i,id,(i.tem_pix&&nPix<pixL.length)?(nPix++):-1);   // 🖤 VISUAL-2611 (aviso da 1ª unidade) + 🔑 PIX-MOLDURA-2611 (cartão)
       h+='<tr class="p3f-linha"><td><b>#'+id+'</b></td><td>'+pecas3dEsc(p.nome_cliente||'—')+'</td><td>'+pecas3dEsc(i.nome_produto)+'</td><td><b>'+i.qtd+'</b></td><td>'+como+'</td><td>'+pecas3dDataBR(pecas3dQuandoPago(p))+'</td></tr>';
     });
     h+='</tbody></table></div>'+
@@ -20275,6 +20666,411 @@ async function pecas3dMarcarImpressa(id,btn,desfazer){
   if(ver){ loadPecas3d(); return; }
   window.PECAS3D_FILA=(window.PECAS3D_FILA||[]).filter(function(p){ return String(p.id)!==String(id); });
   pecas3dFilaPintar();
+}
+// ⟪PIX-MOLDURA-2611:INI⟫
+// 🔑 PIX-MOLDURA-2611 (26/11/2026, empresa: "lembre de pedir a chave pix pro tatuador ali na hora") — chave Pix da Moldura de QR.
+// • A chave vive SÓ no item do pedido (pecas3d[i].pix) e no cartão do painel. Nunca em evento, URL, WhatsApp, observações,
+//   carrinho abandonado ou armazenamento do navegador (nesses lugares só "com chave Pix informada").
+// • Código Pix: BR Code estático (EMV), GUI br.gov.bcb.pix, sem valor, CRC16-CCITT (0xFFFF, 0x1021) no fim.
+// • QR Code feito aqui, em JavaScript puro (modo byte, correção M, versões 1 a 20): sem biblioteca, sem rede.
+// • Este trecho não depende do resto do site (a página testes\cartao_teste.html usa exatamente ele).
+function pecas3dPixSemAcento(v,max){
+  var s=String(v==null?'':v);
+  try{ s=s.normalize('NFD').replace(/[̀-ͯ]/g,''); }catch(e){}
+  s=s.toUpperCase().replace(/[^A-Z0-9 ]/g,' ').replace(/ +/g,' ').replace(/^ /,'');
+  return s.slice(0,Number(max)||25).replace(/ $/,'');
+}
+function pecas3dCpfOk(v){
+  var d=String(v==null?'':v).replace(/\D/g,''), s=0, i, r;
+  if(d.length!==11||/^(\d)\1{10}$/.test(d)) return false;
+  for(i=0;i<9;i++) s+=Number(d.charAt(i))*(10-i);
+  r=(s*10)%11; if(r===10) r=0; if(r!==Number(d.charAt(9))) return false;
+  s=0; for(i=0;i<10;i++) s+=Number(d.charAt(i))*(11-i);
+  r=(s*10)%11; if(r===10) r=0; return r===Number(d.charAt(10));
+}
+// CNPJ com dígito verificador. Vale para o só de números e para o novo, com letras (cada caractere vale o código dele menos 48).
+function pecas3dCnpjOk(v){
+  var c=String(v==null?'':v).toUpperCase().replace(/[^0-9A-Z]/g,'');
+  if(!/^[0-9A-Z]{12}[0-9]{2}$/.test(c)||/^(.)\1{13}$/.test(c)) return false;
+  var dv=function(n){ var s=0, p=2, i, r; for(i=n-1;i>=0;i--){ s+=(c.charCodeAt(i)-48)*p; p=(p===9)?2:(p+1); } r=s%11; return r<2?0:(11-r); };
+  return dv(12)===Number(c.charAt(12))&&dv(13)===Number(c.charAt(13));
+}
+window.PECAS3D_PIX_TIPOS=[['doc','CPF ou CNPJ'],['celular','Celular'],['email','E-mail'],['aleatoria','Aleatória']];
+window.PECAS3D_PIX_ROTULO={cpf:'CPF',cnpj:'CNPJ',celular:'celular',email:'e-mail',aleatoria:'aleatória'};
+// Confere a chave pelo TIPO que o cliente escolheu (11 números podem ser CPF ou celular: por isso o tipo é obrigatório).
+// Devolve {tipo,chave} com a chave como vai no código Pix, ou {erro:'…'}.
+function pecas3dPixChave(tipo,valor){
+  var v=String(valor==null?'':valor).trim(), t=String(tipo||'');
+  if(t==='doc'||t==='cpf'||t==='cnpj'){
+    var a=v.toUpperCase().replace(/[^0-9A-Z]/g,'');
+    if(t!=='cnpj'&&/^\d{11}$/.test(a)) return pecas3dCpfOk(a)?{tipo:'cpf',chave:a}:{erro:'Esse CPF não confere. Veja os números.'};
+    if(t!=='cpf'&&a.length===14) return pecas3dCnpjOk(a)?{tipo:'cnpj',chave:a}:{erro:'Esse CNPJ não confere. Veja os números.'};
+    return {erro:'Escreva o CPF (11 números) ou o CNPJ (14).'};
+  }
+  if(t==='celular'){
+    var d=v.replace(/\D/g,'');
+    if(d.length===13&&d.indexOf('55')===0) d=d.slice(2);
+    if(d.length!==11||d.charAt(0)==='0'||d.charAt(1)==='0'||d.charAt(2)!=='9') return {erro:'Escreva o celular com DDD (11 números).'};
+    return {tipo:'celular',chave:'+55'+d};
+  }
+  if(t==='email'){
+    var e=v.toLowerCase();
+    var ok=(typeof emailValido==='function')?emailValido(e):/^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}$/.test(e);
+    if(!ok||e.length>77||/[^\x21-\x7e]/.test(e)) return {erro:'Esse e-mail não parece certo.'};
+    return {tipo:'email',chave:e};
+  }
+  if(t==='aleatoria'){
+    var u=v.toLowerCase();
+    if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(u)) return {erro:'A chave aleatória tem 36 caracteres, com os traços. Copie do app do banco.'};
+    return {tipo:'aleatoria',chave:u};
+  }
+  return {erro:'Escolha o tipo da chave.'};
+}
+// O que pode ir para o pedido: chave conferida pelo tipo, nome (até 25) e cidade (até 15) sem acento, e o "confirmo" do cliente.
+function pecas3dPixLimpa(px){
+  if(!px||typeof px!=='object'||px.ok!==true) return null;
+  var k=pecas3dPixChave(px.tipo,px.chave); if(!k||k.erro) return null;
+  var nome=pecas3dPixSemAcento(px.nome,25), cid=pecas3dPixSemAcento(px.cidade,15);
+  if(nome.length<3||cid.length<2) return null;
+  return {tipo:k.tipo,chave:k.chave,nome:nome,cidade:cid,ok:true};
+}
+// a chave como a pessoa lê: 529.982.247-25 · +55 (47) 99999-0001
+function pecas3dPixFmt(px){
+  var c=String((px&&px.chave)||''), t=px&&px.tipo;
+  if(t==='cpf'&&c.length===11) return c.slice(0,3)+'.'+c.slice(3,6)+'.'+c.slice(6,9)+'-'+c.slice(9);
+  if(t==='cnpj'&&c.length===14) return c.slice(0,2)+'.'+c.slice(2,5)+'.'+c.slice(5,8)+'/'+c.slice(8,12)+'-'+c.slice(12);
+  if(t==='celular'&&c.length===14) return '+55 ('+c.slice(3,5)+') '+c.slice(5,10)+'-'+c.slice(10);
+  return c;
+}
+// "Chave: … (CPF) · Recebedor: … · Cidade: …" (a conferência que o cliente confirma e que o painel mostra)
+function pecas3dPixTexto(px){
+  return 'Chave: '+pecas3dPixFmt(px)+' ('+(window.PECAS3D_PIX_ROTULO[px.tipo]||px.tipo)+') · Recebedor: '+px.nome+' · Cidade: '+px.cidade;
+}
+function pecas3dPixTlv(id,v){ v=String(v); return id+(v.length<10?'0':'')+v.length+v; }
+function pecas3dCrc16(s){
+  var c=0xFFFF, i, b; s=String(s);
+  for(i=0;i<s.length;i++){ c^=(s.charCodeAt(i)&0xFF)<<8; for(b=0;b<8;b++){ c=(c&0x8000)?((c<<1)^0x1021):(c<<1); c&=0xFFFF; } }
+  return c;
+}
+// Código Pix copia-e-cola (estático, sem valor). '' quando os dados não passam em pecas3dPixLimpa.
+function pecas3dPixBrCode(px){
+  var p=pecas3dPixLimpa(px); if(!p) return '';
+  var s=pecas3dPixTlv('00','01')+
+    pecas3dPixTlv('26',pecas3dPixTlv('00','br.gov.bcb.pix')+pecas3dPixTlv('01',p.chave))+
+    pecas3dPixTlv('52','0000')+pecas3dPixTlv('53','986')+pecas3dPixTlv('58','BR')+
+    pecas3dPixTlv('59',p.nome)+pecas3dPixTlv('60',p.cidade)+
+    pecas3dPixTlv('62',pecas3dPixTlv('05','***'))+'6304';
+  return s+('0000'+pecas3dCrc16(s).toString(16).toUpperCase()).slice(-4);
+}
+
+// ───── QR Code (modo byte, correção M). Devolve {versao,n,mascara,m:[linhas de 0/1]} ou null se o texto não couber. ─────
+window.PECAS3D_QR_EC=[10,16,26,18,24,16,18,22,22,26,30,22,22,24,24,28,28,26,26,26];   // códigos de correção por bloco, versões 1 a 20 (nível M)
+window.PECAS3D_QR_NB=[1,1,1,2,2,4,4,4,5,5,5,8,9,9,10,10,11,13,14,16];                 // quantos blocos
+window.PECAS3D_QR_AL=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90]];
+function pecas3dQrBrutos(v){ var r=(16*v+128)*v+64; if(v>=2){ var a=Math.floor(v/7)+2; r-=(25*a-10)*a-55; if(v>=7) r-=36; } return r; }
+function pecas3dQrDados(v){ return Math.floor(pecas3dQrBrutos(v)/8)-window.PECAS3D_QR_EC[v-1]*window.PECAS3D_QR_NB[v-1]; }
+function pecas3dQrMul(x,y){ var z=0, i; for(i=7;i>=0;i--){ z=(z<<1)^((z>>>7)*0x11D); z^=((y>>>i)&1)*x; } return z&0xFF; }
+function pecas3dQrDivisor(g){ var r=[], i, j, raiz=1; for(i=0;i<g-1;i++) r.push(0); r.push(1); for(i=0;i<g;i++){ for(j=0;j<r.length;j++){ r[j]=pecas3dQrMul(r[j],raiz); if(j+1<r.length) r[j]^=r[j+1]; } raiz=pecas3dQrMul(raiz,2); } return r; }
+function pecas3dQrResto(dados,div){ var r=div.map(function(){ return 0; }); dados.forEach(function(b){ var f=b^r.shift(); r.push(0); div.forEach(function(c,i){ r[i]^=pecas3dQrMul(c,f); }); }); return r; }
+function pecas3dQrBytes(txt){
+  var s=String(txt), out=[], i, c;
+  for(i=0;i<s.length;i++){ c=s.charCodeAt(i);
+    if(c<0x80) out.push(c);
+    else if(c<0x800) out.push(0xC0|(c>>6),0x80|(c&63));
+    else if(c>=0xD800&&c<0xDC00&&i+1<s.length){ c=0x10000+((c&0x3FF)<<10)+(s.charCodeAt(++i)&0x3FF); out.push(0xF0|(c>>18),0x80|((c>>12)&63),0x80|((c>>6)&63),0x80|(c&63)); }
+    else out.push(0xE0|(c>>12),0x80|((c>>6)&63),0x80|(c&63));
+  }
+  return out;
+}
+function pecas3dQrMatriz(txt,forcaMascara){
+  var by=pecas3dQrBytes(txt), v=0, i, j, x, y;
+  for(i=1;i<=20;i++){ if(by.length<=pecas3dQrDados(i)-(i<10?2:3)){ v=i; break; } }
+  if(!v) return null;
+  // 1) bits: modo byte (0100), tamanho (8 bits até a versão 9, 16 depois), os bytes, terminador e enchimento
+  var cap=pecas3dQrDados(v)*8, bits=[], poe=function(val,n){ for(var k=n-1;k>=0;k--) bits.push((val>>>k)&1); };
+  poe(4,4); poe(by.length,v<10?8:16); by.forEach(function(b){ poe(b,8); });
+  poe(0,Math.min(4,cap-bits.length)); poe(0,(8-bits.length%8)%8);
+  for(i=0;bits.length<cap;i++) poe(i%2?0x11:0xEC,8);
+  var dados=[]; for(i=0;i<bits.length;i+=8){ var b=0; for(j=0;j<8;j++) b=(b<<1)|bits[i+j]; dados.push(b); }
+  // 2) correção de erros por bloco e intercalação
+  var nb=window.PECAS3D_QR_NB[v-1], ec=window.PECAS3D_QR_EC[v-1], total=Math.floor(pecas3dQrBrutos(v)/8), curtos=nb-total%nb, tamCurto=Math.floor(total/nb), div=pecas3dQrDivisor(ec), blocos=[], k=0;
+  for(i=0;i<nb;i++){ var d=dados.slice(k,k+tamCurto-ec+(i<curtos?0:1)); k+=d.length; var e=pecas3dQrResto(d,div); if(i<curtos) d.push(0); blocos.push(d.concat(e)); }
+  var cw=[]; for(i=0;i<blocos[0].length;i++){ for(j=0;j<nb;j++){ if(i!==tamCurto-ec||j>=curtos) cw.push(blocos[j][i]); } }
+  // 3) a matriz: padrões fixos
+  var n=v*4+17, m=[], fx=[];
+  for(y=0;y<n;y++){ m.push([]); fx.push([]); for(x=0;x<n;x++){ m[y].push(0); fx[y].push(0); } }
+  var fixo=function(px,py,val){ m[py][px]=val?1:0; fx[py][px]=1; };
+  for(i=0;i<n;i++){ fixo(6,i,i%2===0); fixo(i,6,i%2===0); }
+  var olho=function(cx,cy){ for(var dy=-4;dy<=4;dy++){ for(var dx=-4;dx<=4;dx++){ var q=Math.max(Math.abs(dx),Math.abs(dy)), xx=cx+dx, yy=cy+dy; if(xx>=0&&xx<n&&yy>=0&&yy<n) fixo(xx,yy,q!==2&&q!==4); } } };
+  olho(3,3); olho(n-4,3); olho(3,n-4);
+  var al=window.PECAS3D_QR_AL[v-1];
+  for(i=0;i<al.length;i++){ for(j=0;j<al.length;j++){
+    if((i===0&&j===0)||(i===0&&j===al.length-1)||(i===al.length-1&&j===0)) continue;
+    for(y=-2;y<=2;y++){ for(x=-2;x<=2;x++) fixo(al[i]+x,al[j]+y,Math.max(Math.abs(x),Math.abs(y))!==1); }
+  } }
+  var formato=function(masc){
+    var dd=masc, r=dd, q, bt;   // nível M = 00
+    for(q=0;q<10;q++) r=(r<<1)^((r>>>9)*0x537);
+    bt=((dd<<10)|r)^0x5412;
+    var bit=function(p){ return (bt>>>p)&1; };
+    for(q=0;q<=5;q++) fixo(8,q,bit(q));
+    fixo(8,7,bit(6)); fixo(8,8,bit(7)); fixo(7,8,bit(8));
+    for(q=9;q<15;q++) fixo(14-q,8,bit(q));
+    for(q=0;q<8;q++) fixo(n-1-q,8,bit(q));
+    for(q=8;q<15;q++) fixo(8,n-15+q,bit(q));
+    fixo(8,n-8,1);
+  };
+  formato(0);
+  if(v>=7){ var rv=v; for(i=0;i<12;i++) rv=(rv<<1)^((rv>>>11)*0x1F25); var bv=(v<<12)|rv; for(i=0;i<18;i++){ var a2=n-11+i%3, b2=Math.floor(i/3), t2=(bv>>>i)&1; fixo(a2,b2,t2); fixo(b2,a2,t2); } }
+  // 4) os dados em zigue-zague
+  k=0;
+  for(var dir=n-1;dir>=1;dir-=2){ if(dir===6) dir=5;
+    for(var vert=0;vert<n;vert++){ for(j=0;j<2;j++){ x=dir-j; y=(((dir+1)&2)===0)?(n-1-vert):vert;
+      if(!fx[y][x]&&k<cw.length*8){ m[y][x]=(cw[k>>>3]>>>(7-(k&7)))&1; k++; } } } }
+  // 5) máscara: a de menor penalidade (ou a pedida, para os testes)
+  var mascara=function(q){ for(var yy=0;yy<n;yy++){ for(var xx=0;xx<n;xx++){ if(fx[yy][xx]) continue; var inv;
+    switch(q){ case 0: inv=(xx+yy)%2===0; break; case 1: inv=yy%2===0; break; case 2: inv=xx%3===0; break; case 3: inv=(xx+yy)%3===0; break;
+      case 4: inv=(Math.floor(xx/3)+Math.floor(yy/2))%2===0; break; case 5: inv=(xx*yy)%2+(xx*yy)%3===0; break;
+      case 6: inv=((xx*yy)%2+(xx*yy)%3)%2===0; break; default: inv=((xx+yy)%2+(xx*yy)%3)%2===0; }
+    if(inv) m[yy][xx]^=1; } } };
+  var penal=function(){
+    var p=0, yy, xx, cor, seg, escuros=0, linha=function(pega){
+      var c=-1, s=0, h=0, q;
+      for(q=0;q<n;q++){ var val=pega(q); if(val===c){ s++; if(s===5) p+=3; else if(s>5) p++; } else { c=val; s=1; } h=((h<<1)&0x7FF)|val; if(q>=10&&(h===0x5D||h===0x5D0)) p+=40; }
+    };
+    for(yy=0;yy<n;yy++){ (function(Y){ linha(function(q){ return m[Y][q]; }); })(yy); }
+    for(xx=0;xx<n;xx++){ (function(X){ linha(function(q){ return m[q][X]; }); })(xx); }
+    for(yy=0;yy<n-1;yy++){ for(xx=0;xx<n-1;xx++){ cor=m[yy][xx]; if(cor===m[yy][xx+1]&&cor===m[yy+1][xx]&&cor===m[yy+1][xx+1]) p+=3; } }
+    for(yy=0;yy<n;yy++){ for(xx=0;xx<n;xx++) escuros+=m[yy][xx]; }
+    seg=Math.ceil(Math.abs(escuros*20-n*n*10)/(n*n))-1; if(seg>0) p+=seg*10;
+    return p;
+  };
+  var melhor=-1, menor=Infinity;
+  if(forcaMascara>=0&&forcaMascara<=7) melhor=forcaMascara;
+  else for(i=0;i<8;i++){ mascara(i); formato(i); var pn=penal(); if(pn<menor){ menor=pn; melhor=i; } mascara(i); }
+  mascara(melhor); formato(melhor);
+  return {versao:v,n:n,mascara:melhor,m:m};
+}
+// desenho do QR como caminho de SVG (um retângulo por sequência de módulos escuros); x0,y0 = canto, lado = tamanho do código
+function pecas3dQrCaminho(q,x0,y0,lado){
+  var t=lado/q.n, d='', y, x, ini, f=function(v){ return String(Math.round(v*1000)/1000); };
+  for(y=0;y<q.n;y++){ ini=-1; for(x=0;x<=q.n;x++){ var on=(x<q.n&&q.m[y][x]===1);
+    if(on&&ini<0) ini=x;
+    if(!on&&ini>=0){ d+='M'+f(x0+ini*t)+' '+f(y0+y*t)+'h'+f((x-ini)*t)+'v'+f(t)+'h-'+f((x-ini)*t)+'z'; ini=-1; } } }
+  return d;
+}
+// 🪪 O cartão de 10 × 10 cm (medidas em mm): nome em cima, QR no meio com a margem branca dele, chave embaixo e, na faixa que
+// a beira da moldura cobre, a frase de conferência. Devolve {svg,codigo,versao,modulo_mm} ou null.
+function pecas3dPixCartao(px){
+  var p=pecas3dPixLimpa(px); if(!p) return null;
+  var cod=pecas3dPixBrCode(p), q=cod?pecas3dQrMatriz(cod):null; if(!q) return null;
+  var esc=function(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); };
+  var lado=Math.min(70,41/(0.5+4/q.n)), x0=(100-lado)/2, y0=13+(70-lado)/2;
+  var t1='PIX · '+p.nome, t2='Chave Pix ('+(window.PECAS3D_PIX_ROTULO[p.tipo]||p.tipo)+'): '+pecas3dPixFmt(p);
+  var f1=Math.min(4.2,84/(t1.length*0.66)), f2=Math.min(3,84/(t2.length*0.58)), fam='font-family="Arial, Helvetica, sans-serif"';
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" class="p3pix-svg" viewBox="0 0 100 100" width="100mm" height="100mm" role="img" aria-label="'+esc('Cartão do Pix de '+p.nome)+'">'+
+    '<rect x="0" y="0" width="100" height="100" fill="#ffffff"/>'+
+    '<rect x="0.1" y="0.1" width="99.8" height="99.8" fill="none" stroke="#9ca3af" stroke-width="0.2" stroke-dasharray="1.2 1.2"/>'+
+    '<text x="50" y="6.8" text-anchor="middle" '+fam+' font-weight="700" font-size="'+f1.toFixed(2)+'" fill="#000000">'+esc(t1)+'</text>'+
+    '<path d="'+pecas3dQrCaminho(q,x0,y0,lado)+'" fill="#000000" shape-rendering="crispEdges"/>'+
+    '<text x="50" y="91.8" text-anchor="middle" '+fam+' font-weight="700" font-size="'+f2.toFixed(2)+'" fill="#000000">'+esc(t2)+'</text>'+
+    '<text x="50" y="97" text-anchor="middle" '+fam+' font-size="2.3" fill="#374151">Confira o nome que aparece no app do banco antes de usar.</text>'+
+  '</svg>';
+  return {svg:svg,codigo:cod,versao:q.versao,modulo_mm:Math.round(lado/q.n*100)/100,dados:p};
+}
+// ⟪PIX-MOLDURA-2611:FIM⟫
+
+// ───── 🔑 PIX-MOLDURA-2611: o campo da chave no catálogo (Moldura de QR) ─────
+// Só aparece com site_config.pecas3d_pix_chave = 'on' (padrão DESLIGADO: sem a chave no banco a moldura vende como "encaixe o seu
+// QR"). A peça é comprável sem chave. A chave só entra no pedido depois de CONFERIDA (tipo escolhido + validação) e CONFIRMADA
+// pelo cliente ("Chave: … (tipo) · Recebedor: … · Cidade: …"). O rascunho vive só na memória e some ao fechar o catálogo.
+function pecas3dPixRasc(slug){
+  var r=window._p3R, x=r&&r.it&&r.it[slug]; if(!x) return null;
+  if(!x.pix) x.pix={aberto:false,tipo:'',chave:'',nome:'',cidade:'',conf:null,val:null};
+  return x.pix;
+}
+function pecas3dPixVai(v,max){ var n=pecas3dPixSemAcento(v,max); return n?('No QR vai assim: <b>'+pecas3dEsc(n)+'</b>'):('No QR vai sem acento, até '+max+' letras.'); }
+function pecas3dPixHtml(p){
+  var s=p.slug, px=pecas3dPixRasc(s); if(!px) return '';
+  var h='<div class="p3-pix" id="p3-pix-'+s+'"><div class="p3-pix-t">QR do seu Pix (opcional)</div>';
+  if(px.val){
+    h+='<div class="p3-pixok" id="p3-pixval-'+s+'" role="status"><b>✓ Chave Pix confirmada.</b> '+pecas3dEsc(pecas3dPixTexto(px.val))+'</div>'+
+      '<p class="p3-pix-s">A moldura vai com o cartão de 10 × 10 cm do seu QR, pronto para encaixar.</p>'+
+      '<button type="button" class="p3-pixb sec" data-p3f="pixtrocar" onclick="pecas3dPixCorrigir(\''+s+'\')">Trocar a chave</button>'+
+      '<button type="button" class="p3-pixl" data-p3f="pixtirar" onclick="pecas3dPixTirar(\''+s+'\')">Tirar a chave</button>';
+  }else if(px.conf){
+    h+='<p class="p3-pix-s">Confira antes de confirmar: é com estes dados que o QR será feito.</p>'+
+      '<div class="p3-pixconf" id="p3-pixconf-'+s+'" role="status">'+pecas3dEsc(pecas3dPixTexto(px.conf))+'</div>'+
+      '<button type="button" class="p3-pixb" data-p3f="pixok" onclick="pecas3dPixConfirmar(\''+s+'\')">Está certo, confirmar</button>'+
+      '<button type="button" class="p3-pixl" data-p3f="pixcorrigir" onclick="pecas3dPixCorrigir(\''+s+'\')">Corrigir</button>';
+  }else if(px.aberto){
+    var t=px.tipo, tipoInp=(t==='email'?'email':(t==='celular'?'tel':'text')), modo=(t==='email'?'email':(t==='celular'?'tel':'text'));
+    var dica=(t==='doc'?'CPF ou CNPJ':(t==='celular'?'(47) 99999-0000':(t==='email'?'voce@exemplo.com':(t==='aleatoria'?'Cole a chave do app do banco':'Escolha o tipo acima'))));
+    h+='<span class="p3-rot" id="p3-pixlt-'+s+'">Tipo da chave</span>'+
+      '<div class="p3-cores p3-c2" role="radiogroup" aria-labelledby="p3-pixlt-'+s+'">'+
+        window.PECAS3D_PIX_TIPOS.map(function(o,i){ var on=(t===o[0]); return '<button type="button" role="radio" aria-checked="'+(on?'true':'false')+'" class="p3-cor'+(on?' on':'')+'" data-p3f="pixt'+i+'" onclick="pecas3dPixTipo(\''+s+'\','+i+')">'+pecas3dEsc(o[1])+'</button>'; }).join('')+
+      '</div>'+
+      '<label class="p3-rot" for="p3-pixchave-'+s+'">Chave Pix</label>'+
+      '<input type="'+tipoInp+'" inputmode="'+modo+'" class="p3-pixi" id="p3-pixchave-'+s+'" data-p3f="pixchave" maxlength="80" value="'+pecas3dEsc(px.chave)+'" placeholder="'+pecas3dEsc(dica)+'" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" oninput="pecas3dPixCampo(\''+s+'\',\'chave\',this)"/>'+
+      '<label class="p3-rot" for="p3-pixnome-'+s+'">Nome de quem recebe, como está no banco</label>'+
+      '<input type="text" class="p3-pixi" id="p3-pixnome-'+s+'" data-p3f="pixnome" maxlength="60" value="'+pecas3dEsc(px.nome)+'" autocomplete="off" autocorrect="off" spellcheck="false" oninput="pecas3dPixCampo(\''+s+'\',\'nome\',this)"/>'+
+      '<div class="p3-pixv" id="p3-pixv-nome-'+s+'">'+pecas3dPixVai(px.nome,25)+'</div>'+
+      '<label class="p3-rot" for="p3-pixcidade-'+s+'">Cidade</label>'+
+      '<input type="text" class="p3-pixi" id="p3-pixcidade-'+s+'" data-p3f="pixcidade" maxlength="40" value="'+pecas3dEsc(px.cidade)+'" autocomplete="off" autocorrect="off" spellcheck="false" oninput="pecas3dPixCampo(\''+s+'\',\'cidade\',this)"/>'+
+      '<div class="p3-pixv" id="p3-pixv-cidade-'+s+'">'+pecas3dPixVai(px.cidade,15)+'</div>'+
+      '<div class="p3-erro" id="p3-pixerro-'+s+'" role="alert" style="display:none;"></div>'+
+      '<button type="button" class="p3-pixb" data-p3f="pixconferir" onclick="pecas3dPixConferir(\''+s+'\')">Conferir a chave</button>'+
+      '<button type="button" class="p3-pixl" data-p3f="pixnao" onclick="pecas3dPixTirar(\''+s+'\')">Não informar a chave</button>';
+  }else{
+    h+='<p class="p3-pix-s">Informe a sua chave e a moldura vai com o cartão do QR pronto para encaixar. Sem chave, você encaixa o seu QR.</p>'+
+      '<button type="button" class="p3-pixb" data-p3f="pixabrir" onclick="pecas3dPixAbrir(\''+s+'\')">Informar a chave Pix</button>';
+  }
+  return h+'</div>';
+}
+function pecas3dPixPintar(slug,foco){
+  var w=document.getElementById('p3-pix-'+slug), p=pecas3dProduto(slug); if(!w||!p) return;
+  w.outerHTML=pecas3dPixHtml(p);
+  if(foco){ try{ var n=document.querySelector('#p3-pix-'+slug+' [data-p3f="'+foco+'"]'); if(n) n.focus({preventScroll:true}); }catch(e){} }
+  pecas3dErroTela('');
+}
+function pecas3dPixErro(slug,msg,campo){
+  var e=document.getElementById('p3-pixerro-'+slug); if(e){ e.textContent=msg||''; e.style.display=msg?'block':'none'; }
+  if(msg&&campo){ try{ var i=document.querySelector('#p3-pix-'+slug+' [data-p3f="'+campo+'"]'); if(i) i.focus({preventScroll:true}); }catch(x){} }
+}
+function pecas3dPixAbrir(slug){ var px=pecas3dPixRasc(slug); if(!px) return; px.aberto=true; pecas3dPixPintar(slug,'pixt0'); }
+function pecas3dPixTipo(slug,i){ var px=pecas3dPixRasc(slug), o=window.PECAS3D_PIX_TIPOS[i]; if(!px||!o) return; px.tipo=o[0]; pecas3dPixPintar(slug,'pixchave'); }
+function pecas3dPixCampo(slug,campo,el){
+  var px=pecas3dPixRasc(slug); if(!px||!el) return;
+  var v=String(el.value||'');
+  if(campo==='chave') px.chave=v.slice(0,80);
+  else if(campo==='nome'||campo==='cidade'){ px[campo]=v.slice(0,60); var d=document.getElementById('p3-pixv-'+campo+'-'+slug); if(d) d.innerHTML=pecas3dPixVai(v,campo==='nome'?25:15); }
+  pecas3dPixErro(slug,'');
+}
+// "Conferir a chave": valida pelo tipo escolhido e mostra de volta como vai ficar; só o toque em "Está certo, confirmar" vale
+function pecas3dPixConferir(slug){
+  var px=pecas3dPixRasc(slug); if(!px) return;
+  if(!px.tipo){ pecas3dPixErro(slug,'Escolha o tipo da chave.','pixt0'); return; }
+  var k=pecas3dPixChave(px.tipo,px.chave), nome=pecas3dPixSemAcento(px.nome,25), cid=pecas3dPixSemAcento(px.cidade,15);
+  if(!k||k.erro){ pecas3dPixErro(slug,(k&&k.erro)||'Confira a chave.','pixchave'); return; }
+  if(nome.length<3){ pecas3dPixErro(slug,'Escreva o nome de quem recebe o Pix.','pixnome'); return; }
+  if(cid.length<2){ pecas3dPixErro(slug,'Escreva a cidade.','pixcidade'); return; }
+  px.conf={tipo:k.tipo,chave:k.chave,nome:nome,cidade:cid,ok:true};
+  pecas3dPixPintar(slug,'pixok');
+}
+function pecas3dPixConfirmar(slug){
+  var r=window._p3R, px=pecas3dPixRasc(slug); if(!r||!px||!px.conf) return;
+  var v=pecas3dPixLimpa(px.conf); px.conf=null;
+  if(!v){ pecas3dPixPintar(slug,'pixchave'); return; }
+  px.val=v;
+  var x=r.it[slug]; if(x&&pecas3dRascTotal(x)<1) x.qtds[x.cor]=1;   // confirmou a chave = quer a moldura
+  pecas3dRedesenhaCard(slug,'pixtrocar');
+  pecas3dEvento('pecas3d_pix',r.inline?'bancada':r.ctx,'confirmou');   // só o fato: a chave NUNCA vai em evento
+}
+function pecas3dPixCorrigir(slug){ var px=pecas3dPixRasc(slug); if(!px) return; px.val=null; px.conf=null; px.aberto=true; pecas3dRedesenhaCard(slug,'pixchave'); }
+function pecas3dPixTirar(slug){
+  var r=window._p3R, x=r&&r.it&&r.it[slug]; if(!x) return;
+  x.pix={aberto:false,tipo:'',chave:'',nome:'',cidade:'',conf:null,val:null};
+  pecas3dRedesenhaCard(slug,'pixabrir');
+}
+// chave começada e não confirmada numa moldura que está no rascunho: o pedido não fecha calado sem ela ('' = nada pendente)
+function pecas3dPixPendente(){
+  var r=window._p3R, out=''; if(!r||!window.PECAS3D_PIX_LIGADO) return '';
+  pecas3dCatVenda().forEach(function(p){
+    if(out||!p.pix) return; var x=r.it[p.slug], px=x&&x.pix; if(!px||px.val||pecas3dRascTotal(x)<1) return;
+    if(px.conf||(px.aberto&&(String(px.chave||'').trim()||String(px.nome||'').trim()||String(px.cidade||'').trim()))) out=p.slug;
+  });
+  return out;
+}
+function pecas3dPixPendenteMsg(slug){ var p=pecas3dProduto(slug); return 'Confirme a chave Pix de "'+((p&&p.nome)||'Moldura de QR')+'" ou toque em "Não informar a chave".'; }
+// tira a chave de uma lista de itens (para qualquer lugar que não seja o pedido): fica só a marca "tem chave"
+function pecas3dSemPix(l){
+  return (l||[]).map(function(i){ if(!i||typeof i!=='object'||!i.pix) return i; var o={}; Object.keys(i).forEach(function(k){ if(k!=='pix') o[k]=i[k]; }); o.tem_pix=true; return o; });
+}
+
+// ───── 🧩 painel (só admin): aviso da 1ª unidade das peças novas e o cartão do Pix ─────
+// A 1ª unidade de cada peça nova sai sem impressão de teste: o "Como fazer" avisa o que conferir antes de embalar. O aviso some
+// quando a empresa toca em "Já conferi": grava o slug em site_config.pecas3d_conferidas pela função que o painel já usa
+// (site_config_set). Se a gravação falhar, o aviso continua na tela.
+function pecas3dAviso1a(slug){
+  var t=window.PECAS3D_1A_UNIDADE[String(slug||'')];
+  return (t&&window.PECAS3D_CONFERIDAS.indexOf(String(slug))<0)?t:'';
+}
+function pecas3dAviso1aHtml(slug,botao){
+  var t=pecas3dAviso1a(slug); if(!t) return '';
+  return '<span class="p3a-1a" data-p3a1="'+pecas3dEsc(slug)+'" role="note">⚠️ '+pecas3dEsc(t)+
+    (botao?'<br><button type="button" class="p3f-bt" data-p3a1b="'+pecas3dEsc(slug)+'" onclick="pecas3dConferida(\''+pecas3dEsc(slug)+'\',this)">✓ Já conferi</button>':'')+'</span>';
+}
+async function pecas3dConferida(slug,btn){
+  if(!(typeof IA!=='undefined'&&IA)) return;
+  slug=String(slug||''); if(!window.PECAS3D_1A_UNIDADE[slug]) return;
+  var orig=btn?btn.textContent:''; if(btn){ btn.disabled=true; btn.textContent='Gravando...'; }
+  var nova=window.PECAS3D_CONFERIDAS.slice(); if(nova.indexOf(slug)<0) nova.push(slug);
+  var r=null;
+  try{ r=await sb.rpc('site_config_set',{p_chave:'pecas3d_conferidas',p_valor:nova.join(','),p_quem:'painel'}); }catch(e){ r={data:null,error:e}; }
+  // supabase-js não rejeita: erro vem em r.error; a função também pode devolver {ok:false}
+  if(!r||r.error||(r.data&&r.data.ok===false)){
+    if(btn){ btn.disabled=false; btn.textContent=orig; }
+    alert('Não consegui gravar que a peça foi conferida: o aviso continua. '+((r&&r.error&&r.error.message)||(r&&r.data&&r.data.erro)||'Tente de novo.'));
+    return;
+  }
+  window.PECAS3D_CONFERIDAS=pecas3dSlugs(nova.join(','));
+  try{ pecas3dFilaPintar(); }catch(e){}
+}
+// a chave Pix de um pedido: só o painel lê (o resto do site usa pecas3dDoPedido, que não carrega a chave)
+function pecas3dPixDoPedido(p){
+  if(!(typeof IA!=='undefined'&&IA)) return [];
+  var l=p&&p.pecas3d; if(typeof l==='string'){ try{ l=JSON.parse(l); }catch(e){ l=null; } }
+  if(!Array.isArray(l)) return [];
+  var out=[]; l.forEach(function(i){ if(!i||typeof i!=='object'||!(Number(i.qtd)>0)||!i.nome_produto||!i.pix) return; var v=pecas3dPixLimpa(i.pix); if(v) out.push({slug:String(i.slug||''),pix:v}); });   // o mesmo filtro de pecas3dDoPedido: o n-ésimo item com chave é o n-ésimo daqui
+  return out;
+}
+function pecas3dPixCartaoAbrir(id,n){
+  if(!(typeof IA!=='undefined'&&IA)) return;
+  var T=window.PECAS3D_FILA||[], p=null; for(var i=0;i<T.length;i++){ if(String(T[i].id)===String(id)){ p=T[i]; break; } }
+  var e=p?pecas3dPixDoPedido(p)[Number(n)||0]:null, c=e?pecas3dPixCartao(e.pix):null;
+  if(!c){ alert('Não achei a chave Pix deste pedido.'); return; }
+  pecas3dPixCartaoFechar();
+  var ov=document.createElement('div'); ov.id='p3pix-ov'; ov.className='p3pix-ov';
+  ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-labelledby','p3pix-t');
+  ov.innerHTML='<div class="p3pix-cx">'+
+    '<div class="p3pix-t p3pix-nao" id="p3pix-t">Cartão do Pix · pedido #'+pecas3dEsc(String(id).replace(/[^0-9a-zA-Z_-]/g,''))+'</div>'+
+    '<div class="p3pix-conf p3pix-nao" id="p3pix-conf">'+pecas3dEsc(pecas3dPixTexto(c.dados))+'</div>'+
+    '<div class="p3pix-frase p3pix-nao" id="p3pix-frase">Confira o nome que aparece no app do banco antes de usar. Aponte o app para o QR abaixo: tem que aparecer '+pecas3dEsc(c.dados.nome)+'.</div>'+
+    '<div class="p3pix-cartao" id="p3pix-cartao">'+c.svg+'</div>'+
+    '<div class="p3pix-info p3pix-nao">Cartão de 10 × 10 cm. Imprima em tamanho real (100 %), recorte no tracejado e encaixe na moldura. QR versão '+c.versao+', módulo de '+String(c.modulo_mm).replace('.',',')+' mm.</div>'+
+    '<label class="p3pix-info p3pix-nao" for="p3pix-cod">Pix copia e cola (o mesmo código do QR):</label>'+
+    '<textarea class="p3pix-cod p3pix-nao" id="p3pix-cod" readonly rows="3">'+pecas3dEsc(c.codigo)+'</textarea>'+
+    '<div class="p3pix-bts p3pix-nao"><button type="button" class="p3pix-bt" id="p3pix-imprimir" onclick="pecas3dPixCartaoImprimir()">Imprimir o cartão</button><button type="button" class="p3pix-bt sec" id="p3pix-fechar" onclick="pecas3dPixCartaoFechar()">Fechar</button></div>'+
+  '</div>';
+  try{ ov.addEventListener('click',function(ev){ if(ev.target===ov) pecas3dPixCartaoFechar(); }); }catch(x){}
+  document.body.appendChild(ov);
+  try{ document.getElementById('p3pix-imprimir').focus({preventScroll:true}); }catch(x){}
+}
+function pecas3dPixCartaoFechar(){ var o=document.getElementById('p3pix-ov'); if(o) o.remove(); try{ document.body.classList.remove('p3pix-imprimindo'); }catch(e){} }
+// imprime só o cartão (o resto da página some na impressão) em tamanho real
+function pecas3dPixCartaoImprimir(){
+  if(!document.getElementById('p3pix-ov')) return;
+  try{ document.body.classList.add('p3pix-imprimindo'); }catch(e){}
+  var tira=function(){ try{ document.body.classList.remove('p3pix-imprimindo'); window.removeEventListener('afterprint',tira); }catch(e){} };
+  try{ window.addEventListener('afterprint',tira); }catch(e){}
+  try{ window.print(); }catch(e){ tira(); }
+}
+// o que entra na coluna "Como fazer" da fila para as peças novas (aviso da 1ª unidade) e para a moldura com chave (cartão)
+function pecas3dFilaExtra(i,id,nPix){
+  var h=pecas3dAviso1aHtml(i.slug,true);
+  if(i.tem_pix&&nPix>=0) h+='<span class="p3f-pix" data-p3fpix="'+nPix+'">🔑 Com chave Pix: imprima o cartão e mande junto.<br><button type="button" class="p3f-bt" onclick="pecas3dPixCartaoAbrir(\''+id+'\','+nPix+')">Abrir o cartão do Pix</button></span>';
+  else if(window.PECAS3D_PIX_LIGADO&&pecas3dProduto(i.slug)&&pecas3dProduto(i.slug).pix&&!i.variante) h+='<span class="p3f-pix">Sem chave Pix: a moldura vai vazia (o cliente encaixa o QR dele).</span>';
+  return h;
+}
+// relê quais peças novas já foram conferidas (a aba 🧩 Peças abre com o dado do banco, não com o da hora em que o site carregou)
+async function pecas3dLerConferidas(){
+  if(!(typeof IA!=='undefined'&&IA)) return;
+  var r=null; try{ r=await sb.from('site_config').select('chave,valor').in('chave',['pecas3d_conferidas']); }catch(e){ r=null; }
+  if(!r||r.error||!Array.isArray(r.data)) return;
+  var v=''; r.data.forEach(function(x){ if(x.chave==='pecas3d_conferidas') v=x.valor; });
+  var n=pecas3dSlugs(v); if(n.join(',')===window.PECAS3D_CONFERIDAS.join(',')) return;
+  window.PECAS3D_CONFERIDAS=n;
+  try{ if((window.PECAS3D_FILA||[]).length) pecas3dFilaPintar(); }catch(e){}
 }
 // ===== fim PEÇAS-BANCADA-1211 =====
 // ============================================================
@@ -20423,7 +21219,9 @@ function bancadaPintarTopo(){
 function bancadaPintarLista(){
   var w=bancadaEl('bancada-lista'), r=window._p3R; if(!w||!r||!r.inline) return;
   var cat=((window.PECAS3D_CAT||{}).produtos)||[];
-  w.innerHTML=cat.map(function(p){ return '<div class="p3-card'+(pecas3dCardLigado(p)?' p3-on':'')+'" id="p3-card-'+p.slug+'" data-slug="'+p.slug+'">'+pecas3dCardHtml(p)+'</div>'; }).join('');
+  w.innerHTML='<div class="p3-cat" id="p3-cat">'+pecas3dCatHtml()+'</div>';   // 🖤 VISUAL-2611: o mesmo catálogo de uma peça por vez (palco + vitrine + detalhe)
+  // a peça fica presa logo ABAIXO da barra do topo do site (que também é presa): sem isto a barra cobriria a peça
+  try{ var _tn=document.getElementById('topnav-publico'); w.style.setProperty('--p3-topo',((_tn&&_tn.getClientRects().length&&getComputedStyle(_tn).position==='sticky')?_tn.offsetHeight:0)+'px'); }catch(e){}
 }
 // cada toque num cartão (quantidade, cor, padrão/nome, nome digitado) já vale para o pedido: sem botão escondido de "adicionar"
 function bancadaAplicar(){
@@ -20605,7 +21403,8 @@ async function cartLerInterruptor(){
   if(window._cartInterruptorLido||window._cartLendoInt) return;
   window._cartLendoInt=true;
   var v=null;
-  try{ var r=await sb.from('site_config').select('chave,valor').in('chave',['pecas3d','pecas3d_promo']); if(r&&!r.error&&Array.isArray(r.data)) r.data.forEach(function(x){ if(x.chave==='pecas3d') v=x.valor; if(x.chave==='pecas3d_promo') pecas3dLePromo(x.valor); }); }catch(e){}
+  var _x={};   // 🖤 VISUAL-2611
+  try{ var r=await sb.from('site_config').select('chave,valor').in('chave',['pecas3d','pecas3d_promo','pecas3d_fora','pecas3d_pix_chave','pecas3d_conferidas']); if(r&&!r.error&&Array.isArray(r.data)){ r.data.forEach(function(x){ if(x.chave==='pecas3d') v=x.valor; if(x.chave==='pecas3d_promo') pecas3dLePromo(x.valor); if(x.chave==='pecas3d_fora') _x.fora=x.valor; if(x.chave==='pecas3d_pix_chave') _x.pix=x.valor; if(x.chave==='pecas3d_conferidas') _x.conferidas=x.valor; }); pecas3dLeExtras(_x); } }catch(e){}
   window._cartLendoInt=false;
   if(window._cartInterruptorLido) return;
   try{ pecas3dAplicarInterruptor(v); }catch(e){}
