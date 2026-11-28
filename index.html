@@ -1777,8 +1777,8 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
 .cp-callout-eco{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .cp-callout-icon{font-size:24px;}
 .cp-callout-text{flex:1;}
-.cp-callout-title{font-size:13px;color:#fff;font-weight:500;line-height:1.3;}
-.cp-callout-sub{font-size:11px;color:#2563eb;margin-top:2px;line-height:1.3;}
+.cp-callout-title{font-size:14px;color:#0f172a;font-weight:700;line-height:1.35;}/* CALLOUT-COR-2811: era branco em fundo claro (empresa 28/11) */
+.cp-callout-sub{font-size:12px;color:#1d4ed8;margin-top:3px;line-height:1.35;}
 .cp-callout-btn{width:100%;padding:11px;background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;}
 .cp-callout-btn:hover{filter:brightness(1.1);}
 /* === SELETOR DE PLANOS — refeito 16/08 (TKTX: "ficou ruim, melhore esse sistema") ===
@@ -2504,6 +2504,208 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
 /* ===== PAGE-PROMO (reusa classes cp-, paleta do site) ===== */
 /* (o .cp-frete-card.sel morava aqui duplicado e brigava com a regra de cima — agora é uma só) */
 
+</style>
+<style>
+/* TRILHA-2811 + TABELA-CTA-2811 (empresa 28/11): trilha de conquistas nova, cartão "Quanto mais leva, menos paga",
+   tabela de preços completa, número da barra de baixo, oferta única do Anual e cartão único dos extras (gel/spray).
+   Só visual: nenhum preço/cálculo/gravação mora aqui. Letra >= 12px, alvos >= 44px, foco visível, cabe em 375px. */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ===== TRILHA-2811: a trilha (janela) ===== */
+.tr{--ouro:#f59e0b;--ouro-vivo:#fb923c;--ouro-esc:#b45309;--ouro-claro:#fffbeb;--ouro-borda:#fde68a;background:#fff;border:1px solid var(--ouro-borda);border-radius:16px;padding:18px 14px 16px;position:relative;overflow:hidden;color:#0f172a;font-family:'DM Sans',sans-serif}
+.tr::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--ouro),var(--ouro-vivo))}
+.tr-tit{font-size:20px;font-weight:800;line-height:1.3;letter-spacing:-.2px;color:#0f172a}
+.tr-tit em{font-style:normal;color:var(--ouro-esc)}
+.tr-sub{margin-top:6px;font-size:13px;color:#475569;line-height:1.5}
+.tr-sub b{color:var(--ouro-esc);white-space:nowrap}
+.tr-cond{display:inline-flex;align-items:flex-start;gap:6px;margin-top:10px;padding:7px 10px;border-radius:10px;background:var(--ouro-claro);border:1px solid var(--ouro-borda);color:#92400e;font-size:13px;font-weight:700;line-height:1.4}
+.tr-trilho{position:relative;margin:60px 22px 38px 12px;height:14px}
+.tr-fundo{position:absolute;inset:0;border-radius:14px;background:#f1f5f9}
+.tr-ja,.tr-ped{position:absolute;top:0;bottom:0;left:0;border-radius:14px;width:0;transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+.tr-ja{background:linear-gradient(90deg,var(--ouro),var(--ouro-vivo));z-index:2}
+.tr-ped{background:repeating-linear-gradient(-45deg,#fdba74 0 6px,#fed7aa 6px 12px);z-index:1;transition-delay:.9s;transition-duration:.9s}
+.tr.vis .tr-ja{width:var(--a)}
+.tr.vis .tr-ped{width:var(--b);animation:trBrilho 1.6s 1.9s ease-in-out 2}
+@keyframes trBrilho{50%{filter:brightness(1.12) saturate(1.3)}}
+.tr-marco{position:absolute;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:#fff;border:2px solid #cbd5e1;z-index:3}
+.tr-marco.ok{background:var(--ouro);border-color:var(--ouro)}
+.tr-marco.prox{border-color:var(--ouro);box-shadow:0 0 0 4px rgba(245,158,11,.18)}
+.tr.vis .tr-marco.prox{animation:trPulso 1.4s 2s ease-in-out 3}
+@keyframes trPulso{50%{box-shadow:0 0 0 9px rgba(245,158,11,.12)}}
+.tr-premio,.tr-valor{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:13px}
+.tr-premio{bottom:26px;font-weight:800;color:var(--ouro-esc);text-align:center;line-height:1.1}
+.tr-premio small,.tr-col .pr small{display:block;font-size:12px;font-weight:700}
+.tr-valor{top:26px;color:#475569}
+.tr-leg{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:#475569}
+.tr-leg span{display:inline-flex;align-items:center;gap:6px}
+.tr-leg i{width:12px;height:12px;border-radius:3px;flex:none;background:linear-gradient(90deg,var(--ouro),var(--ouro-vivo))}
+.tr-leg i.ped{background:repeating-linear-gradient(-45deg,#fdba74 0 3px,#fed7aa 3px 6px)}
+.tr-abre{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;padding:0 2px;border:0;background:none;color:#1d4ed8;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+.tr-esc{display:none;margin-top:8px;padding-top:14px;border-top:1px solid #e2e8f0}
+.tr.aberta .tr-esc{display:block}
+.tr-graf{display:grid;gap:6px;align-items:end;height:216px}
+.tr-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.tr-col .pr{font-size:13px;font-weight:800;color:var(--ouro-esc);margin-bottom:4px;text-align:center;line-height:1.1}
+.tr-deg{width:100%;border-radius:8px 8px 0 0;background:var(--ouro-claro);border:1.5px dashed #fcd34d;border-bottom:0;position:relative;overflow:hidden}
+.tr-deg .enc{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(0deg,var(--ouro),var(--ouro-vivo));transition:height .9s cubic-bezier(.2,.7,.2,1)}
+.tr-col.ok .tr-deg{border-style:solid;border-color:var(--ouro)}
+.tr-eixo{display:grid;gap:6px;border-top:2px solid #0f172a;padding-top:6px;text-align:center}
+.tr-eixo div{font-size:12px;line-height:1.3;color:#475569;min-width:0;overflow-wrap:anywhere}
+.tr-eixo b{display:block;color:#0f172a;font-weight:800;font-size:13px}
+.tr-eixo span{display:block;font-size:12px}
+.tr-eixo .un{color:#0f172a;font-weight:700}
+.tr-eixo .st{color:#15803d;font-weight:700}
+.tr-ex{margin:0 0 14px;padding:10px 12px;border-radius:10px;background:#eff6ff;border:1px solid #bfdbfe;color:#0f172a;font-size:13px;line-height:1.5}
+.tr-ex b{color:var(--ouro-esc)}
+.tr-regra{margin-top:14px;padding:10px 12px;border-radius:10px;background:var(--ouro-claro);color:#92400e;font-weight:700;font-size:13px;line-height:1.5}
+.tr-btn{display:block;width:100%;min-height:48px;padding:0 18px;border:0;border-radius:12px;background:linear-gradient(90deg,#d97706,#ea580c);color:#fff;font-size:15px;font-weight:800;margin-top:14px;cursor:pointer;font-family:inherit;box-shadow:0 8px 18px -10px rgba(234,88,12,.8)}
+.tr-aviso{margin-top:12px;font-size:13px;color:#475569;line-height:1.5}
+.tr-topo{background:#f0fdf4;border:1px solid #16a34a;border-radius:11px;padding:10px 12px;font-size:14px;color:#15803d;font-weight:800;line-height:1.5}
+.tr .vbr{margin-top:14px}
+.tr-abre:focus-visible,.tr-btn:focus-visible{outline:3px solid #2563eb;outline-offset:2px;border-radius:8px}
+@media(min-width:700px){.tr{padding:22px 22px 18px}.tr-graf{height:232px}}
+/* a barra curta (cartão do Painel, linha do CPF no /comprar): o mesmo desenho, em pequeno */
+.trc{background:#fff;border:1px solid #fde68a;border-radius:12px;padding:11px 12px;font-family:'DM Sans',sans-serif}
+.trc-tit{font-size:15px;font-weight:800;color:#0f172a;line-height:1.35}
+.trc-tit em{font-style:normal;color:#b45309}
+.trc-cond{margin-top:6px;font-size:12.5px;font-weight:700;color:#92400e;line-height:1.4}
+.trc-barra{position:relative;height:12px;border-radius:12px;background:#f1f5f9;margin-top:10px;overflow:hidden}
+.trc-barra>i{position:absolute;left:0;top:0;bottom:0;border-radius:12px;background:linear-gradient(90deg,#f59e0b,#fb923c);transform-origin:left center;animation:trcEnche .9s cubic-bezier(.2,.8,.2,1) .15s both}
+@keyframes trcEnche{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.trc-leg{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:7px;font-size:12.5px;color:#475569;line-height:1.4}
+.trc-leg b{color:#b45309}
+@media(prefers-reduced-motion:reduce){
+  .tr-ja,.tr-ped,.tr-deg .enc{transition:none!important}
+  .tr.vis .tr-ped,.tr.vis .tr-marco.prox,.trc-barra>i{animation:none!important}
+}
+
+/* ===== TABELA-CTA-2811: "Quanto mais leva, menos paga por pomada" ===== */
+.tc{background:#fff;border:1.5px solid #bfdbfe;border-radius:16px;padding:16px 14px 14px;margin:0 0 14px;font-family:'DM Sans',sans-serif;color:#0f172a;box-shadow:0 10px 28px -18px rgba(37,99,235,.55);position:relative;overflow:hidden}
+.tc::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,#2563eb,#60a5fa)}
+.tc-tit{font-size:19px;font-weight:800;line-height:1.25;letter-spacing:-.2px}
+.tc-sub{font-size:13px;color:#475569;margin-top:4px;line-height:1.4}
+.tc-esc{display:grid;gap:5px;align-items:end;margin-top:14px;height:164px}
+.tc-deg{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;border-radius:10px;padding:0 0 4px}
+.tc-pr{font-size:14px;font-weight:800;color:#0f172a;white-space:nowrap;line-height:1.1;margin-bottom:4px;font-variant-numeric:tabular-nums}
+.tc-bar{width:100%;border-radius:8px 8px 3px 3px;background:#dbeafe;transform-origin:bottom center}
+.tc-q{font-size:12px;color:#475569;font-weight:700;margin-top:5px;white-space:nowrap;line-height:1.1}
+.tc-deg.on .tc-bar{background:linear-gradient(180deg,#3b82f6,#1d4ed8)}
+.tc-deg.on .tc-pr{color:#1d4ed8}
+.tc-deg.on .tc-q{color:#1d4ed8}
+.tc-deg.on{background:#eff6ff;box-shadow:inset 0 0 0 2px #2563eb}
+.tc.anim .tc-bar{animation:tcSobe .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 90ms)}
+@keyframes tcSobe{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.tc-msg{margin-top:12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:9px 11px;font-size:13.5px;line-height:1.45;color:#0f172a}
+.tc-msg b{color:#1d4ed8}
+.tc-lin{margin-top:8px;font-size:13px;color:#334155;line-height:1.45}
+.tc-lin b{color:#0f172a}
+.tc-bt{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin-top:12px;border:0;border-radius:12px;background:#1d4ed8;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;animation:tcPulso 2.4s ease-in-out 1.2s 2}
+@keyframes tcPulso{50%{box-shadow:0 0 0 6px rgba(37,99,235,.18)}}
+.tc-bt:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.tc-mais{font-size:12px;color:#475569;text-align:center;margin-top:6px}
+@media(min-width:700px){.tc{padding:20px 20px 16px}.tc-esc{height:170px;gap:10px}.tc-pr{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.tc.anim .tc-bar,.tc-bt{animation:none!important}}
+
+/* ===== TABELA-CTA-2811: a tabela de preços completa (janela) ===== */
+#tp-modal.tpn{position:fixed;inset:0;z-index:99997;background:rgba(15,23,42,.66);display:flex;align-items:center;justify-content:center;padding:16px;font-family:'DM Sans',sans-serif}
+.tpn-sh{background:#fff;border-radius:20px;width:100%;max-width:560px;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 -12px 60px rgba(0,0,0,.4);overflow:hidden;color:#0f172a}
+@media(max-width:640px){#tp-modal.tpn{align-items:flex-end;padding:0}.tpn-sh{border-radius:20px 20px 0 0;max-height:90vh}}
+.tpn-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 12px 8px 16px;flex-shrink:0}
+.tpn-t{font-size:20px;font-weight:800;line-height:1.2}
+.tpn-s{font-size:13px;color:#475569;margin-top:2px;line-height:1.35}
+.tpn-x{width:44px;height:44px;min-width:44px;border-radius:50%;border:1px solid #e2e8f0;background:#f8fafc;color:#334155;font-size:18px;cursor:pointer;flex-shrink:0}
+.tpn-anual{margin:0 16px 8px;font-size:13px;color:#334155;line-height:1.45;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:8px 10px}
+.tpn-anual b{color:#0f172a}
+.tpn-corpo{overflow:auto;padding:0 16px 8px;-webkit-overflow-scrolling:touch;flex:1}
+.tpn-cab,.tpn-l{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:6px;align-items:center}
+.tpn-cab{padding:0 10px 4px;font-size:12px;font-weight:800;color:#475569;position:sticky;top:0;background:#fff;z-index:1;padding-top:4px}
+.tpn-cab span+span{text-align:right}
+.tpn-l{width:100%;min-height:56px;margin-top:6px;padding:8px 10px;border-radius:12px;background:#fff;border:1px solid #e2e8f0;text-align:left;font-family:inherit;color:#0f172a;cursor:default}
+button.tpn-l{cursor:pointer}
+.tpn-l .q{font-size:14px;font-weight:800;line-height:1.25}
+.tpn-l .q small{display:block;font-size:12px;font-weight:700;color:#475569}
+.tpn-l .v{text-align:right;line-height:1.15}
+.tpn-l .v b{display:block;font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+.tpn-l .v small{display:block;font-size:12px;color:#475569;margin-top:2px;white-space:nowrap}
+.tpn-l .v.an b{color:#0f172a}
+.tpn-l.on{border:2px solid #2563eb;background:#eff6ff;padding:7px 9px}
+.tpn-l.on .q{color:#1d4ed8}
+.tpn-l.sel{box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+.tpn-eco{grid-column:1/-1;font-size:13px;font-weight:800;color:#1d4ed8;margin-top:2px}
+.tpn-selo{display:inline-block;margin-top:3px;font-size:12px;font-weight:700;color:#334155;border:1px solid #cbd5e1;border-radius:999px;padding:1px 7px;background:#fff;white-space:nowrap}
+.tpn-mais{display:block;width:100%;min-height:44px;margin-top:8px;background:#fff;color:#1d4ed8;border:1px solid #cbd5e1;border-radius:10px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+.tpn-pe{padding:10px 16px calc(12px + env(safe-area-inset-bottom));flex-shrink:0;border-top:1px solid #f1f5f9}
+.tpn-dica{font-size:12px;color:#475569;text-align:center;margin-bottom:8px}
+.tpn-b{display:block;width:100%;min-height:48px;background:#1d4ed8;color:#fff;border:0;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.tpn-x:focus-visible,.tpn-l:focus-visible,.tpn-b:focus-visible,.tpn-mais:focus-visible,#tp-modal .pm-aba:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+.tpn .pm-grupos{margin-top:4px}
+
+/* ===== TABELA-CTA-2811: número da barra de baixo do /comprar (digitar + atalhos) ===== */
+.cp-sq-num{min-width:52px;min-height:44px;padding:0 6px;border:1.5px dashed #94a3b8;border-radius:8px;background:#fff;color:#0f172a;font-size:16px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
+.cp-sq-num:focus-visible,.cp-sq-pop button:focus-visible,.cp-sq-pop input:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
+.cp-sq-pop{position:absolute;left:8px;right:8px;bottom:calc(100% + 8px);max-width:544px;margin:0 auto;background:#fff;border:1px solid #cbd5e1;border-radius:14px;box-shadow:0 -10px 40px rgba(15,23,42,.25);padding:12px;font-family:'DM Sans',sans-serif;z-index:5}
+.cp-sq-pop[hidden]{display:none}
+.cp-sq-tit{font-size:13px;font-weight:800;color:#0f172a;margin-bottom:8px}
+.cp-sq-lin{display:flex;gap:8px}
+.cp-sq-lin input{flex:1;min-width:0;min-height:48px;border:2px solid #2563eb;border-radius:10px;padding:0 12px;font-size:20px;font-weight:800;color:#0f172a;font-family:inherit}
+.cp-sq-ok{min-width:72px;min-height:48px;border:0;border-radius:10px;background:#1d4ed8;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.cp-sq-at{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}
+.cp-sq-at button{min-height:44px;border:1px solid #cbd5e1;border-radius:10px;background:#f8fafc;color:#0f172a;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;line-height:1.1}
+.cp-sq-at button small{display:block;font-size:12px;font-weight:600;color:#475569}
+.cp-sq-at button.on{background:#eff6ff;border-color:#2563eb;color:#1d4ed8}
+html.bancada #cp-sticky-pop{display:none!important}
+
+/* ===== TABELA-CTA-2811: oferta única do Anual no passo 3 ===== */
+.cp-callout-plano{font-size:14.5px;color:#0f172a;font-weight:800;line-height:1.35}
+.cp-callout-plano small{display:block;font-size:12.5px;font-weight:600;color:#334155;margin-top:1px}
+.cp-callout-eco2{font-size:14px;color:#0f172a;margin-top:6px;line-height:1.35}
+.cp-callout-eco2 b{color:#15803d;font-size:16px;white-space:nowrap}
+.cp-callout-ben{font-size:12.5px;color:#1e3a8a;margin-top:6px;line-height:1.45}
+
+/* ===== TABELA-CTA-2811: cartão único dos extras (gel e spray) ===== */
+.xt{--xt-cor:#22d3ee;--xt-bt:#0e7490;background:#0f172a;color:#f8fafc;border:1.5px solid #1e293b;border-radius:16px;padding:14px;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden}
+.xt::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--xt-cor)}
+.xt.xt-on{border-color:var(--xt-cor)}
+#cp-gel-section .xt,#cp-spray-section .xt{margin-bottom:14px}
+.xt-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.xt-opc{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--xt-cor);border:1px solid var(--xt-cor);border-radius:999px;padding:2px 9px}
+.xt-ult{font-size:12px;font-weight:800;color:#fbbf24;white-space:nowrap}
+.xt-cab{display:grid;grid-template-columns:112px minmax(0,1fr);gap:12px;align-items:center}
+.xt-foto{position:relative;width:112px;height:112px;padding:0;border:1px solid #334155;border-radius:12px;background:#020617;overflow:hidden;cursor:zoom-in;display:flex;align-items:center;justify-content:center}
+.xt-foto img{width:100%;height:100%;object-fit:contain;display:block}
+.xt-lupa{position:absolute;right:5px;bottom:5px;width:26px;height:26px;border-radius:50%;background:rgba(15,23,42,.85);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+.xt-nome{font-size:18px;font-weight:800;line-height:1.2;color:#fff}
+.xt-selos{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.xt-selo{font-size:12px;font-weight:700;line-height:1.3;color:#e2e8f0;background:#1e293b;border:1px solid #334155;border-radius:999px;padding:3px 9px}
+.xt-selo.xt-forte{color:#0f172a;background:var(--xt-cor);border-color:var(--xt-cor);font-weight:800}
+.xt-preco{margin-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.xt-preco .gel-vp-l1,.xt-preco .xt-l1{font-size:14px;color:#cbd5e1}
+.xt-preco .gel-vp-l1 b,.xt-preco .xt-l1 b{font-size:28px;font-weight:800;color:#fff;letter-spacing:-.5px}
+.xt-preco .gel-vp-l2,.xt-preco .xt-l2{font-size:13px;color:#0f172a;background:#fef3c7;border-radius:999px;padding:4px 10px;font-weight:600}
+.xt-preco .gel-vp-l2 b,.xt-preco .xt-l2 b{color:#0f172a;font-weight:800}
+.xt-preco .gel-vp-l1,.xt-preco .gel-vp-l2,.xt-preco .xt-l1,.xt-preco .xt-l2{display:block;width:fit-content;max-width:100%}
+.xt-reg{font-size:12px;color:#94a3b8;margin-top:6px;line-height:1.4}
+.xt-fato{font-size:12.5px;color:#cbd5e1;margin-top:8px;line-height:1.4}
+.xt-add{display:block;width:100%;height:48px;min-height:48px;margin-top:12px;border:0;border-radius:12px;background:var(--xt-bt);color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.xt-conta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;background:#1e293b;border:1.5px solid var(--xt-cor);border-radius:12px;padding:4px 12px 4px 4px}
+.xt-passos{display:flex;align-items:center;gap:2px}
+.xt-p{width:44px;height:44px;border-radius:10px;border:1.5px solid var(--xt-cor);background:#0f172a;color:#fff;font-size:20px;font-weight:800;line-height:1;cursor:pointer;font-family:inherit}
+.xt-p[disabled]{border-color:#334155;color:#64748b;cursor:not-allowed}
+.xt-conta input{width:48px;min-height:44px;padding:0;border:0;background:transparent;color:#fff;font-size:18px;font-weight:800;text-align:center;font-family:inherit;-moz-appearance:textfield}
+.xt-tot{text-align:right;line-height:1.25}
+.xt-tot b{display:block;font-size:17px;color:#fff;white-space:nowrap}
+.xt-tot small{display:block;font-size:12px;color:#cbd5e1;white-space:nowrap}
+.xt-mais{display:block;width:100%;min-height:44px;margin-top:8px;border:1px dashed #fbbf24;border-radius:10px;background:transparent;color:#fde68a;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;line-height:1.3;padding:6px 10px}
+.xt-mais b{color:#fff}
+.xt-ver{display:inline-flex;align-items:center;min-height:44px;margin-top:4px;padding:0 4px;border:0;background:none;color:var(--xt-cor);font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
+.xt-foto:focus-visible,.xt-add:focus-visible,.xt-p:focus-visible,.xt-mais:focus-visible,.xt-ver:focus-visible,.xt-conta input:focus-visible{outline:3px solid #fbbf24;outline-offset:2px}
+@media(min-width:700px){.xt-cab{grid-template-columns:128px minmax(0,1fr)}.xt-foto{width:128px;height:128px}}
+#xt-ov{position:fixed;inset:0;z-index:99999;background:rgba(2,6,23,.88);display:flex;align-items:center;justify-content:center;padding:16px}
+#xt-ov .xt-ov-in{position:relative;max-width:640px;width:100%;background:#0f172a;border-radius:16px;padding:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);text-align:center}
+#xt-ov img{width:100%;height:auto;max-height:78vh;object-fit:contain;border-radius:10px;display:block}
+#xt-ov .xt-ov-x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;border-radius:22px;background:#f1f5f9;color:#0f172a;font-size:20px;font-weight:900;cursor:pointer;z-index:1}
+#xt-ov .xt-ov-n{color:#fff;font-size:15px;font-weight:800;margin-top:8px}
+#xt-ov .xt-ov-x:focus-visible{outline:3px solid #fbbf24;outline-offset:2px}
 </style>
 </head>
 <body>
@@ -3727,6 +3929,9 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
     <!-- 📦 Foto do pedido embalado (montarFotoCaixa) — some sozinha se o arquivo não existir -->
     <div class="foto-caixa-slot"></div>
 
+    <!-- TABELA-CTA-2811: "Quanto mais leva, menos paga por pomada" — a 1ª informação do /comprar (preenchido por tcPintar, faixas reais) -->
+    <div id="cp-tabela-cta"></div>
+
     <!-- CONFIANÇA: um único bloco contra o medo de golpe (vídeo = ação principal, provas = secundária) -->
     <div style="background:#f0fdf4;border:1.5px solid #16a34a44;border-radius:12px;padding:12px 14px;margin-bottom:14px;">
       <div style="font-size:12.5px;color:#15803d;font-weight:700;line-height:1.4;text-align:center;margin-bottom:9px;">🛡️ Com receio de golpe? A gente quebra esse medo:</div>
@@ -3756,15 +3961,7 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
       <button type="button" id="cp-ver-conquista" onclick="conqAbrir('cp')" style="width:100%;min-height:44px;margin-top:10px;background:linear-gradient(135deg,#fffbeb,#ffffff);border:1.5px dashed #f59e0b;color:#92400e;border-radius:11px;padding:10px 12px;font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;">🏆 Ver conquista <span style="font-weight:500;color:#b45309;">· quanto falta pro próximo brinde</span></button>
     </div>
 
-    <!-- BANNER ASSINANTE — rola pro passo 3 NA PRÓPRIA página (nunca tira o cliente do checkout) -->
-    <div class="cp-banner-ass" id="cp-banner-ass" onclick="try{document.getElementById('cp-step-plano').scrollIntoView({behavior:'smooth',block:'start'});}catch(e){}">
-      <div class="cp-banner-icon">⭐</div>
-      <div class="cp-banner-text">
-        <div class="cp-banner-title">Assine e economize muito mais!</div>
-        <div class="cp-banner-desc"><!--TABELA-0112 SO-ANUAL-2611--><span class="sa-old">Planos a partir de <b>R$ 36,90/mês</b> ou no cartão em até <b>12x</b>. Ganhe <b>1 pomada grátis na adesão</b> + pomada <b>a partir de R$ 26/un</b> + peça quando quiser + 20% off em rifas.</span><span class="sa-new">Plano Anual: <b>R$ 358,80</b> à vista ou no cartão em até <b>12x</b>. Ganhe <b>1 pomada grátis na adesão</b> + pomada <b>a partir de <span class="t12-old">R$ 26</span><span class="t12-new">R$ 28</span>/un</b> + peça quando quiser + 20% off em rifas.</span></div>
-      </div>
-      <div style="font-size:18px;color:var(--blue);">→</div>
-    </div>
+    <!-- TABELA-CTA-2811 ("informação duplicada!"): o banner "Assine e economize muito mais!" saiu; a oferta do Anual mora só no passo 3 (#cp-callout) -->
 
     <!-- 2. CEP & FRETE (cedo: cliente vê o custo total antes de gastar tempo com dados) -->
     <div class="cp-step">
@@ -3795,13 +3992,15 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
         <div class="cp-callout-eco">
           <div class="cp-callout-icon">⭐</div>
           <div class="cp-callout-text">
-            <div class="cp-callout-title">Vire assinante e economize até <span id="cp-callout-eco" style="color:#16a34a;">R$ 0,00</span> <span style="font-weight:400;opacity:.85;">(no plano Anual)</span></div>
-            <div class="cp-callout-sub">+ 1 pomada grátis na adesão 🎁 + peça quando quiser, sem espera + 20% off em rifas</div>
+            <!-- TABELA-CTA-2811: a oferta única do Anual — preço do plano (PLANOS_INFO) e "a partir de" (faixas) preenchidos por tcCallout -->
+            <div class="cp-callout-plano">Plano Anual · <span data-tc-anual></span><small>à vista ou 12x no cartão · vale 12 meses</small></div>
+            <div class="cp-callout-eco2">Neste pedido você economiza <b id="cp-callout-eco">R$ 0,00</b></div>
+            <div class="cp-callout-ben">🎁 1 pomada grátis na adesão · pomada a partir de <span data-tc-min></span>/un · peça quando quiser · 20% off em rifas</div>
           </div>
         </div>
       </div>
       
-      <button onclick="mostrarTabelaPrecos('cp',(typeof cpQtd!=='undefined'?cpQtd:0))" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#eff6ff,#ffffff);border:1.5px dashed #2563eb;color:#1d4ed8;border-radius:11px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;">📊 Ver tabela de preços completa <span style="font-weight:500;color:#64748b;">· abre aqui mesmo</span></button>
+      <!-- TABELA-CTA-2811: o botão "Ver tabela de preços completa" foi para o cartão do topo -->
       <div id="cp-planos-wrap">
         <div style="font-size:11.5px;color:#475569;text-align:center;max-width:560px;margin:0 auto 10px;line-height:1.5;">O plano deixa a pomada mais barata em <b>toda</b> compra. Sem plano também dá pra comprar.</div>
         <div class="cp-planos-grid"><!-- preenchido por cpPlanosRender() — os preços vêm de FAIXAS_PRECO, nunca escritos aqui --></div>
@@ -3980,25 +4179,26 @@ html.bancada #bancada-lp button:focus-visible,html.bancada #bancada-lp a:focus-v
   
   <!-- BARRA FLUTUANTE FIXA NO RODAPÉ — total sempre visível com breakdown -->
   <div id="cp-sticky-bar" style="display:none;">
+    <div id="cp-sticky-pop" class="cp-sq-pop" role="dialog" aria-label="Digitar a quantidade" hidden></div><!-- TABELA-CTA-2811 -->
     <div style="max-width:560px;margin:0 auto;padding:12px 14px;">
       <!-- Linha 1: Controle de qtd + total grande -->
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
         <!-- Botões de qtd -->
         <div style="display:flex;align-items:center;background:#f1f5f9;border-radius:10px;flex-shrink:0;padding:3px;border:1px solid #e5e7eb;">
-          <button onclick="cpStickyQtd(-1)" style="background:#ffffff;border:none;color:#0f172a;width:34px;height:34px;font-size:18px;cursor:pointer;font-family:'DM Sans';border-radius:7px;box-shadow:0 1px 2px rgba(15,23,42,0.06);font-weight:600;">−</button>
-          <div style="font-size:15px;color:#0f172a;font-weight:700;min-width:38px;text-align:center;" id="cp-sticky-qtd">1</div>
-          <button onclick="cpStickyQtd(1)" style="background:#ffffff;border:none;color:#0f172a;width:34px;height:34px;font-size:18px;cursor:pointer;font-family:'DM Sans';border-radius:7px;box-shadow:0 1px 2px rgba(15,23,42,0.06);font-weight:600;">+</button>
+          <button onclick="cpStickyQtd(-1)" aria-label="Tirar 1 pomada" style="background:#ffffff;border:none;color:#0f172a;width:44px;height:44px;font-size:18px;cursor:pointer;font-family:'DM Sans';border-radius:7px;box-shadow:0 1px 2px rgba(15,23,42,0.06);font-weight:600;">−</button>
+          <button type="button" class="cp-sq-num" id="cp-sticky-qtd" aria-haspopup="dialog" aria-expanded="false" aria-describedby="cp-sq-dica" onclick="cpSqAbrir()">1</button><span id="cp-sq-dica" class="sr-only">quantidade de pomadas; toque para digitar</span><!-- TABELA-CTA-2811 -->
+          <button onclick="cpStickyQtd(1)" aria-label="Pôr mais 1 pomada" style="background:#ffffff;border:none;color:#0f172a;width:44px;height:44px;font-size:18px;cursor:pointer;font-family:'DM Sans';border-radius:7px;box-shadow:0 1px 2px rgba(15,23,42,0.06);font-weight:600;">+</button>
         </div>
         <!-- Totais -->
         <div style="flex:1;text-align:right;line-height:1.1;">
-          <div style="font-size:10px;color:#64748b;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Total do pedido</div>
+          <div style="font-size:12px;color:#475569;letter-spacing:1px;text-transform:uppercase;font-weight:600;">Total do pedido</div><!-- TABELA-CTA-2811 -->
           <div style="font-size:12px;color:#94a3b8;text-decoration:line-through;margin-top:2px;display:none;" id="cp-sticky-total-normal">R$ 0,00</div>
           <div style="font-family:'Bebas Neue';font-size:26px;color:#2563eb;font-weight:600;margin-top:2px;letter-spacing:0.5px;" id="cp-sticky-total">R$ 0,00</div>
-          <div style="font-size:10px;color:#15803d;margin-top:2px;font-weight:600;" id="cp-sticky-eco"></div>
+          <div style="font-size:12px;color:#15803d;margin-top:2px;font-weight:600;" id="cp-sticky-eco"></div><!-- TABELA-CTA-2811 -->
         </div>
       </div>
       <!-- Linha 2: Breakdown (qty + frete) -->
-      <div id="cp-sticky-breakdown" style="font-size:11px;color:#64748b;text-align:center;margin-bottom:8px;line-height:1.4;"></div>
+      <div id="cp-sticky-breakdown" style="font-size:12px;color:#475569;text-align:center;margin-bottom:8px;line-height:1.4;"></div>
       <!-- Botão finalizar (único agora — recebeu o id cp-btn-fin pro feedback "Processando...") -->
       <button id="cp-btn-fin" onclick="cpFinalizarComRifa()" style="width:100%;background:linear-gradient(135deg,var(--blue),var(--bd));color:#fff;border:none;border-radius:11px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:0.3px;box-shadow:0 8px 24px rgba(37,99,235,0.35);">🚀 Finalizar pedido</button>
     </div>
@@ -9015,20 +9215,7 @@ function _repetirRenderSprayBloco(){
   const adicionar=qtd===0
     ? '<button type="button" onclick="_repetirSetSprayQtd(1)" style="min-height:44px;margin-top:10px;background:linear-gradient(135deg,#0f766e,#115e59);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;font-family:\'DM Sans\',sans-serif;">+ Adicionar ao pedido</button>'
     : '';
-  return '<div style="background:#ffffff;border:1px solid #5eead488;border-radius:12px;padding:14px;margin-bottom:10px;position:relative;">'+
-    '<div style="font-size:12px;color:#0f766e;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;">💨 Opcional</div>'+
-    (estoqueSpray<=3?'<div style="position:absolute;top:10px;right:10px;background:#fbbf2422;border:0.5px solid #fbbf2466;color:#b45309;font-size:12px;padding:3px 7px;border-radius:4px;font-weight:600;">⚡ Últimas '+estoqueSpray+'</div>':'')+
-    '<div style="display:flex;gap:10px;align-items:center;">'+
-      '<div style="width:54px;height:54px;flex-shrink:0;background:#f1f5f9;border:0.5px solid #f1f5f9;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="/spray.png" alt="Spray TKTX 30 ml" style="width:54px;height:54px;object-fit:contain;" onerror="this.style.display=\'none\';if(this.parentNode)this.parentNode.innerHTML=\'<div style=&quot;font-size:24px;&quot;>💨</div>\';"/></div>'+
-      '<div style="flex:1;min-width:0;">'+
-        '<div style="font-size:14px;color:#0f172a;font-weight:600;">Spray TKTX</div>'+
-        '<div style="font-size:12px;color:#0f766e;margin-top:1px;">'+window.SPRAY_TEXTO.apoio+'</div>'+
-      '</div>'+
-    '</div>'+
-    window.sprayVendaCurta('#0f766e')+
-    adicionar+
-    window.sprayTabelaHtml(qtd,'_repetirSetSprayQtd','rp')+
-  '</div>';
+  return '<div style="margin-bottom:10px;">'+window.sprayXtCard({qtd:qtd,est:estoqueSpray,setFn:'_repetirSetSprayQtd',pref:'rp'})+'</div>';   // TABELA-CTA-2811
 }
 
 // Define a quantidade do spray no Repetir: trava no estoque, redesenha, refaz o resumo E RECOTA O FRETE.
@@ -11805,48 +11992,85 @@ const GEL_PRODUTO={id:'gel',nome:'gel',faixas:GEL_FAIXAS,cor:window.GEL_VP.cor,
 if(window.T0112){ window.gelTabelaHtml=function(qtd,setFn,idPref){ return window.extraTabelaHtml(GEL_PRODUTO,qtd,setFn||'cpGelSetQtd',idPref); }; }
 // Cartão do ViperShield — o mesmo nas 5 telas (/comprar, Repetir, /promo, BF, Fazer Pedido).
 // o = {v:'cp'|'mini'|'fp', qtd, est, setFn, pref}. Sem largura fixa: cabe em 375px sem rolar de lado.
-window.gelVpCard=function(o){
+// TABELA-CTA-2811 (empresa 28/11: "nada vendável… a imagem nem dá pra ver direito" e "as duas têm que ter o mesmo padrão"):
+// UM cartão de extra para o gel e o spray, nas telas onde eles aparecem. Fundo escuro neutro; a cor do produto só num detalhe.
+// Selo OPCIONAL · foto que abre grande ao tocar · nome · selos com fatos do produto · preço grande + vantagem por quantidade ·
+// "+ Adicionar ao pedido" largo · depois de adicionado, o mesmo − n + com o total. ⛔ Nenhuma promessa de efeito.
+// Preço SEMPRE das faixas do produto (GEL_FAIXAS / SPRAY_FAIXAS via as funções de sempre); estoque e gravação: intocados.
+// o = {id, nome, cor, bt, img, imgGrande, alt, selos:[[texto,forte]], precoHtml, regua, fato, qtd, est, setFn, pref, v,
+//      precoUn(q), valorTotal(q), prox(q) → {apartirDe,un,faltam} | null}
+window.xtCard=function(o){
   try{
-    const V=window.GEL_VP, est=Math.max(0,Number(o.est)||0), q=Math.min(est,Math.max(0,Number(o.qtd)||0));
-    const regra='<div class="gel-vp-regra" style="font-size:13px;color:#0f172a;line-height:1.45;margin-top:12px;background:'+V.fundo+';border:1px solid '+V.borda+';border-radius:10px;padding:9px 12px;display:flex;gap:6px;align-items:flex-start;"><span aria-hidden="true" style="flex-shrink:0;">💰</span><span style="flex:1;min-width:0;">'+window.gelVpRegra(true)+'</span></div>';   // NOMES-75-2611: 💰 ao lado das 2 linhas
-    const fatos=window.GEL_VP_FATOS.map(function(f){
-      return '<div style="display:flex;gap:7px;align-items:flex-start;font-size:12.5px;color:#334155;line-height:1.4;margin-top:6px;">'+
-        '<span aria-hidden="true" style="flex-shrink:0;">'+f[0]+'</span><span style="flex:1;min-width:0;">'+f[1]+'</span></div>';
-    }).join('');
-    const selo=(est>0&&est<=3)?'<span style="font-size:12px;color:#b45309;font-weight:700;white-space:nowrap;">⚡ Últimas '+est+' un</span>':'';
-    const add=q===0?('<button type="button" onclick="'+o.setFn+'(1)" style="width:100%;min-height:44px;margin-top:12px;background:'+V.cor+';color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">+ Adicionar ao pedido</button>'):'';
-    const foto='<div style="width:72px;height:72px;flex-shrink:0;border-radius:12px;overflow:hidden;background:#fff;border:1px solid #e2e8f0;display:flex;align-items:center;justify-content:center;">'+
-        '<img src="'+V.img+'" alt="'+V.nome+'" width="72" height="72" style="width:72px;height:72px;object-fit:contain;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';"/>'+
-        '<span aria-hidden="true" style="display:none;font-size:30px;">🧴</span></div>';
-    const cab='<div style="display:flex;align-items:center;gap:12px;">'+foto+
-        '<div style="flex:1;min-width:0;"><div style="font-size:15px;font-weight:800;color:#0f172a;line-height:1.25;">'+V.nome+'</div>'+
-        '<div style="font-size:12.5px;color:'+V.cor+';margin-top:3px;line-height:1.4;">'+V.apoio+' · '+V.uso+'</div></div></div>';
-    // FINAL-0112 (desenho): sem a tabelinha "1-4 / 5+" (a frase do preço já diz tudo) e sem botão + contador ao mesmo tempo:
-    // com 0 = só "+ Adicionar ao pedido"; com 1 ou mais = só o contador (− n +) e o total, com o R$/un embaixo.
+    const est=Math.max(0,Number(o.est)||0), q=Math.min(est,Math.max(0,Number(o.qtd)||0));
     const brl=function(v){ return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); };
-    const passo=function(rot,nome,alvo,lig){
-      return '<button type="button" aria-label="'+nome+'" '+(lig?('onclick="'+o.setFn+'('+alvo+')"'):'disabled aria-disabled="true"')+
-        ' style="width:44px;height:44px;border-radius:10px;border:1.5px solid '+(lig?V.cor:'#e2e8f0')+';background:#fff;font-size:20px;font-weight:800;line-height:1;cursor:'+
-        (lig?'pointer':'not-allowed')+';color:'+(lig?V.cor:'#cbd5e1')+';font-family:inherit;">'+rot+'</button>';
-    };
-    const conta=q===0?'':('<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;background:'+V.fundo+';border:1.5px solid '+V.cor+';border-radius:12px;padding:6px 12px 6px 6px;">'+
-        '<div style="display:flex;align-items:center;gap:4px;">'+
-          passo('−','Tirar 1 '+V.nome,q-1,true)+
-          '<input type="number" inputmode="numeric" min="0" max="'+est+'" value="'+q+'" id="'+o.pref+'-gel-qtd" aria-label="Quantidade de '+V.nome+'" '+
-            'onchange="'+o.setFn+'(this.value)" onkeydown="if(event.key===\'Enter\'){'+o.setFn+'(this.value);this.blur();}" '+
-            'style="width:48px;min-height:44px;padding:0;border:0;background:transparent;font-size:18px;font-weight:800;text-align:center;font-family:inherit;color:#0f172a;-moz-appearance:textfield;"/>'+
-          passo('+','Adicionar 1 '+V.nome,q+1,q<est)+
-        '</div>'+
-        '<div style="text-align:right;line-height:1.25;">'+
-          '<div style="font-size:17px;font-weight:800;color:#0f172a;white-space:nowrap;">'+brl(window.gelValorTotal(q))+'</div>'+
-          '<div style="font-size:12px;color:#475569;white-space:nowrap;">'+brl(window.gelPrecoUn(q))+' cada</div>'+
-        '</div>'+
-      '</div>');
-    const corpo=cab+regra+fatos+add+conta;
-    if(o.v==='fp') return (selo?'<div style="text-align:right;margin-bottom:6px;">'+selo+'</div>':'')+corpo;
-    const topo='<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;">'+
-        '<span style="font-size:12px;color:'+V.cor+';letter-spacing:1px;text-transform:uppercase;font-weight:700;">🧴 Opcional</span>'+selo+'</div>';
-    return '<div class="gel-vp-card" style="background:#fff;border:1.5px solid '+(q>0?V.cor:V.borda)+';border-radius:14px;padding:14px;margin:'+(o.v==='cp'?'0':'14px 0 10px')+';">'+topo+corpo+'</div>';
+    const ult=(est>0&&est<=3)?'<span class="xt-ult">⚡ Últimas '+est+' un</span>':'';
+    const foto='<button type="button" class="xt-foto" aria-label="Ver a foto grande: '+o.alt+'" onclick="xtFoto(\''+o.id+'\')" style="min-height:44px;">'+
+        '<img src="'+o.img+'" alt="'+o.alt+'" width="128" height="128" loading="lazy" onerror="if(this.dataset.r!==\'1\'&&\''+(o.imgReserva||'')+'\'){this.dataset.r=\'1\';this.src=\''+(o.imgReserva||'')+'\';}else{this.style.display=\'none\';}"/>'+
+        '<span class="xt-lupa" aria-hidden="true">🔍</span></button>';
+    const selos=(o.selos||[]).map(function(s){ return '<span class="xt-selo'+(s[1]?' xt-forte':'')+'">'+s[0]+'</span>'; }).join('');
+    const cab='<div class="xt-cab">'+foto+'<div style="min-width:0;"><div class="xt-nome">'+o.nome+'</div><div class="xt-selos">'+selos+'</div></div></div>';
+    const preco='<div class="xt-preco">'+o.precoHtml+'</div>'+(o.nota?'<div class="xt-reg">'+o.nota+'</div>':'');   // 1 linha curta embaixo do preço (os 2 cartões)
+    let mais='';
+    try{ const p=(q>0&&o.prox)?o.prox(q):null; if(p&&p.faltam>0&&p.apartirDe<=est&&Number(p.un)<Number(o.precoUn(q))) mais='<button type="button" class="xt-mais" onclick="'+o.setFn+'('+p.apartirDe+')" style="min-height:44px;">Leve mais <b>'+p.faltam+'</b> e pague <b>'+brl(p.un)+'</b> cada</button>'; }catch(e){}
+    const add=q===0?('<button type="button" class="xt-add" onclick="'+o.setFn+'(1)" style="min-height:44px;">+ Adicionar ao pedido</button>'):'';
+    const passo=function(rot,nome,alvo,lig){ return '<button type="button" class="xt-p" aria-label="'+nome+'" '+(lig?('onclick="'+o.setFn+'('+alvo+')"'):'disabled aria-disabled="true"')+' style="height:44px;">'+rot+'</button>'; };
+    const conta=q===0?'':('<div class="xt-conta"><div class="xt-passos">'+
+        passo('−','Tirar 1 '+o.nome,q-1,true)+
+        '<input type="number" inputmode="numeric" min="0" max="'+est+'" value="'+q+'" id="'+o.pref+'-'+o.id+'-qtd" aria-label="Quantidade de '+o.nome+'" '+
+          'onfocus="this.select()" onchange="'+o.setFn+'(this.value)" onkeydown="if(event.key===\'Enter\'){'+o.setFn+'(this.value);this.blur();}"/>'+
+        passo('+','Adicionar 1 '+o.nome,q+1,q<est)+'</div>'+
+        '<div class="xt-tot"><b>'+brl(o.valorTotal(q))+'</b><small>'+brl(o.precoUn(q))+' cada</small></div></div>');
+    return '<div class="xt xt-'+o.id+(q>0?' xt-on':'')+'" style="--xt-cor:'+o.cor+';--xt-bt:'+o.bt+';">'+
+      '<div class="xt-top"><span class="xt-opc">Opcional</span>'+ult+'</div>'+cab+preco+mais+add+conta+'</div>';
+  }catch(e){ return ''; }
+};
+// a foto grande por cima (o padrão do VER-CAIXA-2611): fecha no X, no fundo e no Esc
+window.XT_FOTOS={};
+window.xtFoto=function(id){
+  try{
+    const f=window.XT_FOTOS[id]; if(!f) return;
+    const velho=document.getElementById('xt-ov'); if(velho) velho.remove();
+    const de=document.activeElement;
+    const ov=document.createElement('div'); ov.id='xt-ov';
+    ov.setAttribute('role','dialog'); ov.setAttribute('aria-modal','true'); ov.setAttribute('aria-label',f.alt);
+    const fecha=function(){ const o=document.getElementById('xt-ov'); if(o) o.remove(); document.removeEventListener('keydown',esc); try{ if(de&&de.focus) de.focus(); }catch(e){} };
+    const esc=function(e){ if(e.key==='Escape') fecha(); };
+    ov.innerHTML='<div class="xt-ov-in"><button type="button" class="xt-ov-x" aria-label="Fechar a foto">✕</button>'+
+      '<img src="'+f.src+'" alt="'+f.alt+'" onerror="if(this.dataset.r!==\'1\'&&\''+(f.reserva||'')+'\'){this.dataset.r=\'1\';this.src=\''+(f.reserva||'')+'\';}"/><div class="xt-ov-n">'+f.nome+'</div></div>';
+    ov.addEventListener('click',function(e){ if(e.target===ov) fecha(); });
+    ov.querySelector('.xt-ov-x').addEventListener('click',fecha);
+    document.addEventListener('keydown',esc);
+    document.body.appendChild(ov);
+    try{ ov.querySelector('.xt-ov-x').focus(); }catch(e){}
+  }catch(e){}
+};
+// GEL: foto nova (anúncio do fabricante, sem a fileira de promessas) e a arte grande ao tocar
+window.GEL_VP_FOTO='/gel-vipershield-produto.jpg';
+window.GEL_VP_ARTE='/gel-vipershield-arte.jpg';
+window.XT_FOTOS.gel={src:window.GEL_VP_ARTE,reserva:window.GEL_VP_FOTO,alt:'ViperShield Gel 15 ml: a caixa e o frasco',nome:'ViperShield Gel 15 ml'};
+window.SPRAY_XT={nome:'Spray TKTX',img:'/spray.png',cor:'#5eead4',bt:'#0f766e'};
+window.XT_FOTOS.spray={src:'/spray.png',alt:'Spray TKTX 30 ml',nome:'Spray TKTX 30 ml'};
+window.sprayXtCard=function(o){
+  const F=SPRAY_FAIXAS, a=F[0], z=F[F.length-1], r=function(v){ return 'R$&nbsp;'+Number(v).toLocaleString('pt-BR'); };
+  const regua=F.length>2?('Faixas: '+F.slice(1).map(function(f){ return f.min+'+ '+r(f.un); }).join(' · ')):'';
+  return window.xtCard({id:'spray',nome:window.SPRAY_XT.nome,cor:window.SPRAY_XT.cor,bt:window.SPRAY_XT.bt,img:window.SPRAY_XT.img,alt:'Spray TKTX 30 ml',
+    selos:[['30 ml',true],['válvula spray',false],['aplica sem tirar a luva',false],[window.SPRAY_TEXTO.apoio,false],['mesma marca TKTX',false]],
+    precoHtml:'<span class="xt-l1"><b>'+r(a.un)+'</b> a unidade</span><span class="xt-l2">A partir de <b>'+z.min+'</b>: <b>'+r(z.un)+'</b> cada</span>',
+    nota:regua,qtd:o.qtd,est:o.est,setFn:o.setFn,pref:o.pref,
+    precoUn:window.sprayPrecoUn,valorTotal:window.sprayValorTotal,prox:window.sprayProximaFaixa});
+};
+
+window.gelVpCard=function(o){
+  // TABELA-CTA-2811: o cartão único dos extras (xtCard). Mesmas entradas e mesmo setFn/estoque de antes; só o desenho mudou.
+  try{
+    const V=window.GEL_VP;
+    const card=window.xtCard({id:'gel',nome:V.nome,cor:'#22d3ee',bt:V.cor,img:window.GEL_VP_FOTO,imgReserva:V.img,alt:'Caixa e frasco do '+V.nome,
+      selos:[['40% de lidocaína',true],[V.apoio,false],[V.uso,false]],
+      precoHtml:window.gelVpRegra(true),
+      nota:window.GEL_VP_FATOS.map(function(f){ return f[0]+' '+f[1]; }).join(' · '),
+      qtd:o.qtd,est:o.est,setFn:o.setFn,pref:o.pref,
+      precoUn:window.gelPrecoUn,valorTotal:window.gelValorTotal,prox:window.gelProximaFaixa});
+    return (o.v==='cp')?card:'<div style="margin:'+(o.v==='fp'?'0':'14px 0 10px')+';">'+card+'</div>';
   }catch(e){ return ''; }
 };
 
@@ -12118,23 +12342,8 @@ function renderSprayCard(){
     ? '<div class="cp-balm-actions"><button type="button" class="cp-balm-btn-add" style="min-height:44px;font-size:13px;background:linear-gradient(135deg,#0f766e,#115e59);" onclick="cpSpraySetQtd(1)">+ Adicionar ao pedido</button></div>'
     : '';
   section.style.display='block';
-  section.innerHTML=
-    '<div class="cp-balm-card" style="border-color:#5eead488;">'+
-      '<div class="cp-balm-tag" style="font-size:12px;color:#0f766e;border-color:#5eead488;">💨 Opcional</div>'+
-      selo+
-      '<div class="cp-balm-head">'+
-        '<div class="cp-balm-img-wrap"><img src="/spray.png" alt="Spray TKTX 30 ml" onerror="this.style.display=\'none\';if(this.parentNode)this.parentNode.innerHTML=\'<div style=&quot;font-size:32px;&quot;>💨</div>\';"/></div>'+
-        '<div class="cp-balm-info">'+
-          '<div class="cp-balm-name">Spray TKTX</div>'+
-          '<div class="cp-balm-sub" style="font-size:12px;color:#0f766e;">'+window.SPRAY_TEXTO.apoio+'</div>'+
-        '</div>'+
-      '</div>'+
-      '<div style="font-size:13px;color:#334155;line-height:1.5;margin-top:12px;">'+window.SPRAY_TEXTO.frase+'</div>'+
-      '<div class="cp-balm-benefits" style="grid-template-columns:1fr;gap:7px;margin-top:12px;">'+_sprayFatos+'</div>'+
-      adicionar+
-      window.sprayTabelaHtml(qtd,'cpSpraySetQtd','cp')+
-      pecas3dSoSprayHtml('cp')+   // 🧩 PEÇAS-BANCADA-1211 (sopeça): "Quero só o spray, sem pomada" (só com spray E pomada no pedido)
-    '</div>';
+  section.innerHTML=window.sprayXtCard({qtd:qtd,est:estoqueSpray,setFn:'cpSpraySetQtd',pref:'cp'})+   // TABELA-CTA-2811: o cartão único dos extras
+    pecas3dSoSprayHtml('cp');   // 🧩 PEÇAS-BANCADA-1211 (sopeça): "Quero só o spray, sem pomada" (só com spray E pomada no pedido)
 }
 
 // Define a quantidade do spray: trava no estoque, refaz card/resumo e RECOTA O FRETE (o peso muda a etiqueta).
@@ -15186,12 +15395,204 @@ function cpPlanoRodape(){
 }
 
 
+// ====== 📊 TABELA-CTA-2811 (empresa 28/11): "a pessoa pode pensar que a pomada custa R$ 50 para 1 e até 100 unidades,
+// essa é a primeira informação que deve ter". Cartão no começo do /comprar (e no Fazer Pedido) com a escadinha REAL do preço
+// por pomada, e a tabela completa refeita ("melhore esse catálogo, faça algo profissional e fácil de entender").
+// TUDO sai de FAIXAS_PRECO_BASE / FAIXAS_PRECO_99 / PLANOS_INFO: nenhum preço escrito aqui. Só visual: a conta do pedido
+// continua nas funções de sempre (calcularPrecos / calcularPrecosDiv); quantidade muda só por cpSetQtd / fpSetQtd.
+function tcBrl(v){ v=Number(v)||0; return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:(Math.round(v*100)%100?2:0),maximumFractionDigits:2}); }
+function tcGrupo(onde){
+  try{
+    const d=(typeof divisaoModelo!=='undefined'&&divisaoModelo)?divisaoModelo[onde]:null; let b=0,n=0;
+    if(d) MODELOS.forEach(function(m){ const q=Number(d[m.id]||0); if(grupoDe(m.id)==='99') n+=q; else b+=q; });
+    if(n>b&&FAIXAS_PRECO_99!==FAIXAS_PRECO_BASE) return '99';
+  }catch(e){}
+  return 'base';
+}
+function tcFaixas(g){ return (g==='99')?FAIXAS_PRECO_99:FAIXAS_PRECO_BASE; }
+// a escadinha do cartão: as faixas do começo enquanto o preço sem plano desce (no máximo 6 degraus)
+function tcEscada(g){
+  const F=tcFaixas(g), out=[];
+  for(let i=0;i<F.length&&out.length<6;i++){ if(out.length&&Number(F[i].precoUn)>Number(out[out.length-1].precoUn)) break; out.push(F[i]); }
+  return out;
+}
+function tcRot(fx){ return (fx.max>=99999)?(fx.min+'+ un'):(fx.min===fx.max?fx.min+' un':fx.min+'–'+fx.max+' un'); }
+function tcNomeGrupo(g){ try{ if(g==='99') return 'Linha 99%'; const m=MODELOS.find(function(x){ return x.id==='gold'; }); return m?m.curto:'Gold'; }catch(e){ return ''; } }
+function tcQtd(onde){ try{ return onde==='fp'?Math.max(0,parseInt(window.FP&&window.FP.qtd)||0):Math.max(0,parseInt(typeof cpQtd!=='undefined'?cpQtd:window.cpQtd)||0); }catch(e){ return 0; } }
+function tcPlano(onde){ try{ return (typeof pmPlanoDe==='function')?pmPlanoDe(onde):null; }catch(e){ return null; } }
+function tcUn(fx,plano){ return plano?Number(precoAssinanteUn(fx,plano)):Number(fx.precoUn); }
+// a frase do destaque: "levando N você paga R$ Y cada; com mais M passa a R$ Z" (só se a faixa seguinte for mais barata)
+function tcMsgHtml(onde,g,q){
+  const F=tcFaixas(g), pl=tcPlano(onde);
+  if(!(q>0)){ const a=F[0], b=F[1]; return 'Escolha a quantidade: <b>'+tcRot(a)+'</b> sai a <b>'+tcBrl(tcUn(a,pl))+'</b> cada'+(b?' e a partir de <b>'+b.min+'</b> já cai para <b>'+tcBrl(tcUn(b,pl))+'</b>.':'.'); }
+  const i=F.findIndex(function(f){ return q>=f.min&&q<=f.max; }), fx=F[i<0?F.length-1:i], nx=F[(i<0?F.length-1:i)+1];
+  let h='Levando <b>'+q+'</b> você paga <b>'+tcBrl(tcUn(fx,pl))+'</b> cada'+(pl==='anual'?' (plano Anual)':'');
+  if(nx&&tcUn(nx,pl)<tcUn(fx,pl)) h+='; com mais <b>'+(nx.min-q)+'</b> passa a <b>'+tcBrl(tcUn(nx,pl))+'</b>';
+  return h+'.';
+}
+function tcHtml(onde,q){
+  try{
+    const g=tcGrupo(onde), L=tcEscada(g), F=tcFaixas(g);
+    if(!L.length) return '';
+    const max=Math.max.apply(null,L.map(function(f){ return Number(f.precoUn); }));
+    const col='grid-template-columns:repeat('+L.length+',minmax(0,1fr))';
+    const degs=L.map(function(fx,i){
+      const on=q>=fx.min&&q<=fx.max, h=Math.round(24+84*Number(fx.precoUn)/max);
+      return '<div class="tc-deg'+(on?' on':'')+'" data-min="'+fx.min+'" data-max="'+fx.max+'" style="--i:'+i+'">'+
+        '<span class="tc-pr" data-v="'+Number(fx.precoUn)+'">'+tcBrl(fx.precoUn)+'</span>'+
+        '<span class="tc-bar" style="height:'+h+'px" aria-hidden="true"></span><span class="tc-q">'+tcRot(fx).replace(' un','')+'</span></div>';
+    }).join('');
+    const ult=L[L.length-1], resto=F.indexOf(ult)<F.length-1;
+    const anMin=Math.min.apply(null,F.map(function(f){ return Number(f.anualUn); })), anTop=Number(F[0].anualUn);
+    const A=(typeof PLANOS_INFO!=='undefined'&&PLANOS_INFO.anual)?PLANOS_INFO.anual:null;
+    let outro='';
+    try{
+      const og=(g==='99')?'base':'99';
+      if((og==='base'||pmModelosGrupo('99').length>0)&&FAIXAS_PRECO_99!==FAIXAS_PRECO_BASE){
+        const OF=tcFaixas(og), mn=Math.min.apply(null,OF.map(function(f){ return Number(f.precoUn); }));
+        outro='<div class="tc-lin">'+tcNomeGrupo(og)+': de <b>'+tcBrl(OF[0].precoUn)+'</b> a <b>'+tcBrl(mn)+'</b> por pomada.</div>';
+      }
+    }catch(e){}
+    const lista=L.map(function(fx){ return tcRot(fx)+' '+tcBrl(fx.precoUn); }).join(', ');
+    return '<section class="tc" aria-labelledby="tc-t-'+onde+'" data-tc="'+onde+'" data-g="'+g+'">'+
+      '<div class="tc-tit" id="tc-t-'+onde+'">💰 Quanto mais leva, menos paga por pomada</div>'+
+      '<div class="tc-sub">'+tcNomeGrupo(g)+' · preço de cada pomada, sem plano</div>'+
+      '<div class="tc-esc" style="'+col+'" role="img" aria-label="Preço por pomada: '+vipEsc(lista)+'">'+degs+'</div>'+
+      '<div class="tc-msg" aria-live="polite">'+tcMsgHtml(onde,g,q)+'</div>'+
+      (A?'<div class="tc-lin">⭐ No plano <b>Anual</b> ('+tcBrl(A.avista)+', vale 12 meses): de <b>'+tcBrl(anTop)+'</b> a <b>'+tcBrl(anMin)+'</b> por pomada.</div>':'')+
+      outro+
+      '<button type="button" class="tc-bt" onclick="mostrarTabelaPrecos(\''+onde+'\',tcQtd(\''+onde+'\'))">📊 Ver tabela completa</button>'+
+      (resto?'<div class="tc-mais">Mais de '+ult.max+' pomadas: veja na tabela completa</div>':'')+
+    '</section>';
+  }catch(e){ return ''; }
+}
+// conta de baixo pra cima a 1ª vez que o cartão aparece (só com movimento liberado)
+function tcAnima(el){
+  try{
+    if(!el||el.getAttribute('data-anim')) return; el.setAttribute('data-anim','1');
+    let red=false; try{ red=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+    if(red) return;
+    const roda=function(){
+      el.classList.add('anim');
+      const prs=el.querySelectorAll('.tc-pr'), top=prs.length?Number(prs[0].getAttribute('data-v')):0, t0=Date.now();
+      const passo=function(){
+        const k=Math.min(1,(Date.now()-t0)/900);
+        prs.forEach(function(p){ const v=Number(p.getAttribute('data-v')); p.textContent=tcBrl(k>=1?v:Math.round(top-(top-v)*k)); });
+        if(k<1) (window.requestAnimationFrame||setTimeout)(passo,16);
+      };
+      passo();
+    };
+    if('IntersectionObserver' in window){ const ob=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ ob.disconnect(); roda(); } },{threshold:.3}); ob.observe(el); }
+    else roda();
+  }catch(e){}
+}
+// pinta (1ª vez) ou só atualiza o destaque e a frase (as outras vezes: a animação não recomeça a cada toque)
+function tcPintar(onde){
+  onde=(onde==='fp')?'fp':'cp';
+  try{ tcCallout(); }catch(e){}
+  const box=document.getElementById(onde+'-tabela-cta'); if(!box) return;
+  const q=tcQtd(onde), g=tcGrupo(onde);
+  let el=box.querySelector('.tc');
+  if(!el||el.getAttribute('data-g')!==g){ box.innerHTML=tcHtml(onde,q); el=box.querySelector('.tc'); tcAnima(el); return; }
+  el.querySelectorAll('.tc-deg').forEach(function(d){ const mn=Number(d.getAttribute('data-min')), mx=Number(d.getAttribute('data-max')); d.classList.toggle('on',q>=mn&&q<=mx); });
+  const m=el.querySelector('.tc-msg'); if(m) m.innerHTML=tcMsgHtml(onde,g,q);
+}
+// a oferta ÚNICA do Anual no passo 3 (TABELA-CTA-2811, "informação duplicada!"): preço do plano e "a partir de" das faixas reais
+function tcCallout(){
+  const A=(typeof PLANOS_INFO!=='undefined'&&PLANOS_INFO.anual)?PLANOS_INFO.anual:null;
+  document.querySelectorAll('[data-tc-anual]').forEach(function(e){ if(A) e.textContent=tcBrl(A.avista); });
+  let mn=0; try{ mn=(typeof precoMinLoja==='function')?precoMinLoja('anual'):0; }catch(e){}
+  if(!(mn>0)){ try{ mn=Math.min.apply(null,FAIXAS_PRECO_BASE.map(function(f){ return Number(f.anualUn); })); }catch(e){} }
+  document.querySelectorAll('[data-tc-min]').forEach(function(e){ if(mn>0) e.textContent=tcBrl(mn); });
+}
+
+// ── a tabela completa (janela) — TABELA-CTA-2811 ──
+// 1 cor de destaque (azul), cinzas, números em negrito. Abas Linha 75% × Linha 99% (as de sempre: pmAbasHtml/pmAba),
+// faixa | sem plano | Anual, a faixa da quantidade marcada e rolada até ela, o menor preço com um selo discreto.
+// Tocar numa faixa (no /comprar e no Fazer Pedido) troca o botão de baixo para "Montar meu pedido com N" (cpSetQtd/fpSetQtd).
+function tpnLinhas(id,q,clicavel){
+  const F=tcFaixas(id), COMUNS=[1,5,10,25,50,100];
+  let best=null; F.forEach(function(f){ if(!best||Number(f.anualUn)<Number(best.anualUn)) best=f; });
+  return F.map(function(fx){
+    const atual=q>=fx.min&&q<=fx.max, eBest=(fx===best), comum=COMUNS.indexOf(fx.min)>=0||atual||eBest;
+    const n=atual?q:(Number(fx.exemplo)||fx.min), alvo=atual?q:fx.min;
+    const rot=(fx.max>=99999)?(fx.min+' ou mais'):(fx.min+' a '+fx.max);
+    const eco=Number(fx.precoUn)-Number(fx.anualUn);
+    const tag=clicavel?'button':'div';
+    return '<'+tag+(clicavel?' type="button" onclick="tpnEscolhe(this)" aria-pressed="false"':'')+' class="tpn-l'+(atual?' on':'')+'" data-n="'+alvo+'"'+(comum?'':' data-pmx="1" style="display:none"')+
+      ' aria-label="'+rot+' pomadas: sem plano '+tcBrl(fx.precoUn)+' cada, Anual '+tcBrl(fx.anualUn)+' cada'+(eBest?', menor preço':'')+'">'+
+      '<span class="q">'+rot+'<small>pomadas</small>'+(eBest?'<span class="tpn-selo">menor preço</span>':'')+'</span>'+
+      '<span class="v"><b>'+pmBrl(fx.precoUn)+'</b><small>'+n+' un = '+tcBrl(Number(fx.precoUn)*n)+'</small></span>'+
+      '<span class="v an"><b>'+pmBrl(fx.anualUn)+'</b><small>'+n+' un = '+tcBrl(Number(fx.anualUn)*n)+'</small></span>'+
+      (atual&&eco>0?'<span class="tpn-eco">💚 Você economiza '+tcBrl(eco)+' por pomada no Anual</span>':'')+
+    '</'+tag+'>';
+  }).join('');
+}
+function tpnPainel(id,g,q,clicavel,dois){
+  let sub=''; try{ sub=pmSubGrupo(id); }catch(e){ sub=''; }
+  return '<div data-pmg="'+id+'"'+((id===g||!dois)?'':' style="display:none;"')+'>'+
+    (sub?'<div class="tpn-s" style="text-align:center;margin:-2px 0 6px;">'+(dois?'':'<b>'+tcNomeGrupo(id)+'</b> · ')+sub+'</div>':'')+
+    '<div class="tpn-cab" aria-hidden="true"><span>Quantidade</span><span>Sem plano</span><span>Anual</span></div>'+
+    tpnLinhas(id,q,clicavel)+'</div>';
+}
+window.tpNovo=function(origem,qtd){
+  const old=document.getElementById('tp-modal'); if(old) old.remove();
+  const q=Math.max(0,parseInt(qtd)||0), clic=(origem==='cp'||origem==='fp');
+  const dois=(typeof pmDoisBlocos==='function')&&pmDoisBlocos();
+  const g=dois?((clic&&q>0)?tcGrupo(origem):((typeof pmGrupoPadrao==='function')?pmGrupoPadrao(null):'base')):'base';
+  const A=(typeof PLANOS_INFO!=='undefined'&&PLANOS_INFO.anual)?PLANOS_INFO.anual:null;
+  const ov=document.createElement('div');
+  ov.id='tp-modal'; ov.className='tpn';
+  ov.setAttribute('data-origem',origem||''); ov.setAttribute('data-q',String(q));
+  ov.innerHTML='<div class="tpn-sh" role="dialog" aria-modal="true" aria-labelledby="tpn-t">'+
+    '<div class="tpn-top"><div><div class="tpn-t" id="tpn-t">Tabela de preços</div><div class="tpn-s">Preço por pomada · quanto mais leva, menos paga</div></div>'+
+      '<button type="button" class="tpn-x" aria-label="Fechar a tabela" onclick="tpnFechar()">✕</button></div>'+
+    (A?'<div class="tpn-anual">⭐ <b>Plano Anual: '+tcBrl(A.avista)+'</b> uma vez, vale 12 meses, preço de assinante em todo pedido.</div>':'')+
+    '<div class="tpn-corpo"><div class="pm-grupos">'+(dois?pmAbasHtml(g):'')+tpnPainel('base',g,q,clic,dois)+(dois?tpnPainel('99',g,q,clic,dois):'')+
+      '<button type="button" class="tpn-mais" aria-expanded="false" onclick="pmMaisFaixas(this)">Ver tabela completa</button></div></div>'+
+    '<div class="tpn-pe">'+(q>0?'<div class="tpn-dica">Sua quantidade ('+q+' un) está marcada em azul'+(clic?' · toque numa faixa para mudar':'')+'</div>':(clic?'<div class="tpn-dica">Toque numa faixa para montar o pedido</div>':''))+
+      '<button type="button" class="tpn-b" id="tpn-b" onclick="tpnMontar()">'+(q>0?'Voltar pro pedido':'Fechar')+'</button></div>'+
+  '</div>';
+  ov.onclick=function(e){ if(e.target===ov) tpnFechar(); };
+  document.body.appendChild(ov);
+  document.body.style.overflow='hidden';
+  if(!window._tpnEsc){ window._tpnEsc=1; document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&document.getElementById('tp-modal')) tpnFechar(); }); }
+  try{ window._tpnDe=document.activeElement; }catch(e){}
+  try{ const on=ov.querySelector('[data-pmg="'+g+'"] .tpn-l.on'); if(on&&on.scrollIntoView) on.scrollIntoView({block:'center'}); }catch(e){}
+  try{ const x=ov.querySelector('.tpn-x'); if(x&&x.focus) x.focus({preventScroll:true}); }catch(e){}
+  try{ logAba&&logAba('tabela-precos-'+(origem||'?'),'modal'); }catch(e){}
+};
+function tpnFechar(){
+  const m=document.getElementById('tp-modal'); if(m) m.remove();
+  document.body.style.overflow='';
+  try{ const b=window._tpnDe; window._tpnDe=null; if(b&&b.focus&&document.body.contains(b)) b.focus({preventScroll:true}); }catch(e){}
+}
+function tpnEscolhe(bt){
+  try{
+    const ov=document.getElementById('tp-modal'); if(!ov) return;
+    ov.querySelectorAll('.tpn-l.sel').forEach(function(x){ x.classList.remove('sel'); x.setAttribute('aria-pressed','false'); });
+    bt.classList.add('sel'); bt.setAttribute('aria-pressed','true');
+    const n=parseInt(bt.getAttribute('data-n'))||0, q=parseInt(ov.getAttribute('data-q'))||0, b=document.getElementById('tpn-b');
+    ov.setAttribute('data-n',String(n));
+    if(b) b.textContent=(n>0&&n!==q)?('Montar meu pedido com '+n):(q>0?'Voltar pro pedido':'Fechar');
+  }catch(e){}
+}
+// fecha e, se a pessoa tocou numa faixa diferente, põe a quantidade pelo MESMO caminho dos botões (cpSetQtd / fpSetQtd)
+function tpnMontar(){
+  const ov=document.getElementById('tp-modal'); if(!ov){ return; }
+  const o=ov.getAttribute('data-origem'), n=parseInt(ov.getAttribute('data-n'))||0, q=parseInt(ov.getAttribute('data-q'))||0;
+  tpnFechar();
+  if(!(n>0)||n===q) return;
+  try{ if(o==='cp'&&typeof cpSetQtd==='function') cpSetQtd(n); else if(o==='fp'&&typeof fpSetQtd==='function') fpSetQtd(n); }catch(e){}
+}
+
 // ====== 📊 TABELA DE PREÇOS EM MODAL (15/08, pedido da empresa) ======
 // Abre POR CIMA da página (nunca navega), lê SEMPRE de FAIXAS_PRECO (fonte única),
 // cada plano com sua cor, e acende a linha da quantidade que o cliente está comprando.
 // Celular: gaveta que sobe de baixo. PC: cartão centralizado. z-index 99997 (abaixo do Pix).
 window.mostrarTabelaPrecos=function(origem,qtd){
   try{
+    if(window.T0112&&typeof window.tpNovo==='function'){ window.tpNovo(origem,qtd); return; }   // TABELA-CTA-2811: a tabela nova (01/12)
     const old=document.getElementById('tp-modal'); if(old) old.remove();
     const q=Math.max(0,parseInt(qtd)||0);
     const fxAtual=q>0?faixaDe(q):null;
@@ -15945,6 +16346,7 @@ window.cpQtd=1;
 function renderCpKits(){
   const grid=document.getElementById('cp-kits');
   if(!grid) return;
+  try{ tcPintar('cp'); }catch(e){}   // TABELA-CTA-2811: o cartão do topo acompanha a quantidade (só visual)
   
   const p=calcularPrecos(cpQtd);
   const f=p.faixa;
@@ -16022,6 +16424,47 @@ function renderCpKits(){
 }
 
 // Define a quantidade (com validação)
+// TABELA-CTA-2811 (empresa 28/11, print da barra de baixo "− 293 +": "tinha que ter a opção de clicar e selecionar com número,
+// exemplo botar 10"). Tocar no número abre a digitação (teclado numérico, número atual selecionado) e atalhos de 1 toque com o
+// começo das faixas reais (FAIXAS_PRECO_BASE). Confirmar (Enter, OK, sair do campo ou atalho) chama o MESMO cpSetQtd dos − e +.
+// Vazio, 0, negativo ou texto: volta ao anterior. Acima do limite: o cpSetQtd já trava (999 e estoque).
+function cpSqAtalhos(){
+  try{ return FAIXAS_PRECO_BASE.map(function(f){ return Number(f.min); }).filter(function(n){ return n>1; }).slice(0,6); }catch(e){ return [5,10,25,50,100,200]; }
+}
+function cpSqAbrir(){
+  try{
+    const pop=document.getElementById('cp-sticky-pop'); if(!pop) return;
+    if(!pop.hidden){ cpSqFechar(); return; }
+    const q=Math.max(0,parseInt(typeof cpQtd!=='undefined'?cpQtd:window.cpQtd)||0);
+    pop.innerHTML='<div class="cp-sq-tit" id="cp-sq-tit">Quantas pomadas?</div>'+
+      '<div class="cp-sq-lin"><input id="cp-sq-in" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="4" aria-labelledby="cp-sq-tit" value="'+q+'" '+
+        'onkeydown="if(event.key===\'Enter\'){event.preventDefault();cpSqAplicar(this.value);}else if(event.key===\'Escape\'){event.preventDefault();cpSqFechar(true);}" onblur="cpSqBlur(event)">'+
+        '<button type="button" class="cp-sq-ok" onpointerdown="event.preventDefault()" onclick="cpSqAplicar(document.getElementById(\'cp-sq-in\').value)">OK</button></div>'+
+      '<div class="cp-sq-at" role="group" aria-label="Atalhos de quantidade">'+cpSqAtalhos().map(function(n){
+        let un=''; try{ un=tcBrl(faixaModelo('gold',n).precoUn)+'/un'; }catch(e){}
+        return '<button type="button" class="'+(n===q?'on':'')+'" onpointerdown="event.preventDefault()" onclick="cpSqAplicar('+n+')">'+n+(un?'<small>'+un+'</small>':'')+'</button>';
+      }).join('')+'</div>';
+    pop.hidden=false;
+    const b=document.getElementById('cp-sticky-qtd'); if(b) b.setAttribute('aria-expanded','true');
+    const i=document.getElementById('cp-sq-in'); if(i){ i.focus(); try{ i.select(); }catch(e){} }
+  }catch(e){}
+}
+function cpSqFechar(foco){
+  const pop=document.getElementById('cp-sticky-pop'); if(pop){ pop.hidden=true; pop.innerHTML=''; }
+  const b=document.getElementById('cp-sticky-qtd'); if(b){ b.setAttribute('aria-expanded','false'); if(foco) try{ b.focus(); }catch(e){} }
+}
+function cpSqBlur(ev){
+  // sair do campo confirma (quando o foco não foi para um botão da própria janelinha)
+  try{ const pop=document.getElementById('cp-sticky-pop'); if(ev&&ev.relatedTarget&&pop&&pop.contains(ev.relatedTarget)) return; }catch(e){}
+  setTimeout(function(){ const pop=document.getElementById('cp-sticky-pop'); if(pop&&!pop.hidden){ const i=document.getElementById('cp-sq-in'); cpSqAplicar(i?i.value:''); } },0);
+}
+function cpSqAplicar(v){
+  const atual=Math.max(0,parseInt(typeof cpQtd!=='undefined'?cpQtd:window.cpQtd)||0);
+  const s=String(v==null?'':v).trim(), n=/^\d+$/.test(s)?parseInt(s,10):NaN;   // só dígitos: "-3", "abc" e vazio não mudam nada
+  cpSqFechar(true);
+  if(!isFinite(n)||n<1||n===atual) return;   // vazio, 0, negativo ou texto: fica o que estava
+  cpSetQtd(n);                               // o mesmo caminho dos − e + (trava 999 e estoque lá dentro)
+}
 // Helper da barra flutuante: incrementa/decrementa cpQtd direto (não depende de input)
 function cpStickyQtd(delta){
   const atual=Math.max(0,parseInt(cpQtd)||0);   // 🧩 PEÇAS-BANCADA-1211 (sopeça): com 0 pomada o + vai a 1 (antes pulava para 2) e o − fica em 0
@@ -16224,6 +16667,7 @@ function atualizaCpResumo(){
         } else {
           callout.classList.add('show');callout.style.display='';
           if(calloutEco)calloutEco.textContent='R$ '+p.economia.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+          try{ if(typeof tcCallout==='function') tcCallout(); }catch(e){}   // TABELA-CTA-2811: preço do Anual e "a partir de" (só texto)
         }
       }
     }else{
@@ -24908,7 +25352,7 @@ function vipBrindesHtml(op){
   h+='<p class="vbr-regra">'+(prim
       ?'<b>Entram depois do seu 1º pedido pago</b><span>1 por pedido, e nenhum vence</span>'
       :'<b>1 brinde por pedido</b><span>Os outros ficam guardados e não vencem</span>')+'</p>'+
-    '<p class="vbr-pe">O modelo a gente envia conforme o estoque · não vale em pedido da promoção.</p>';
+    '<p class="vbr-pe">O brinde é '+vipEsc(trModeloBrinde())+' · não vale em pedido da promoção.</p>';   // TRILHA-2811
   if(op.trilha) h+='<button type="button" id="home-ver-conquista" class="vip-bt vbr-b2" onclick="conqAbrir(\'home\')">🏆 Ver minha trilha</button>';
   return h+'</section>';
 }
@@ -24997,20 +25441,22 @@ function vipHomeHtml(){
   if(vipFonte()==='cpf') return '';
   return vipBrindesHtml({onde:'home',trilha:true});
 }
-// ── A FRAÇÃO E A BARRA (regra 3 e 4) — UMA função desenha, os 3 lugares chamam ──
+// ── A FRAÇÃO E A BARRA (regra 3 e 4) — UMA função desenha, os lugares chamam ──
+// TRILHA-2811 (empresa 28/11, "cade a conquista nova?"): o desenho novo em pequeno — "Faltam R$ X para ganhar +N TKTX",
+// o mínimo de pomadas do pedido, a barra e "Você já tem R$ A de R$ B". Números SEMPRE do banco (proximo).
+function trBrl(v){ v=vipNum(v); return (Math.round(v*100)%100)?vipBrl(v):vipBrl0(v); }   // TRILHA-2811: centavo só quando existe
 function vipBarraHtml(prox){
   if(!prox){
-    return '<div style="background:#f0fdf4;border:1px solid #16a34a;border-radius:11px;padding:10px 12px;font-size:12.5px;color:#15803d;font-weight:700;line-height:1.5;">🏆 Você chegou no topo da trilha. Obrigado pela parceria!</div>';
+    return '<div class="trc-topo" style="background:#f0fdf4;border:1px solid #16a34a;border-radius:11px;padding:10px 12px;font-size:12.5px;color:#15803d;font-weight:700;line-height:1.5;">🏆 Você chegou no topo da trilha. Obrigado pela parceria!</div>';
   }
   var para=vipNum(prox.valor), falta=vipNum(prox.falta), de=Math.max(0,para-falta);
   var pct=Math.max(0,Math.min(100,vipNum(prox.pct)));
-  return '<div style="background:#fff;border:1px solid #fde68a;border-radius:11px;padding:10px 12px;">'+
-    '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:15px;font-weight:800;color:#0f172a;">'+
-      '<span>'+(Math.round(de*100)%100?vipBrl(de):vipBrl0(de))+' <span style="color:#64748b;font-weight:700;">/ '+vipBrl0(para)+'</span></span>'+   // 🎁 16/10 (juiz): R$ 9.687,50 + R$ 312,50 = R$ 10.000 (igual ao e-mail)
-      '<span style="font-size:12px;color:#b45309;font-weight:800;">'+pct+'%</span></div>'+
-    '<div style="height:10px;background:#f1f5f9;border-radius:6px;margin-top:7px;overflow:hidden;">'+
-      '<div style="height:10px;width:'+pct+'%;background:linear-gradient(90deg,#f59e0b,#b45309);border-radius:6px;"></div></div>'+
-    '<div style="font-size:12.5px;color:#475569;margin-top:7px;line-height:1.5;">Faltam <b>'+vipBrl(falta)+'</b> pro próximo brinde: <b>'+vipEsc(vipCondicao(prox))+'</b>.</div>'+
+  var un=vipNum(prox.brinde_un), min=vipNum(prox.min_un);
+  return '<div class="trc" role="group" aria-label="Trilha de conquistas: você já tem '+vipEsc(trBrl(de))+' de '+vipEsc(vipBrl0(para))+'">'+
+    '<div class="trc-tit">🏆 Faltam <em>'+trBrl(falta)+'</em> para ganhar <em>+'+un+' TKTX</em></div>'+
+    (min>0?'<div class="trc-cond">📦 O brinde vem no pedido de '+min+' '+vipPomadasTxt(min)+' ou mais</div>':'')+
+    '<div class="trc-barra" aria-hidden="true"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="trc-leg"><span>Você já tem <b>'+trBrl(de)+'</b> de '+vipBrl0(para)+'</span><span>'+pct+'%</span></div>'+
   '</div>';
 }
 // ── O CARD DO CLIENTE (Meu Painel e Meus Pedidos) ──
@@ -25052,7 +25498,7 @@ function vipCardHtml(){
     });
     h+='</div>';
   }
-  if(!guard.length) h+='<div style="font-size:12px;color:#64748b;margin-top:9px;">1 brinde por pedido — o que sobrar fica guardado e não vence. O modelo a gente envia conforme o estoque. Não vale em pedido da promoção.</div>';
+  if(!guard.length) h+='<div style="font-size:12px;color:#475569;margin-top:9px;">1 brinde por pedido — o que sobrar fica guardado e não vence. O brinde é '+vipEsc(trModeloBrinde())+'. Não vale em pedido da promoção.</div>';   // TRILHA-2811
   h+='</div>';
   if(guard.length) h+=vipBrindesHtml({onde:'card'});   // 🎁 16/10: os tickets, o "Como retirar" e a regra em 1 linha
   return h;
@@ -25154,7 +25600,7 @@ function vipCpfLinhaHtml(){
       ?'⚠️ A sua trilha está no WhatsApp final <b>'+vipEsc(String(v.tel_ultimos4||''))+'</b>. Com outro número, este pedido <b>não soma</b> nela.'
       :'⚠️ O brinde está guardado no WhatsApp final <b>'+vipEsc(String(v.tel_ultimos4||''))+'</b>. Com outro número o brinde <b>não entra</b> neste pedido.')+'</div>';
   }
-  h+='<div style="font-size:12px;color:#64748b;margin-top:8px;">1 brinde por pedido — o que sobrar fica guardado e não vence. O modelo a gente envia conforme o estoque.</div>'+
+  h+='<div style="font-size:12px;color:#475569;margin-top:8px;">1 brinde por pedido — o que sobrar fica guardado e não vence. O brinde é '+vipEsc(trModeloBrinde())+'.</div>'+   // TRILHA-2811
   '</div>';
   return h;
 }
@@ -25893,45 +26339,144 @@ function conqTopo(titulo){
   return '<div class="conq-top"><div id="conq-t" class="conq-t">'+titulo+'</div>'+
     '<button type="button" class="conq-x" onclick="conqFechar()" aria-label="fechar">✕</button></div>';
 }
-// modo: 'eu' (logado) · 'cpf' (sem login, digitou o CPF) · 'pub' (só a escada) · 'erro' (o banco não respondeu a trilha dele)
-function conqHtml(modo,origem){
-  var h='', lista=[];
-  if(modo==='eu'||modo==='cpf'){
-    var prox=vipProximo(), guard=vipGuardados(), nome=(modo==='cpf'&&window.VIP)?String(window.VIP.primeiro_nome||''):'';
-    lista=vipDegraus();
-    h+=conqTopo('🏆 '+(nome?vipEsc(nome)+', a sua trilha':'Sua trilha de conquistas'));
-    h+='<div class="conq-corpo">';
-    h+='<div class="conq-sec">Onde você está</div><div class="conq-barra">'+vipBarraHtml(prox)+'</div>';
-    if(guard.length) h+=vipBrindesHtml({onde:origem});   // 🎁 16/10: o cartão "🎁 Seus brindes" (no checkout, o deste pedido vem marcado)
-    h+='<div class="conq-sec">Até onde pode chegar</div><ol class="conq-lista">';
-    var _neste=null; try{ _neste=(typeof vipNesteId==='function')?vipNesteId(origem):null; }catch(e){ _neste=null; }   // 🎁 16/10 (juiz)
-    lista.forEach(function(d,i){ h+=conqLinhaHtml(d,i,modo,prox?prox.id:null,_neste,guard.length>0); });
-    h+='</ol>';
-    var prim=(typeof vipPrimeiro==='function'&&vipPrimeiro());   // 🏆 28/09: o 1º pedido não leva
-    if(!guard.length&&prim)
-      h+='<div class="conq-cap" style="margin-top:10px;">'+vipPrimeiroTxt()+'</div>';
-  }else{
-    var P=window.CONQ_PUB;
-    lista=(P&&Array.isArray(P.degraus))?P.degraus:[];
-    h+=conqTopo('🏆 Trilha de conquistas');
-    h+='<div class="conq-corpo">';
-    if(modo==='erro') h+='<div class="conq-aviso">Não consegui carregar a sua trilha agora. Atualize a página em instantes — nada se perdeu, o brinde não vence.</div>';
-    if(P&&P.ativa===false){
-      h+='<div class="conq-aviso">A trilha de conquistas está pausada agora.</div>';
-    }else if(!lista.length){
-      if(modo!=='erro') h+='<div class="conq-aviso">Não consegui carregar agora. Tenta de novo em instantes.</div>';
-    }else{
-      h+='<div class="conq-cap">Cada pedido pago na loja soma no seu total. Chegou no degrau, o brinde fica guardado e não vence. O 1º pedido não leva brinde: ele entra a partir do pedido seguinte.</div>';
-      h+='<div class="conq-sec">Até onde pode chegar</div><ol class="conq-lista">';
-      lista.forEach(function(d,i){ h+=conqLinhaHtml(d,i,'pub',null); });
-      h+='</ol>';
-      if(origem==='cp'&&!conqLogado()&&document.getElementById('cp-cpf'))
-        h+='<button type="button" class="conq-b2" onclick="conqIrCpf()">Já comprou? Digitar meu CPF ou CNPJ</button>';
+// ── TRILHA-2811: A JANELA NOVA (desenho aprovado no protótipo comprar_novo_2611, "cade a conquista nova?") ──
+// Os MESMOS dados e estados de antes (degraus do banco, guardado, retirado no #X, 1º pedido não leva, erro, pausada);
+// muda só o desenho: título grande "Faltam R$ X para ganhar +N TKTX", o mínimo de pomadas, a barra com uma bolinha por
+// degrau (o da vez ocupa mais espaço), "Este pedido +R$ C" listrado quando há pedido montado, e a escada completa.
+// Quem dá o brinde continua sendo o gatilho do banco: aqui é só espelho.
+function trModeloBrinde(){ try{ return 'TKTX '+vipModeloNome('gold'); }catch(e){ return 'TKTX Gold 75%'; } }   // TRILHA-2811: desde 27/11 o brinde é sempre Gold 75%
+function trRegraHtml(){
+  return '<div class="tr-regra">1 brinde por pedido · o brinde fica guardado e não vence · vale a partir do 2º pedido · o brinde é '+vipEsc(trModeloBrinde())+' · não vale em pedido da promoção</div>';
+}
+function trDegrausOrd(lista){ return (lista||[]).filter(function(d){ return vipNum(d&&d.valor)>0; }).slice().sort(function(a,b){ return vipNum(a.valor)-vipNum(b.valor); }); }
+function trCurto(v){ v=vipNum(v); return v>=10000?(Number(v/1000).toLocaleString('pt-BR')+' mil'):v.toLocaleString('pt-BR'); }
+// o degrau da vez ocupa 3 vezes o espaço dos outros (lupa): assim o pedido aparece andando
+function trPesos(D,k){ return D.map(function(d,i){ return i===k?3:1; }); }
+function trPos(D,i,k){ var w=trPesos(D,k), t=w.reduce(function(a,b){ return a+b; },0), c=0; for(var j=0;j<i;j++) c+=w[j]; return c/t*100; }
+function trPct(D,v,k){
+  var w=trPesos(D,k), t=w.reduce(function(a,b){ return a+b; },0), M=[0].concat(D.map(function(d){ return vipNum(d.valor); }));
+  v=Math.max(0,Math.min(vipNum(v),M[M.length-1]));
+  for(var j=0;j<D.length;j++) if(v<=M[j+1]) return trPos(D,j,k)+w[j]/t*100*(v-M[j])/Math.max(1,(M[j+1]-M[j]));
+  return 100;
+}
+// quanto o pedido montado NESTA tela soma (a MESMA conta do gatilho: vipEntra com o teto)
+function trPedidoNaTela(origem){
+  try{
+    if(origem==='cp'&&typeof vipCpValorProdutos==='function') return vipEntra(vipCpValorProdutos(),vipCpUn());
+    if(origem==='fp'&&typeof vipFpValorProdutos==='function') return vipEntra(vipFpValorProdutos(),vipFpUn());
+  }catch(e){}
+  return 0;
+}
+// a escada completa: degraus que enchem, "+N TKTX" em cima, valor e "pedido N+ un" embaixo
+function trEscadaHtml(D,acum,modo){
+  if(!D.length) return '';
+  var col='', eixo='', n=D.length, passo=n>1?Math.round(130/(n-1)):0;
+  D.forEach(function(d,i){
+    var ant=i?vipNum(D[i-1].valor):0, v=vipNum(d.valor), est=String(d.estado||'');
+    var enc=(est==='retirado'||est==='guardado')?1:Math.max(0,Math.min(1,(acum-ant)/Math.max(1,(v-ant))));
+    col+='<div class="tr-col'+(enc>=1?' ok':'')+'"><span class="pr">+'+vipNum(d.brinde_un)+'<small>TKTX</small></span>'+
+      '<div class="tr-deg" style="height:'+(34+i*passo)+'px"><span class="enc" data-h="'+(enc*100).toFixed(1)+'%"></span></div></div>';
+    var st='';
+    if(modo==='eu'||modo==='cpf'){
+      if(est==='retirado'){
+        var ag=false; try{ ag=(modo==='eu'&&d.pedido_id!=null&&!!window.MEUS_PED_ST&&String(window.MEUS_PED_ST[String(d.pedido_id)]||'')==='aguardando'); }catch(e){ ag=false; }
+        st='<span class="st"'+(ag?' style="color:#92400e"':'')+'>'+(ag?'⏳ reservado':'✓ retirado')+(modo==='eu'&&d.pedido_id?' no #'+vipEsc(d.pedido_id):'')+'</span>';
+      }else if(est==='guardado') st='<span class="st">🎁 guardado</span>';
     }
+    eixo+='<div><b>'+trCurto(v)+'</b><span>pedido</span><span class="un">'+vipNum(d.min_un)+'+ un</span>'+st+'</div>';
+  });
+  var ex=null; for(var i=0;i<D.length;i++){ if(vipNum(D[i].valor)>acum){ ex=D[i]; break; } } if(!ex) ex=D[D.length-1];
+  var cols='grid-template-columns:repeat('+n+',minmax(0,1fr))';
+  return '<div class="tr-esc" id="tr-esc"><div class="tr-ex"><b>Como funciona:</b> some suas compras. Bateu o valor, o brinde entra no seu pedido que tiver o mínimo de pomadas.<br>'+
+      'Exemplo: somou <b>R$ '+vipNum(ex.valor).toLocaleString('pt-BR')+'</b> → pedido de <b>'+vipNum(ex.min_un)+' pomadas ou mais</b> leva <b>+'+vipNum(ex.brinde_un)+' TKTX de brinde</b>.</div>'+
+    '<div class="tr-graf" style="'+cols+'">'+col+'</div><div class="tr-eixo" style="'+cols+'">'+eixo+'</div></div>';
+}
+function trAbreBt(aberta,rot){ return '<button type="button" class="tr-abre" aria-expanded="'+(aberta?'true':'false')+'" aria-controls="tr-esc" onclick="trAbre(this)" data-rot="'+vipEsc(rot)+'">'+(aberta?'Fechar a escada':vipEsc(rot))+'</button>'; }
+function trAbre(bt){
+  try{
+    var box=bt.closest('.tr'); if(!box) return;
+    var ab=!box.classList.contains('aberta'); box.classList.toggle('aberta',ab);
+    bt.setAttribute('aria-expanded',ab?'true':'false'); bt.textContent=ab?'Fechar a escada':(bt.getAttribute('data-rot')||'Ver a escada completa');
+    if(ab) trAnima(box,true);
+  }catch(e){}
+}
+// enche a barra e os degraus (duplo quadro: o navegador desenha o 0 antes de animar). Sem movimento: CSS tira a transição.
+function trAnima(box,soEscada){
+  try{
+    if(!box) return;
+    var enche=function(){ try{ box.querySelectorAll('.tr-deg .enc').forEach(function(e){ e.style.height=box.classList.contains('aberta')?e.getAttribute('data-h'):'0'; }); }catch(e){} };
+    var raf=window.requestAnimationFrame||function(f){ return setTimeout(f,16); };
+    raf(function(){ raf(function(){ if(!soEscada) box.classList.add('vis'); enche(); }); });
+  }catch(e){}
+}
+// o miolo da janela. modo: 'eu' (logado) · 'cpf' (sem login, digitou o CPF) · 'pub' (só a escada) · 'erro'
+function trCorpoHtml(modo,origem){
+  var h='';
+  if(modo==='eu'||modo==='cpf'){
+    var prox=vipProximo(), guard=vipGuardados(), D=trDegrausOrd(vipDegraus());
+    var prim=(typeof vipPrimeiro==='function'&&vipPrimeiro());
+    var acum=prox?Math.max(0,vipNum(prox.valor)-vipNum(prox.falta)):(D.length?vipNum(D[D.length-1].valor):0);
+    var ped=trPedidoNaTela(origem), depois=acum+ped;
+    h+='<section class="tr" aria-label="Trilha de conquistas">';
+    if(!prox){
+      h+='<div class="tr-topo">🏆 Você chegou no topo da trilha. Obrigado pela parceria!</div>';
+    }else{
+      var falta=vipNum(prox.falta), un=vipNum(prox.brinde_un), min=vipNum(prox.min_un);
+      h+='<div class="tr-tit" role="heading" aria-level="3">🏆 Faltam <em>'+trBrl(falta)+'</em> para ganhar <em>+'+un+' TKTX</em></div>';
+      if(min>0) h+='<div class="tr-cond">📦 O brinde vem no pedido de '+min+' '+vipPomadasTxt(min)+' ou mais</div>';
+      if(ped>0){
+        var neste=null; try{ neste=(origem==='cp')?vipCpDeg():(origem==='fp'&&typeof vipFpDeg==='function'?vipFpDeg():null); }catch(e){ neste=null; }
+        var sub;
+        if(neste&&!prim) sub='Este pedido já leva <b>+'+vipNum(neste.brinde_un)+' TKTX de brinde</b> 🎉';
+        else if(depois>=vipNum(prox.valor)) sub=prim?('Com este pedido você bate a meta. '+vipEsc(vipPrimeiroTxt())):('Com este pedido você bate a meta. O brinde fica guardado até um pedido de <b>'+min+' pomadas ou mais</b>.');
+        else sub='Este pedido anda <b>'+trBrl(ped)+'</b> · depois dele faltam só <b>'+trBrl(vipNum(prox.valor)-depois)+'</b>';
+        h+='<div class="tr-sub">'+sub+'</div>';
+      }
+    }
+    if(D.length){
+      var k=-1; for(var i=0;i<D.length;i++){ if(prox&&String(D[i].id)===String(prox.id)){ k=i; break; } }
+      if(k<0){ for(var j=0;j<D.length;j++){ if(vipNum(D[j].valor)>acum){ k=j; break; } } }
+      if(k<0) k=D.length-1;
+      var marcos='';
+      [null].concat(D).forEach(function(d,i){
+        var v=d?vipNum(d.valor):0, est=d?String(d.estado||''):'';
+        var cls=(i===0||v<=acum||est==='retirado'||est==='guardado')?'ok':((d&&prox&&String(d.id)===String(prox.id))?'prox':'');
+        var val=(i===k||i===k+1)?'<span class="tr-valor">'+(i?vipBrl0(v):'R$ 0')+'</span>':'';
+        marcos+='<span class="tr-marco '+cls+'" style="left:'+trPos(D,i,k).toFixed(2)+'%">'+(d?'<span class="tr-premio">+'+vipNum(d.brinde_un)+'<small>TKTX</small></span>':'')+val+'</span>';
+      });
+      var alvo=prox?vipNum(prox.valor):vipNum(D[D.length-1].valor);
+      h+='<div class="tr-trilho" style="--a:'+trPct(D,acum,k).toFixed(2)+'%;--b:'+trPct(D,depois,k).toFixed(2)+'%" role="img" aria-label="Você já tem '+vipEsc(trBrl(acum))+' de '+vipEsc(vipBrl0(alvo))+(ped>0?'; com este pedido, '+vipEsc(trBrl(depois)):'')+'">'+
+        '<span class="tr-fundo"></span><span class="tr-ped"></span><span class="tr-ja"></span>'+marcos+'</div>';
+      h+='<div class="tr-leg"><span><i></i>Você já tem '+trBrl(acum)+' de '+vipBrl0(alvo)+'</span>'+(ped>0?'<span><i class="ped"></i>Este pedido +'+trBrl(ped)+'</span>':'')+'</div>';
+    }
+    if(guard.length) h+=vipBrindesHtml({onde:origem});   // os tickets "🎁 Seus brindes" (guardado / neste pedido / retirar / esperando reposição)
+    else if(prim) h+='<div class="tr-aviso">'+vipEsc(vipPrimeiroTxt())+'</div>';
+    if(D.length) h+=trAbreBt(false,'Ver a escada completa')+trEscadaHtml(D,acum,modo);
+    h+=trRegraHtml()+'</section>';
+    return h;
   }
-  var _temLista=(modo==='eu'||modo==='cpf')&&vipGuardados().length>0;   // 🎁 16/10: a regra e o "modelo conforme o estoque" moram no cartão
-  if(!_temLista) h+='<p class="conq-regra">1 brinde por pedido · o modelo a gente envia conforme o estoque · não vale em pedido da promoção.</p>';
-  h+='</div>';
+  var P=window.CONQ_PUB, lista=trDegrausOrd((P&&Array.isArray(P.degraus))?P.degraus:[]);
+  h+='<section class="tr" aria-label="Trilha de conquistas">';
+  if(modo==='erro') h+='<div class="conq-aviso">Não consegui carregar a sua trilha agora. Atualize a página em instantes — nada se perdeu, o brinde não vence.</div>';
+  if(P&&P.ativa===false){
+    h+='<div class="conq-aviso">A trilha de conquistas está pausada agora.</div>';
+  }else if(!lista.length){
+    if(modo!=='erro') h+='<div class="conq-aviso">Não consegui carregar agora. Tenta de novo em instantes.</div>';
+  }else{
+    var tot=lista.reduce(function(a,d){ return a+vipNum(d.brinde_un); },0);
+    h+='<div class="tr-tit" role="heading" aria-level="3"'+(modo==='erro'?' style="margin-top:12px"':'')+'>🏆 Compre e ganhe TKTX: a cada degrau um brinde</div>'+
+      '<div class="tr-sub">São até <b>+'+tot+' TKTX</b> de brinde somando suas compras.</div>';
+    if(origem==='cp'&&!conqLogado()&&document.getElementById('cp-cpf'))
+      h+='<button type="button" class="tr-btn" onclick="conqIrCpf()">Já comprou? Digitar meu CPF ou CNPJ</button>';
+    h+=trAbreBt(false,'Ver a escada de brindes')+trEscadaHtml(lista,0,'pub');
+  }
+  h+=trRegraHtml()+'</section>';
+  return h;
+}
+function conqHtml(modo,origem){
+  var nome=(modo==='cpf'&&window.VIP)?String(window.VIP.primeiro_nome||''):'';
+  var h=conqTopo((modo==='eu'||modo==='cpf')?('🏆 '+(nome?vipEsc(nome)+', a sua trilha':'Sua trilha de conquistas')):'🏆 Trilha de conquistas');
+  h+='<div class="conq-corpo">'+trCorpoHtml(modo,origem)+'</div>';
   h+='<div class="conq-pe"><button type="button" class="conq-b" onclick="conqFechar()">'+(origem==='home'?'Fechar':'Voltar pro pedido')+'</button></div>';
   return h;
 }
@@ -25964,6 +26509,7 @@ async function conqAbrir(origem){
   if(modo==='pub'||modo==='erro') await conqPublica();
   if(document.getElementById('conq-modal')!==ov) return;      // fechou (ou abriu de novo) enquanto carregava
   ov.innerHTML=conqCss()+'<div class="conq-sh" role="dialog" aria-modal="true" aria-labelledby="conq-t">'+conqHtml(modo,origem)+'</div>';
+  try{ trAnima(ov.querySelector('.tr')); }catch(e){}   // TRILHA-2811: a barra enche ao abrir
   try{ conqBotoes(); }catch(e){}
   try{ var x2=ov.querySelector('.conq-x'); if(x2) x2.focus(); }catch(e){}
   try{ if(typeof logAba==='function') logAba('conquista-'+modo,origem); }catch(e){}
@@ -35923,7 +36469,7 @@ async function loadFazerPedido(){
   html+='</div>';
   // 🚨 AVISO de limite do plano (aparece quando passa do max)
   html+='<div id="fp-aviso-limite" style="display:none;"></div>';
-  html+='<button onclick="mostrarTabelaPrecos(\'fp\',(window.FP&&window.FP.qtd)||0)" style="width:100%;margin-top:10px;background:linear-gradient(135deg,#eff6ff,#ffffff);border:1.5px dashed #2563eb;color:#1d4ed8;border-radius:11px;padding:12px;font-size:13px;font-weight:800;cursor:pointer;font-family:\'DM Sans\',sans-serif;">📊 Ver tabela de preços completa <span style="font-weight:500;color:#64748b;">· abre aqui mesmo</span></button>';
+  html+='<div id="fp-tabela-cta" style="margin-top:10px;">'+tcHtml('fp',(window.FP&&window.FP.qtd)||0)+'</div>';   // TABELA-CTA-2811
   html+='<button type="button" id="fp-ver-conquista" onclick="conqAbrir(\'fp\')" style="width:100%;min-height:44px;margin-top:10px;background:linear-gradient(135deg,#fffbeb,#ffffff);border:1.5px dashed #f59e0b;color:#92400e;border-radius:11px;padding:10px 12px;font-size:13px;font-weight:800;cursor:pointer;font-family:\'DM Sans\',sans-serif;">🏆 Ver conquista <span style="font-weight:500;color:#b45309;">· quanto falta pro próximo brinde</span></button>';
   html+='</div>';
   
@@ -35944,16 +36490,15 @@ async function loadFazerPedido(){
 
   // 🧴 GEL ANESTÉSICO — pele aberta (irmão do balm; some sozinho se estoque=0)
   html+='<div id="fp-gel-wrap" style="display:none;">';
-  html+='<div class="card" style="margin-bottom:14px;border:1px solid #93c5fd88;position:relative;">';
-  html+=window.T0112?'<div style="font-size:12px;color:#0e7490;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:10px;">🧴 Opcional</div>'/*GEL-VIPER-0112*/:'<div style="font-size:11px;color:#1d4ed8;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:10px;">🧴 Para pele aberta — Gel Anestésico</div>';
+  html+=window.T0112?'<div style="margin-bottom:14px;">'/*TABELA-CTA-2811*/:'<div class="card" style="margin-bottom:14px;border:1px solid #93c5fd88;position:relative;">';
+  html+=window.T0112?''/*TABELA-CTA-2811: o cartão do gel já diz "Opcional"*/:'<div style="font-size:11px;color:#1d4ed8;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:10px;">🧴 Para pele aberta — Gel Anestésico</div>';
   html+='<div id="fp-gel-bloco"></div>';
   html+='</div>';
   html+='</div>';
 
   // 💨 SPRAY TKTX (irmão do gel; some sozinho se estoque=0 — controlado por fpRenderSprayBloco)
   html+='<div id="fp-spray-wrap" style="display:none;">';
-  html+='<div class="card" style="margin-bottom:14px;border:1px solid #5eead488;position:relative;">';
-  html+='<div style="font-size:12px;color:#0f766e;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:10px;">💨 Opcional</div>';
+  html+='<div style="margin-bottom:14px;">';   // TABELA-CTA-2811: o cartão único do spray já tem o selo "Opcional"
   html+='<div id="fp-spray-bloco"></div>';
   html+='</div>';
   html+='</div>';
@@ -36198,6 +36743,7 @@ function fpSetQtd(v){
   try{ fpRenderBalmBloco(); }catch(e){}   // 15/08: a sugestão de balms acompanha a quantidade
   try{ fpRenderGelBloco(); }catch(e){}    // o gel acompanha o mesmo re-render
   try{ fpRenderSprayBloco(); }catch(e){}  // 13/09: o spray também
+  try{ tcPintar('fp'); }catch(e){}   // TABELA-CTA-2811: o cartão acompanha a quantidade
   fpAtualizar();
   
   // 🛒 Salva carrinho parcial (sistema de abandono)
@@ -36793,20 +37339,7 @@ function fpRenderSprayBloco(){
   const adicionar=qtd===0
     ? '<button type="button" onclick="fpSetSprayQtd(1)" style="min-height:44px;margin-top:12px;background:linear-gradient(135deg,#0f766e,#115e59);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:\'DM Sans\',sans-serif;">+ Adicionar ao pedido</button>'
     : '';
-  bloco.innerHTML=
-    '<div style="display:flex;gap:12px;align-items:center;">'+
-      '<div style="width:74px;height:74px;flex-shrink:0;background:#f1f5f9;border:0.5px solid #f1f5f9;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:5px;">'+
-        '<img src="/spray.png" alt="Spray TKTX 30 ml" style="width:64px;height:64px;object-fit:contain;" onerror="this.style.display=\'none\';if(this.parentNode)this.parentNode.innerHTML=\'<div style=&quot;font-size:30px;&quot;>💨</div>\';"/>'+
-      '</div>'+
-      '<div style="flex:1;min-width:0;">'+
-        '<div style="font-size:14px;color:#0f172a;font-weight:600;line-height:1.2;">Spray TKTX</div>'+
-        '<div style="font-size:12px;color:#0f766e;margin-top:3px;line-height:1.35;">'+window.SPRAY_TEXTO.apoio+'</div>'+
-        (estoque<=3?'<div style="font-size:12px;color:#b45309;margin-top:4px;font-weight:600;">⚡ Últimas '+estoque+' un</div>':'')+
-      '</div>'+
-    '</div>'+
-    window.sprayVendaCurta('#0f766e')+
-    adicionar+
-    window.sprayTabelaHtml(qtd,'fpSetSprayQtd','fp')+
+  bloco.innerHTML=window.sprayXtCard({qtd:qtd,est:estoque,setFn:'fpSetSprayQtd',pref:'fp'})+   // TABELA-CTA-2811: o cartão único dos extras
     pecas3dSoSprayHtml('fp');   // 🧩 PEÇAS-BANCADA-1211 (sopeça): "Quero só o spray, sem pomada"
 }
 
