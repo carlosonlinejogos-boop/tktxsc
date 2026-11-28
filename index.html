@@ -2633,17 +2633,19 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
 .tc-q-an{background:var(--tc-an)}
 .tc-leg .tc-mais{margin-left:auto;font-size:12px;font-weight:700;color:#475569;border:1px solid #cbd5e1;border-radius:999px;padding:1px 8px}
 .tc-rola{margin:8px -4px 0;padding:0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;scrollbar-width:thin}
-.tc-graf{display:grid;gap:4px;align-items:end;min-width:470px;min-height:178px;padding-top:4px}
-.tc-col{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;min-width:0;border-radius:10px;padding:2px 3px 4px;position:relative}
+.tc-graf{display:grid;gap:4px;align-items:end;min-width:500px;min-height:196px;padding-top:4px}/* TABELA-CTA-2811c */
+.tc-col{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;min-width:0;border-radius:10px;padding:2px 1px 4px;position:relative}
 .tc-col.on{background:#f1f5f9;box-shadow:inset 0 0 0 2px #0f172a}
 .tc-aqui-selo{align-self:center;max-width:100%;box-sizing:border-box;text-align:center;font-size:12px;font-weight:800;color:#fff;background:#0f172a;border-radius:10px;padding:1px 6px;white-space:normal;margin-bottom:6px;line-height:1.25}
 .tc-aqui-selo[hidden]{display:none}
-.tc-par{display:flex;align-items:flex-end;justify-content:center;gap:3px}
+.tc-par{display:flex;align-items:flex-end;justify-content:center;gap:2px}
 .tc-b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1 1 0;min-width:0}
-.tc-v{font-size:12px;font-weight:800;line-height:1.1;margin-bottom:3px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tc-v{display:block;text-align:center;font-weight:800;margin:0 0 4px;white-space:nowrap;font-variant-numeric:tabular-nums}/* TABELA-CTA-2811c: "R$" pequeno em cima do número */
+.tc-v small{display:block;font-size:12px;font-weight:700;line-height:1.05;opacity:.9}
+.tc-v b{display:block;font-size:13px;font-weight:800;line-height:1.1}
 .tc-v-sp{color:var(--tc-sp)}
 .tc-v-an{color:var(--tc-an)}
-.tc-bar{width:100%;max-width:26px;border-radius:6px 6px 2px 2px;transform-origin:bottom center}
+.tc-bar{display:block;width:100%;max-width:26px;min-height:36px;border-radius:6px 6px 0 0;transform-origin:bottom center}/* TABELA-CTA-2811c */
 .tc-b-sp{background:var(--tc-sp)}
 .tc-b-an{background:var(--tc-an)}
 .tc-col:not(.on) .tc-bar{opacity:.78}
@@ -2662,7 +2664,7 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
 .tc.tc-rolavel .tc-gw::after{content:"";position:absolute;right:-4px;top:8px;bottom:0;width:30px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff);pointer-events:none}
 .tc.tc-fim .tc-gw::after{display:none}
 @media(min-width:520px){.tc-graf{min-width:0}}
-@media(min-width:700px){.tc{padding:20px 20px 16px}.tc-graf{min-height:200px;gap:10px}.tc-v{font-size:14px}.tc-bar{max-width:34px}}
+@media(min-width:700px){.tc{padding:20px 20px 16px}.tc-graf{min-height:216px;gap:4px}.tc-bar{max-width:34px}}/* TABELA-CTA-2811c: 2 rótulos com R$ cabem lado a lado */
 @media(prefers-reduced-motion:reduce){.tc.anim .tc-bar,.tc-bt{animation:none!important}.tc-aba{transition:none}.tc-rola{scroll-behavior:auto}}
 
 /* ===== TABELA-CTA-2811: a tabela de preços completa (janela) ===== */
@@ -15497,7 +15499,7 @@ function tcGrafHtml(onde,g,q){
   const L=tcEscada(g);
   if(!L.length) return '';
   const max=Math.max.apply(null,L.map(function(f){ return Number(f.precoUn); }));
-  const alt=function(v){ return Math.round(14+96*Number(v)/max); };
+  const alt=function(v){ return Math.max(36,Math.round(36+84*Number(v)/max)); };   // TABELA-CTA-2811c: nunca um toco
   const lista=L.map(function(fx){ return tcRot(fx)+': sem plano '+tcBrl(fx.precoUn)+', Anual '+tcBrl(fx.anualUn); }).join('; ');
   return '<div class="tc-rola" tabindex="0" aria-label="Gráfico de preços; no celular, deslize para o lado" onscroll="tcFim(this)"><div class="tc-graf" role="img" aria-label="'+vipEsc(tcNomeGrupo(g)+', preço por pomada. '+lista)+'" style="grid-template-columns:repeat('+L.length+',minmax(0,1fr))">'+
     L.map(function(fx,i){
@@ -15505,8 +15507,8 @@ function tcGrafHtml(onde,g,q){
       return '<div class="tc-col'+(on?' on':'')+'" data-min="'+fx.min+'" data-max="'+fx.max+'" style="--i:'+i+'">'+
         '<span class="tc-aqui-selo"'+(on?'':' hidden')+'>você está aqui</span>'+
         '<div class="tc-par">'+
-          '<div class="tc-b"><span class="tc-v tc-v-sp" data-v="'+Number(fx.precoUn)+'">'+tcN(fx.precoUn)+'</span><span class="tc-bar tc-b-sp" style="height:'+alt(fx.precoUn)+'px"></span></div>'+
-          '<div class="tc-b"><span class="tc-v tc-v-an" data-v="'+Number(fx.anualUn)+'">'+tcN(fx.anualUn)+'</span><span class="tc-bar tc-b-an" style="height:'+alt(fx.anualUn)+'px"></span></div>'+
+          '<div class="tc-b"><span class="tc-v tc-v-sp" data-v="'+Number(fx.precoUn)+'"><small>R$</small><b>'+tcN(fx.precoUn)+'</b></span><span class="tc-bar tc-b-sp" style="height:'+alt(fx.precoUn)+'px"></span></div>'+
+          '<div class="tc-b"><span class="tc-v tc-v-an" data-v="'+Number(fx.anualUn)+'"><small>R$</small><b>'+tcN(fx.anualUn)+'</b></span><span class="tc-bar tc-b-an" style="height:'+alt(fx.anualUn)+'px"></span></div>'+
         '</div><span class="tc-q">'+tcRot(fx).replace(' un','')+'</span></div>';
     }).join('')+'</div></div>';
 }
@@ -15531,7 +15533,6 @@ function tcHtml(onde,q){
       tcAbasHtml(onde,g)+
       '<div class="tc-leg"><span><i class="tc-q-sp" aria-hidden="true"></i>Sem plano</span><span><i class="tc-q-an" aria-hidden="true"></i>Anual'+(A?' ('+tcBrl(A.avista)+'/ano)':'')+'</span>'+(resto?'<span class="tc-mais">até '+ult.max+' un</span>':'')+'</div>'+
       '<div id="tc-graf-'+onde+'" class="tc-gw" role="tabpanel" aria-labelledby="tc-aba-'+onde+'-'+g+'">'+tcGrafHtml(onde,g,q)+'</div>'+
-      '<div class="tc-msg" aria-live="polite"'+(q>0?'':' hidden')+'>'+tcMsgHtml(onde,g,q)+'</div>'+
       '<button type="button" class="tc-bt" onclick="mostrarTabelaPrecos(\''+onde+'\',tcQtd(\''+onde+'\'))">📊 Ver tabela completa</button>'+
     '</section>';
   }catch(e){ return ''; }
@@ -15545,7 +15546,7 @@ function tcRoda(el){
     const vs=el.querySelectorAll('.tc-v'), t0=Date.now(), top=Math.max.apply(null,[].map.call(vs,function(v){ return Number(v.getAttribute('data-v')); }));
     const passo=function(){
       const k=Math.min(1,(Date.now()-t0)/800);
-      vs.forEach(function(p){ const v=Number(p.getAttribute('data-v')); p.textContent=tcN(k>=1?v:Math.round(top-(top-v)*k)); });
+      vs.forEach(function(p){ const v=Number(p.getAttribute('data-v')); (p.querySelector('b')||p).textContent=tcN(k>=1?v:Math.round(top-(top-v)*k)); });   // TABELA-CTA-2811c: o "R$" fica
       if(k<1) (window.requestAnimationFrame||setTimeout)(passo,16);
     };
     passo();
