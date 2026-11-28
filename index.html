@@ -336,7 +336,7 @@ html.so-anual .lp-plans-grid, html.so-anual .np-plans-grid{grid-template-columns
         document.documentElement.classList.add('um-capa');
         setTimeout(function(){ try{ document.documentElement.classList.remove('um-capa'); }catch(e){} },3000);
       }
-      var l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=um?('/hero-'+um+'.png'):(window.T0112?'/hero-gold.png':'/hero-4-modelos.png');   // CAPA-75-0112
+      var l=document.createElement('link'); l.rel='preload'; l.as='image'; l.href=um?('/hero-'+um+'.png'):(window.T0112?'/hero-gold-75-99.jpg':'/hero-4-modelos.png');   // CAPA-75-0112 · CAPA-2-MODELOS-2811
       l.setAttribute('fetchpriority','high'); document.head.appendChild(l);
     }
   }catch(e){}
@@ -2562,6 +2562,43 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
 .tr-aviso{margin-top:12px;font-size:13px;color:#475569;line-height:1.5}
 .tr-topo{background:#f0fdf4;border:1px solid #16a34a;border-radius:11px;padding:10px 12px;font-size:14px;color:#15803d;font-weight:800;line-height:1.5}
 .tr .vbr{margin-top:14px}
+/* TRILHA-2811b: a janela só com o gráfico (rótulo único foto + "+N" centrado no degrau), 1 linha e o CPF dentro da janela */
+.tr2{border:0;padding:6px 0 2px;overflow:visible}
+.tr2::before{display:none}
+.tr2 .tr-graf{height:220px;gap:6px}
+.tr2 .tr-col{justify-content:flex-end;align-items:center}
+.tr-pr{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;margin:0 0 5px;padding:3px 2px 4px;width:100%;max-width:52px;box-sizing:border-box;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa}
+.tr-pr .tr-cx{display:block;width:22px;height:22px;object-fit:contain}
+.tr-pr b{display:block;font-size:14px;font-weight:800;line-height:1;color:#b45309;white-space:nowrap}
+.tr-col.prox .tr-pr{background:#f59e0b;border-color:#f59e0b}
+.tr-col.prox .tr-pr b{color:#fff}
+.tr-col.prox .tr-deg{border:2px solid #f59e0b;border-bottom:0;box-shadow:0 0 0 3px rgba(245,158,11,.18)}
+.tr2 .tr-eixo div{display:flex;flex-direction:column;align-items:center}
+.tr2 .tr-eixo b{font-size:13px}
+.tr2 .tr-eixo .un{font-size:12px;color:#334155;font-weight:700}
+.tr2 .tr-eixo .falta{font-size:12px;font-weight:800;color:#b45309;line-height:1.2;margin-top:2px}
+.tr2 .tr-eixo .st{font-size:12px;font-weight:800;color:#15803d;line-height:1.2;margin-top:2px}
+.tr-linha{margin:12px 0 0;font-size:13px;color:#475569;text-align:center;font-weight:600}
+.tr2 .tr-btn{margin-top:12px}
+.tr-cpf{margin-top:12px;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:10px}
+.tr-cpf-form[hidden],.tr-cpf-ja[hidden]{display:none}
+.tr-cpf-ja{display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px;font-weight:700;color:#334155}
+.tr-cpf-troca{min-height:44px;min-width:44px;padding:0 12px;border:1px solid #d97706;border-radius:10px;background:#fff;color:#b45309;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+.tr-gasto{margin:4px 0 6px;text-align:center;font-size:16px;font-weight:700;color:#334155;outline:none}
+.tr-gasto b{display:inline-block;font-size:24px;font-weight:800;color:#b45309;letter-spacing:-.3px;margin-left:2px}
+.tr-aqui{display:block;margin:0 auto 4px;max-width:100%;box-sizing:border-box;text-align:center;font-size:12px;font-weight:800;line-height:1.2;color:#fff;background:#0f172a;border-radius:8px;padding:2px 5px}
+.tr-col.prox .tr-pr,.tr-col.prox .tr-deg{animation:trPisca 1.6s ease-in-out infinite}
+@keyframes trPisca{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.55)}50%{box-shadow:0 0 0 7px rgba(245,158,11,0)}}
+@media(prefers-reduced-motion:reduce){.tr-col.prox .tr-pr,.tr-col.prox .tr-deg{animation:none!important}}
+.tr-cpf label{display:block;font-size:13px;font-weight:800;color:#0f172a;margin-bottom:6px}
+.tr-cpf-lin{display:flex;gap:8px;flex-wrap:wrap}
+.tr-cpf-lin input{flex:1 1 140px;min-width:0;min-height:48px;border:2px solid #d97706;border-radius:10px;padding:0 12px;font-size:17px;font-weight:700;color:#0f172a;font-family:inherit;letter-spacing:.5px}
+.tr-cpf-bt{flex:0 0 auto;min-width:72px;min-height:48px;padding:0 16px;border:0;border-radius:10px;background:#b45309;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit}
+.tr-cpf-bt[disabled]{opacity:.7;cursor:wait}
+.tr-cpf-st{font-size:13px;color:#334155;margin-top:8px;line-height:1.4}
+.tr-cpf-st:empty{display:none}
+.tr-cpf-erro{color:#b91c1c;font-weight:700}
+.tr-cpf-lin input:focus-visible,.tr-cpf-bt:focus-visible{outline:3px solid #2563eb;outline-offset:2px}
 .tr-abre:focus-visible,.tr-btn:focus-visible{outline:3px solid #2563eb;outline-offset:2px;border-radius:8px}
 @media(min-width:700px){.tr{padding:22px 22px 18px}.tr-graf{height:232px}}
 /* a barra curta (cartão do Painel, linha do CPF no /comprar): o mesmo desenho, em pequeno */
@@ -2579,32 +2616,54 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
   .tr.vis .tr-ped,.tr.vis .tr-marco.prox,.trc-barra>i{animation:none!important}
 }
 
-/* ===== TABELA-CTA-2811: "Quanto mais leva, menos paga por pomada" ===== */
-.tc{background:#fff;border:1.5px solid #bfdbfe;border-radius:16px;padding:16px 14px 14px;margin:0 0 14px;font-family:'DM Sans',sans-serif;color:#0f172a;box-shadow:0 10px 28px -18px rgba(37,99,235,.55);position:relative;overflow:hidden}
-.tc::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,#2563eb,#60a5fa)}
+/* ===== TABELA-CTA-2811b: "Quanto mais leva, menos paga por pomada" — abas Gold 75% | Gold 99%, 2 barras por faixa ===== */
+.tc{--tc-sp:#1d4ed8;--tc-an:#15803d;background:#fff;border:1.5px solid #bfdbfe;border-radius:16px;padding:16px 14px 14px;margin:0 0 14px;font-family:'DM Sans',sans-serif;color:#0f172a;box-shadow:0 10px 28px -18px rgba(37,99,235,.55);position:relative;overflow:hidden}
+.tc::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,#2563eb,#16a34a)}
 .tc-tit{font-size:19px;font-weight:800;line-height:1.25;letter-spacing:-.2px}
-.tc-sub{font-size:13px;color:#475569;margin-top:4px;line-height:1.4}
-.tc-esc{display:grid;gap:5px;align-items:end;margin-top:14px;height:164px}
-.tc-deg{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;border-radius:10px;padding:0 0 4px}
-.tc-pr{font-size:14px;font-weight:800;color:#0f172a;white-space:nowrap;line-height:1.1;margin-bottom:4px;font-variant-numeric:tabular-nums}
-.tc-bar{width:100%;border-radius:8px 8px 3px 3px;background:#dbeafe;transform-origin:bottom center}
-.tc-q{font-size:12px;color:#475569;font-weight:700;margin-top:5px;white-space:nowrap;line-height:1.1}
-.tc-deg.on .tc-bar{background:linear-gradient(180deg,#3b82f6,#1d4ed8)}
-.tc-deg.on .tc-pr{color:#1d4ed8}
-.tc-deg.on .tc-q{color:#1d4ed8}
-.tc-deg.on{background:#eff6ff;box-shadow:inset 0 0 0 2px #2563eb}
-.tc.anim .tc-bar{animation:tcSobe .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 90ms)}
+.tc-abas{display:flex;gap:8px;margin-top:12px}
+.tc-aba{flex:1 1 0;min-width:0;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;padding:6px 10px;border-radius:12px;border:1.5px solid #cbd5e1;background:#fff;color:#334155;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:background .2s,color .2s,border-color .2s}
+.tc-aba img{width:30px;height:30px;flex:0 0 30px;object-fit:contain;border-radius:6px;background:#fff}
+.tc-aba[aria-selected="true"]{background:#0f172a;border-color:#0f172a;color:#fff;box-shadow:0 6px 16px -8px rgba(15,23,42,.7)}
+.tc-aba-75[aria-selected="true"]{background:linear-gradient(135deg,#b45309,#d97706);border-color:#b45309}
+.tc-aba:focus-visible,.tc-bt:focus-visible,.tc-rola:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+.tc-leg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:12px;font-size:13px;font-weight:700;color:#334155}
+.tc-leg span{display:inline-flex;align-items:center;gap:6px}
+.tc-leg i{width:14px;height:14px;border-radius:3px;flex:none}
+.tc-q-sp{background:var(--tc-sp)}
+.tc-q-an{background:var(--tc-an)}
+.tc-leg .tc-mais{margin-left:auto;font-size:12px;font-weight:700;color:#475569;border:1px solid #cbd5e1;border-radius:999px;padding:1px 8px}
+.tc-rola{margin:8px -4px 0;padding:0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;scrollbar-width:thin}
+.tc-graf{display:grid;gap:4px;align-items:end;min-width:470px;min-height:178px;padding-top:4px}
+.tc-col{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;min-width:0;border-radius:10px;padding:2px 3px 4px;position:relative}
+.tc-col.on{background:#f1f5f9;box-shadow:inset 0 0 0 2px #0f172a}
+.tc-aqui-selo{align-self:center;max-width:100%;box-sizing:border-box;text-align:center;font-size:12px;font-weight:800;color:#fff;background:#0f172a;border-radius:10px;padding:1px 6px;white-space:normal;margin-bottom:6px;line-height:1.25}
+.tc-aqui-selo[hidden]{display:none}
+.tc-par{display:flex;align-items:flex-end;justify-content:center;gap:3px}
+.tc-b{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1 1 0;min-width:0}
+.tc-v{font-size:12px;font-weight:800;line-height:1.1;margin-bottom:3px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tc-v-sp{color:var(--tc-sp)}
+.tc-v-an{color:var(--tc-an)}
+.tc-bar{width:100%;max-width:26px;border-radius:6px 6px 2px 2px;transform-origin:bottom center}
+.tc-b-sp{background:var(--tc-sp)}
+.tc-b-an{background:var(--tc-an)}
+.tc-col:not(.on) .tc-bar{opacity:.78}
+.tc-q{font-size:12px;color:#334155;font-weight:800;margin-top:5px;text-align:center;white-space:nowrap;line-height:1.1;border-top:2px solid #e2e8f0;padding-top:4px}
+.tc.anim .tc-bar{animation:tcSobe .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 70ms)}
 @keyframes tcSobe{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-.tc-msg{margin-top:12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:9px 11px;font-size:13.5px;line-height:1.45;color:#0f172a}
-.tc-msg b{color:#1d4ed8}
-.tc-lin{margin-top:8px;font-size:13px;color:#334155;line-height:1.45}
-.tc-lin b{color:#0f172a}
+.tc-msg{margin-top:10px;font-size:14px;line-height:1.4;color:#0f172a;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.tc-msg[hidden]{display:none}
+.tc-aqui{font-weight:800}
+.tc-prox{font-weight:700;color:#334155}
+.tc-c-sp{color:var(--tc-sp)}
+.tc-c-an{color:var(--tc-an)}
 .tc-bt{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin-top:12px;border:0;border-radius:12px;background:#1d4ed8;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;animation:tcPulso 2.4s ease-in-out 1.2s 2}
 @keyframes tcPulso{50%{box-shadow:0 0 0 6px rgba(37,99,235,.18)}}
-.tc-bt:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
-.tc-mais{font-size:12px;color:#475569;text-align:center;margin-top:6px}
-@media(min-width:700px){.tc{padding:20px 20px 16px}.tc-esc{height:170px;gap:10px}.tc-pr{font-size:16px}}
-@media(prefers-reduced-motion:reduce){.tc.anim .tc-bar,.tc-bt{animation:none!important}}
+.tc-gw{position:relative}
+.tc.tc-rolavel .tc-gw::after{content:"";position:absolute;right:-4px;top:8px;bottom:0;width:30px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff);pointer-events:none}
+.tc.tc-fim .tc-gw::after{display:none}
+@media(min-width:520px){.tc-graf{min-width:0}}
+@media(min-width:700px){.tc{padding:20px 20px 16px}.tc-graf{min-height:200px;gap:10px}.tc-v{font-size:14px}.tc-bar{max-width:34px}}
+@media(prefers-reduced-motion:reduce){.tc.anim .tc-bar,.tc-bt{animation:none!important}.tc-aba{transition:none}.tc-rola{scroll-behavior:auto}}
 
 /* ===== TABELA-CTA-2811: a tabela de preços completa (janela) ===== */
 #tp-modal.tpn{position:fixed;inset:0;z-index:99997;background:rgba(15,23,42,.66);display:flex;align-items:center;justify-content:center;padding:16px;font-family:'DM Sans',sans-serif}
@@ -2888,8 +2947,8 @@ html.bancada #cp-sticky-pop{display:none!important}
       <source src="/video-estudio.mp4" type="video/mp4">
     </video>
     <script>/* CAPA-75-0112: de 01/12 em diante a capa da home continua a da Gold 75% até existir a foto nova com os 4 modelos */
-    (function(){ try{ if(!window.T0112) return; var c='/hero-gold.png';
-      var i=document.querySelector('#lpCarouselTrack .lp-slide img'); if(i&&/hero-4-modelos/.test(i.getAttribute('src')||'')){ i.setAttribute('src',c); i.setAttribute('alt','Pomada TKTX original: creme rosa, 6 a 8 horas de efeito'); }
+    (function(){ try{ if(!window.T0112) return; var c='/hero-gold-75-99.jpg';   /* CAPA-2-MODELOS-2811: a capa com o Gold 75% e o Gold 99% */
+      var i=document.querySelector('#lpCarouselTrack .lp-slide img'); if(i&&/hero-4-modelos/.test(i.getAttribute('src')||'')){ i.setAttribute('src',c); i.setAttribute('alt','TKTX Gold 75% e 99%, tubo de alumínio'); }   /* CAPA-2-MODELOS-2811 */
       var v=document.querySelector('.bnrv-wrap video.bnrv-video'); if(v&&/hero-4-modelos/.test(v.getAttribute('data-poster')||'')) v.setAttribute('data-poster',c);
     }catch(e){} })();</script>
     <div class="bnrv-overlay"></div>
@@ -15401,101 +15460,135 @@ function cpPlanoRodape(){
 // TUDO sai de FAIXAS_PRECO_BASE / FAIXAS_PRECO_99 / PLANOS_INFO: nenhum preço escrito aqui. Só visual: a conta do pedido
 // continua nas funções de sempre (calcularPrecos / calcularPrecosDiv); quantidade muda só por cpSetQtd / fpSetQtd.
 function tcBrl(v){ v=Number(v)||0; return 'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:(Math.round(v*100)%100?2:0),maximumFractionDigits:2}); }
+// TABELA-CTA-2811b (empresa 28/11, 2ª rodada: "muito texto, quase ninguém lê… duas cores e um quadrado com a cor falando sem plano,
+// com plano… Gold 75% mais chamativo… a opção dela escolher o gráfico da Gold 99%"): abas Gold 75% | Gold 99%, 2 barras por faixa
+// (Sem plano azul · Anual verde) com o preço em cima, legenda com o quadradinho da cor e 1 linha curta "você está aqui · +M → R$ Z".
+// Dados: FAIXAS_PRECO_BASE (Tabela A) e FAIXAS_PRECO_99 (Tabela B) + PLANOS_INFO. Só visual; quantidade só por cpSetQtd/fpSetQtd.
 function tcGrupo(onde){
   try{
     const d=(typeof divisaoModelo!=='undefined'&&divisaoModelo)?divisaoModelo[onde]:null; let b=0,n=0;
     if(d) MODELOS.forEach(function(m){ const q=Number(d[m.id]||0); if(grupoDe(m.id)==='99') n+=q; else b+=q; });
-    if(n>b&&FAIXAS_PRECO_99!==FAIXAS_PRECO_BASE) return '99';
+    if(n>b&&tcTem99()) return '99';
   }catch(e){}
   return 'base';
 }
+function tcTem99(){ try{ return FAIXAS_PRECO_99!==FAIXAS_PRECO_BASE&&pmModelosGrupo('99').length>0; }catch(e){ return false; } }
 function tcFaixas(g){ return (g==='99')?FAIXAS_PRECO_99:FAIXAS_PRECO_BASE; }
-// a escadinha do cartão: as faixas do começo enquanto o preço sem plano desce (no máximo 6 degraus)
+// as faixas do começo enquanto o preço sem plano desce (no máximo 6) — as mesmas posições nas 2 tabelas
 function tcEscada(g){
   const F=tcFaixas(g), out=[];
   for(let i=0;i<F.length&&out.length<6;i++){ if(out.length&&Number(F[i].precoUn)>Number(out[out.length-1].precoUn)) break; out.push(F[i]); }
   return out;
 }
 function tcRot(fx){ return (fx.max>=99999)?(fx.min+'+ un'):(fx.min===fx.max?fx.min+' un':fx.min+'–'+fx.max+' un'); }
-function tcNomeGrupo(g){ try{ if(g==='99') return 'Linha 99%'; const m=MODELOS.find(function(x){ return x.id==='gold'; }); return m?m.curto:'Gold'; }catch(e){ return ''; } }
+function tcModelo(g){ try{ return (g==='99')?pmModelosGrupo('99').filter(function(m){ return m.id==='gold99'; })[0]||pmModelosGrupo('99')[0]:MODELOS.find(function(x){ return x.id==='gold'; }); }catch(e){ return null; } }
+function tcNomeGrupo(g){ const m=tcModelo(g); return m?m.curto:(g==='99'?'Linha 99%':'Gold'); }
 function tcQtd(onde){ try{ return onde==='fp'?Math.max(0,parseInt(window.FP&&window.FP.qtd)||0):Math.max(0,parseInt(typeof cpQtd!=='undefined'?cpQtd:window.cpQtd)||0); }catch(e){ return 0; } }
-function tcPlano(onde){ try{ return (typeof pmPlanoDe==='function')?pmPlanoDe(onde):null; }catch(e){ return null; } }
-function tcUn(fx,plano){ return plano?Number(precoAssinanteUn(fx,plano)):Number(fx.precoUn); }
-// a frase do destaque: "levando N você paga R$ Y cada; com mais M passa a R$ Z" (só se a faixa seguinte for mais barata)
+function tcN(v){ v=Number(v)||0; return v.toLocaleString('pt-BR',{minimumFractionDigits:(Math.round(v*100)%100?2:0),maximumFractionDigits:2}); }   // o preço em cima da barra, sem "R$"
+// a linha curta: "📍 10–24 · +10 → R$ 32,50 | R$ 28" (azul = sem plano, verde = Anual; só se a faixa seguinte for mais barata)
 function tcMsgHtml(onde,g,q){
-  const F=tcFaixas(g), pl=tcPlano(onde);
-  if(!(q>0)){ const a=F[0], b=F[1]; return 'Escolha a quantidade: <b>'+tcRot(a)+'</b> sai a <b>'+tcBrl(tcUn(a,pl))+'</b> cada'+(b?' e a partir de <b>'+b.min+'</b> já cai para <b>'+tcBrl(tcUn(b,pl))+'</b>.':'.'); }
-  const i=F.findIndex(function(f){ return q>=f.min&&q<=f.max; }), fx=F[i<0?F.length-1:i], nx=F[(i<0?F.length-1:i)+1];
-  let h='Levando <b>'+q+'</b> você paga <b>'+tcBrl(tcUn(fx,pl))+'</b> cada'+(pl==='anual'?' (plano Anual)':'');
-  if(nx&&tcUn(nx,pl)<tcUn(fx,pl)) h+='; com mais <b>'+(nx.min-q)+'</b> passa a <b>'+tcBrl(tcUn(nx,pl))+'</b>';
-  return h+'.';
+  if(!(q>0)) return '';
+  const F=tcFaixas(g), i=F.findIndex(function(f){ return q>=f.min&&q<=f.max; }), fx=F[i<0?F.length-1:i], nx=F[(i<0?F.length-1:i)+1];
+  let h='<span class="tc-aqui">📍 '+q+' un</span>';
+  if(nx&&Number(nx.precoUn)<Number(fx.precoUn)) h+=' <span class="tc-prox">+'+(nx.min-q)+' → <b class="tc-c-sp">'+tcBrl(nx.precoUn)+'</b> <b class="tc-c-an">'+tcBrl(nx.anualUn)+'</b></span>';
+  return h;
+}
+function tcGrafHtml(onde,g,q){
+  const L=tcEscada(g);
+  if(!L.length) return '';
+  const max=Math.max.apply(null,L.map(function(f){ return Number(f.precoUn); }));
+  const alt=function(v){ return Math.round(14+96*Number(v)/max); };
+  const lista=L.map(function(fx){ return tcRot(fx)+': sem plano '+tcBrl(fx.precoUn)+', Anual '+tcBrl(fx.anualUn); }).join('; ');
+  return '<div class="tc-rola" tabindex="0" aria-label="Gráfico de preços; no celular, deslize para o lado" onscroll="tcFim(this)"><div class="tc-graf" role="img" aria-label="'+vipEsc(tcNomeGrupo(g)+', preço por pomada. '+lista)+'" style="grid-template-columns:repeat('+L.length+',minmax(0,1fr))">'+
+    L.map(function(fx,i){
+      const on=q>=fx.min&&q<=fx.max;
+      return '<div class="tc-col'+(on?' on':'')+'" data-min="'+fx.min+'" data-max="'+fx.max+'" style="--i:'+i+'">'+
+        '<span class="tc-aqui-selo"'+(on?'':' hidden')+'>você está aqui</span>'+
+        '<div class="tc-par">'+
+          '<div class="tc-b"><span class="tc-v tc-v-sp" data-v="'+Number(fx.precoUn)+'">'+tcN(fx.precoUn)+'</span><span class="tc-bar tc-b-sp" style="height:'+alt(fx.precoUn)+'px"></span></div>'+
+          '<div class="tc-b"><span class="tc-v tc-v-an" data-v="'+Number(fx.anualUn)+'">'+tcN(fx.anualUn)+'</span><span class="tc-bar tc-b-an" style="height:'+alt(fx.anualUn)+'px"></span></div>'+
+        '</div><span class="tc-q">'+tcRot(fx).replace(' un','')+'</span></div>';
+    }).join('')+'</div></div>';
+}
+function tcAbasHtml(onde,g){
+  if(!tcTem99()) return '';
+  const aba=function(id){
+    const m=tcModelo(id), on=id===g;
+    return '<button type="button" role="tab" class="tc-aba'+(id==='base'?' tc-aba-75':'')+'" id="tc-aba-'+onde+'-'+id+'" aria-selected="'+(on?'true':'false')+'" aria-controls="tc-graf-'+onde+'" data-g="'+id+'" onclick="tcAba(\''+onde+'\',\''+id+'\')">'+
+      (m&&m.foto?'<img src="'+m.foto+'" alt="" width="30" height="30" onerror="this.style.display=\'none\'">':'')+'<span>'+vipEsc(tcNomeGrupo(id))+'</span></button>';
+  };
+  return '<div class="tc-abas" role="tablist" aria-label="Escolha o gráfico">'+aba('base')+aba('99')+'</div>';
 }
 function tcHtml(onde,q){
   try{
-    const g=tcGrupo(onde), L=tcEscada(g), F=tcFaixas(g);
-    if(!L.length) return '';
-    const max=Math.max.apply(null,L.map(function(f){ return Number(f.precoUn); }));
-    const col='grid-template-columns:repeat('+L.length+',minmax(0,1fr))';
-    const degs=L.map(function(fx,i){
-      const on=q>=fx.min&&q<=fx.max, h=Math.round(24+84*Number(fx.precoUn)/max);
-      return '<div class="tc-deg'+(on?' on':'')+'" data-min="'+fx.min+'" data-max="'+fx.max+'" style="--i:'+i+'">'+
-        '<span class="tc-pr" data-v="'+Number(fx.precoUn)+'">'+tcBrl(fx.precoUn)+'</span>'+
-        '<span class="tc-bar" style="height:'+h+'px" aria-hidden="true"></span><span class="tc-q">'+tcRot(fx).replace(' un','')+'</span></div>';
-    }).join('');
-    const ult=L[L.length-1], resto=F.indexOf(ult)<F.length-1;
-    const anMin=Math.min.apply(null,F.map(function(f){ return Number(f.anualUn); })), anTop=Number(F[0].anualUn);
+    window._tcAba=window._tcAba||{};
+    const g=window._tcAba[onde]||tcGrupo(onde);
+    if(!tcEscada(g).length) return '';
     const A=(typeof PLANOS_INFO!=='undefined'&&PLANOS_INFO.anual)?PLANOS_INFO.anual:null;
-    let outro='';
-    try{
-      const og=(g==='99')?'base':'99';
-      if((og==='base'||pmModelosGrupo('99').length>0)&&FAIXAS_PRECO_99!==FAIXAS_PRECO_BASE){
-        const OF=tcFaixas(og), mn=Math.min.apply(null,OF.map(function(f){ return Number(f.precoUn); }));
-        outro='<div class="tc-lin">'+tcNomeGrupo(og)+': de <b>'+tcBrl(OF[0].precoUn)+'</b> a <b>'+tcBrl(mn)+'</b> por pomada.</div>';
-      }
-    }catch(e){}
-    const lista=L.map(function(fx){ return tcRot(fx)+' '+tcBrl(fx.precoUn); }).join(', ');
+    const ult=tcEscada(g)[tcEscada(g).length-1], resto=tcFaixas(g).indexOf(ult)<tcFaixas(g).length-1;
     return '<section class="tc" aria-labelledby="tc-t-'+onde+'" data-tc="'+onde+'" data-g="'+g+'">'+
       '<div class="tc-tit" id="tc-t-'+onde+'">💰 Quanto mais leva, menos paga por pomada</div>'+
-      '<div class="tc-sub">'+tcNomeGrupo(g)+' · preço de cada pomada, sem plano</div>'+
-      '<div class="tc-esc" style="'+col+'" role="img" aria-label="Preço por pomada: '+vipEsc(lista)+'">'+degs+'</div>'+
-      '<div class="tc-msg" aria-live="polite">'+tcMsgHtml(onde,g,q)+'</div>'+
-      (A?'<div class="tc-lin">⭐ No plano <b>Anual</b> ('+tcBrl(A.avista)+', vale 12 meses): de <b>'+tcBrl(anTop)+'</b> a <b>'+tcBrl(anMin)+'</b> por pomada.</div>':'')+
-      outro+
+      tcAbasHtml(onde,g)+
+      '<div class="tc-leg"><span><i class="tc-q-sp" aria-hidden="true"></i>Sem plano</span><span><i class="tc-q-an" aria-hidden="true"></i>Anual'+(A?' ('+tcBrl(A.avista)+'/ano)':'')+'</span>'+(resto?'<span class="tc-mais">até '+ult.max+' un</span>':'')+'</div>'+
+      '<div id="tc-graf-'+onde+'" class="tc-gw" role="tabpanel" aria-labelledby="tc-aba-'+onde+'-'+g+'">'+tcGrafHtml(onde,g,q)+'</div>'+
+      '<div class="tc-msg" aria-live="polite"'+(q>0?'':' hidden')+'>'+tcMsgHtml(onde,g,q)+'</div>'+
       '<button type="button" class="tc-bt" onclick="mostrarTabelaPrecos(\''+onde+'\',tcQtd(\''+onde+'\'))">📊 Ver tabela completa</button>'+
-      (resto?'<div class="tc-mais">Mais de '+ult.max+' pomadas: veja na tabela completa</div>':'')+
     '</section>';
   }catch(e){ return ''; }
 }
-// conta de baixo pra cima a 1ª vez que o cartão aparece (só com movimento liberado)
+function tcSemMov(){ try{ return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; } }
+// as barras sobem e os números contam (1ª vez que aparece e a cada troca de aba). Sem movimento: nada anima.
+function tcRoda(el){
+  try{
+    if(!el||tcSemMov()) return;
+    el.classList.remove('anim'); void el.offsetWidth; el.classList.add('anim');
+    const vs=el.querySelectorAll('.tc-v'), t0=Date.now(), top=Math.max.apply(null,[].map.call(vs,function(v){ return Number(v.getAttribute('data-v')); }));
+    const passo=function(){
+      const k=Math.min(1,(Date.now()-t0)/800);
+      vs.forEach(function(p){ const v=Number(p.getAttribute('data-v')); p.textContent=tcN(k>=1?v:Math.round(top-(top-v)*k)); });
+      if(k<1) (window.requestAnimationFrame||setTimeout)(passo,16);
+    };
+    passo();
+  }catch(e){}
+}
 function tcAnima(el){
   try{
     if(!el||el.getAttribute('data-anim')) return; el.setAttribute('data-anim','1');
-    let red=false; try{ red=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
-    if(red) return;
-    const roda=function(){
-      el.classList.add('anim');
-      const prs=el.querySelectorAll('.tc-pr'), top=prs.length?Number(prs[0].getAttribute('data-v')):0, t0=Date.now();
-      const passo=function(){
-        const k=Math.min(1,(Date.now()-t0)/900);
-        prs.forEach(function(p){ const v=Number(p.getAttribute('data-v')); p.textContent=tcBrl(k>=1?v:Math.round(top-(top-v)*k)); });
-        if(k<1) (window.requestAnimationFrame||setTimeout)(passo,16);
-      };
-      passo();
-    };
-    if('IntersectionObserver' in window){ const ob=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ ob.disconnect(); roda(); } },{threshold:.3}); ob.observe(el); }
-    else roda();
+    tcRolaAqui(el);
+    if('IntersectionObserver' in window){ const ob=new IntersectionObserver(function(es){ if(es.some(function(e){ return e.isIntersecting; })){ ob.disconnect(); tcRoda(el); } },{threshold:.3}); ob.observe(el); }
+    else tcRoda(el);
   }catch(e){}
 }
-// pinta (1ª vez) ou só atualiza o destaque e a frase (as outras vezes: a animação não recomeça a cada toque)
+// no celular o gráfico pode rolar de lado: leva a faixa da pessoa para a vista (sem mexer na página)
+function tcRolaAqui(el){
+  try{ const r=el.querySelector('.tc-rola'), c=el.querySelector('.tc-col.on'); const rola=!!(r&&r.scrollWidth>r.clientWidth+1); el.classList.toggle('tc-rolavel',rola); if(rola&&c) r.scrollLeft=Math.max(0,c.offsetLeft-(r.clientWidth-c.offsetWidth)/2); if(r) tcFim(r); }catch(e){}
+}
+// a sombra da direita (dica de que tem mais) some quando chega no fim
+function tcFim(r){ try{ const el=r.closest('.tc'); if(el) el.classList.toggle('tc-fim',r.scrollLeft+r.clientWidth>=r.scrollWidth-2); }catch(e){} }
+function tcAba(onde,g){
+  try{
+    window._tcAba=window._tcAba||{}; window._tcAba[onde]=g;
+    const box=document.getElementById(onde+'-tabela-cta'), el=box&&box.querySelector('.tc'); if(!el) return;
+    const q=tcQtd(onde);
+    el.setAttribute('data-g',g);
+    el.querySelectorAll('.tc-aba').forEach(function(b){ b.setAttribute('aria-selected',b.getAttribute('data-g')===g?'true':'false'); });
+    const p=document.getElementById('tc-graf-'+onde); if(p){ p.innerHTML=tcGrafHtml(onde,g,q); p.setAttribute('aria-labelledby','tc-aba-'+onde+'-'+g); }
+    const m=el.querySelector('.tc-msg'); if(m){ m.innerHTML=tcMsgHtml(onde,g,q); m.hidden=!(q>0); }
+    tcRolaAqui(el); tcRoda(el);
+  }catch(e){}
+}
+// pinta (1ª vez) ou só atualiza o destaque e a linha curta (a animação não recomeça a cada toque na quantidade)
 function tcPintar(onde){
   onde=(onde==='fp')?'fp':'cp';
   try{ tcCallout(); }catch(e){}
   const box=document.getElementById(onde+'-tabela-cta'); if(!box) return;
-  const q=tcQtd(onde), g=tcGrupo(onde);
+  const q=tcQtd(onde);
   let el=box.querySelector('.tc');
-  if(!el||el.getAttribute('data-g')!==g){ box.innerHTML=tcHtml(onde,q); el=box.querySelector('.tc'); tcAnima(el); return; }
-  el.querySelectorAll('.tc-deg').forEach(function(d){ const mn=Number(d.getAttribute('data-min')), mx=Number(d.getAttribute('data-max')); d.classList.toggle('on',q>=mn&&q<=mx); });
-  const m=el.querySelector('.tc-msg'); if(m) m.innerHTML=tcMsgHtml(onde,g,q);
+  if(!el){ box.innerHTML=tcHtml(onde,q); el=box.querySelector('.tc'); tcAnima(el); return; }
+  const g=el.getAttribute('data-g')||'base';
+  el.querySelectorAll('.tc-col').forEach(function(d){ const on=q>=Number(d.getAttribute('data-min'))&&q<=Number(d.getAttribute('data-max')); d.classList.toggle('on',on); const s=d.querySelector('.tc-aqui-selo'); if(s) s.hidden=!on; });
+  const m=el.querySelector('.tc-msg'); if(m){ m.innerHTML=tcMsgHtml(onde,g,q); m.hidden=!(q>0); }
+  tcRolaAqui(el);
 }
 // a oferta ÚNICA do Anual no passo 3 (TABELA-CTA-2811, "informação duplicada!"): preço do plano e "a partir de" das faixas reais
 function tcCallout(){
@@ -26345,140 +26438,121 @@ function conqTopo(titulo){
 // degrau (o da vez ocupa mais espaço), "Este pedido +R$ C" listrado quando há pedido montado, e a escada completa.
 // Quem dá o brinde continua sendo o gatilho do banco: aqui é só espelho.
 function trModeloBrinde(){ try{ return 'TKTX '+vipModeloNome('gold'); }catch(e){ return 'TKTX Gold 75%'; } }   // TRILHA-2811: desde 27/11 o brinde é sempre Gold 75%
+// TRILHA-2811b (empresa 28/11: "quando clica em brinde ela vê o gráfico e pronto"). A janela é SÓ: título curto, o gráfico de degraus
+// aberto (fotinho da Gold 75% + "+N" em cima, valor e "N+ un" embaixo; o cliente vê até onde chegou e "faltam R$ X" no próximo),
+// 1 linha "1 brinde por pedido · não vence" e, para o visitante, o CPF DENTRO da janela ("aí se a pessoa clica aqui sai da conquista").
+// Dados e estados do banco de sempre (trilha_minha / trilha_por_cpf / trilha_publica); nenhum dado pessoal na janela.
 function trRegraHtml(){
-  return '<div class="tr-regra">1 brinde por pedido · o brinde fica guardado e não vence · vale a partir do 2º pedido · o brinde é '+vipEsc(trModeloBrinde())+' · não vale em pedido da promoção</div>';
+  return '<p class="tr-linha" title="1 brinde por pedido · o brinde fica guardado e não vence · vale a partir do 2º pedido · o brinde é '+vipEsc(trModeloBrinde())+' · não vale em pedido da promoção">1 brinde por pedido · não vence</p>';
 }
 function trDegrausOrd(lista){ return (lista||[]).filter(function(d){ return vipNum(d&&d.valor)>0; }).slice().sort(function(a,b){ return vipNum(a.valor)-vipNum(b.valor); }); }
 function trCurto(v){ v=vipNum(v); return v>=10000?(Number(v/1000).toLocaleString('pt-BR')+' mil'):v.toLocaleString('pt-BR'); }
-// o degrau da vez ocupa 3 vezes o espaço dos outros (lupa): assim o pedido aparece andando
-function trPesos(D,k){ return D.map(function(d,i){ return i===k?3:1; }); }
-function trPos(D,i,k){ var w=trPesos(D,k), t=w.reduce(function(a,b){ return a+b; },0), c=0; for(var j=0;j<i;j++) c+=w[j]; return c/t*100; }
-function trPct(D,v,k){
-  var w=trPesos(D,k), t=w.reduce(function(a,b){ return a+b; },0), M=[0].concat(D.map(function(d){ return vipNum(d.valor); }));
-  v=Math.max(0,Math.min(vipNum(v),M[M.length-1]));
-  for(var j=0;j<D.length;j++) if(v<=M[j+1]) return trPos(D,j,k)+w[j]/t*100*(v-M[j])/Math.max(1,(M[j+1]-M[j]));
-  return 100;
-}
-// quanto o pedido montado NESTA tela soma (a MESMA conta do gatilho: vipEntra com o teto)
-function trPedidoNaTela(origem){
-  try{
-    if(origem==='cp'&&typeof vipCpValorProdutos==='function') return vipEntra(vipCpValorProdutos(),vipCpUn());
-    if(origem==='fp'&&typeof vipFpValorProdutos==='function') return vipEntra(vipFpValorProdutos(),vipFpUn());
-  }catch(e){}
-  return 0;
-}
-// a escada completa: degraus que enchem, "+N TKTX" em cima, valor e "pedido N+ un" embaixo
-function trEscadaHtml(D,acum,modo){
+// a fotinho da caixa do brinde (a mesma do modelo gold no site); alt vazio porque o "+N" do lado já diz
+function trCx(){ var f='/pomada-gold.png?v=2611'; try{ var m=MODELOS.find(function(x){ return x.id==='gold'; }); if(m&&m.foto) f=m.foto; }catch(e){} return '<img class="tr-cx" src="'+f+'" alt="" width="22" height="22" onerror="this.style.visibility=\'hidden\'">'; }
+// o gráfico: degraus que enchem até onde a pessoa chegou; o próximo destacado com "faltam R$ X"
+function trGrafHtml(D,acum,modo,prox){
   if(!D.length) return '';
-  var col='', eixo='', n=D.length, passo=n>1?Math.round(130/(n-1)):0;
+  var n=D.length, passo=n>1?Math.round(120/(n-1)):0, col='', eixo='', cols='grid-template-columns:repeat('+n+',minmax(0,1fr))';
   D.forEach(function(d,i){
     var ant=i?vipNum(D[i-1].valor):0, v=vipNum(d.valor), est=String(d.estado||'');
     var enc=(est==='retirado'||est==='guardado')?1:Math.max(0,Math.min(1,(acum-ant)/Math.max(1,(v-ant))));
-    col+='<div class="tr-col'+(enc>=1?' ok':'')+'"><span class="pr">+'+vipNum(d.brinde_un)+'<small>TKTX</small></span>'+
-      '<div class="tr-deg" style="height:'+(34+i*passo)+'px"><span class="enc" data-h="'+(enc*100).toFixed(1)+'%"></span></div></div>';
+    var ehProx=!!prox&&(String(d.id)===String(prox.id)||vipNum(d.valor)===vipNum(prox.valor)), un=vipNum(d.brinde_un);
+    col+='<div class="tr-col'+(enc>=1?' ok':'')+(ehProx?' prox':'')+'">'+((ehProx&&acum>0)?'<span class="tr-aqui">você está aqui</span>':'')+'<span class="tr-pr">'+trCx()+'<b>+'+un+'</b></span>'+
+      '<div class="tr-deg" style="height:'+(30+i*passo)+'px"><span class="enc" data-h="'+(enc*100).toFixed(1)+'%"></span></div></div>';
     var st='';
     if(modo==='eu'||modo==='cpf'){
       if(est==='retirado'){
         var ag=false; try{ ag=(modo==='eu'&&d.pedido_id!=null&&!!window.MEUS_PED_ST&&String(window.MEUS_PED_ST[String(d.pedido_id)]||'')==='aguardando'); }catch(e){ ag=false; }
-        st='<span class="st"'+(ag?' style="color:#92400e"':'')+'>'+(ag?'⏳ reservado':'✓ retirado')+(modo==='eu'&&d.pedido_id?' no #'+vipEsc(d.pedido_id):'')+'</span>';
+        st='<span class="st">'+(ag?'⏳ reservado':'✓ retirado')+'</span>';
       }else if(est==='guardado') st='<span class="st">🎁 guardado</span>';
+      else if(ehProx&&vipNum(prox.falta)>0) st='<span class="falta">faltam '+trBrl(prox.falta)+'</span>';
     }
-    eixo+='<div><b>'+trCurto(v)+'</b><span>pedido</span><span class="un">'+vipNum(d.min_un)+'+ un</span>'+st+'</div>';
+    eixo+='<div><b>'+trCurto(v)+'</b><span class="un">'+vipNum(d.min_un)+'+ un</span>'+st+'</div>';
   });
-  var ex=null; for(var i=0;i<D.length;i++){ if(vipNum(D[i].valor)>acum){ ex=D[i]; break; } } if(!ex) ex=D[D.length-1];
-  var cols='grid-template-columns:repeat('+n+',minmax(0,1fr))';
-  return '<div class="tr-esc" id="tr-esc"><div class="tr-ex"><b>Como funciona:</b> some suas compras. Bateu o valor, o brinde entra no seu pedido que tiver o mínimo de pomadas.<br>'+
-      'Exemplo: somou <b>R$ '+vipNum(ex.valor).toLocaleString('pt-BR')+'</b> → pedido de <b>'+vipNum(ex.min_un)+' pomadas ou mais</b> leva <b>+'+vipNum(ex.brinde_un)+' TKTX de brinde</b>.</div>'+
-    '<div class="tr-graf" style="'+cols+'">'+col+'</div><div class="tr-eixo" style="'+cols+'">'+eixo+'</div></div>';
+  var nome='brindes '+D.map(function(d){ return 'R$ '+vipNum(d.valor).toLocaleString('pt-BR')+' (pedido de '+vipNum(d.min_un)+'+ un): +'+vipNum(d.brinde_un)+' '+trModeloBrinde(); }).join('; ');
+  return '<div class="tr-graf" role="img" aria-label="'+vipEsc(nome+(acum>0?'. Você já tem '+trBrl(acum):''))+'" style="'+cols+'">'+col+'</div><div class="tr-eixo" style="'+cols+'">'+eixo+'</div>';
 }
-function trAbreBt(aberta,rot){ return '<button type="button" class="tr-abre" aria-expanded="'+(aberta?'true':'false')+'" aria-controls="tr-esc" onclick="trAbre(this)" data-rot="'+vipEsc(rot)+'">'+(aberta?'Fechar a escada':vipEsc(rot))+'</button>'; }
-function trAbre(bt){
-  try{
-    var box=bt.closest('.tr'); if(!box) return;
-    var ab=!box.classList.contains('aberta'); box.classList.toggle('aberta',ab);
-    bt.setAttribute('aria-expanded',ab?'true':'false'); bt.textContent=ab?'Fechar a escada':(bt.getAttribute('data-rot')||'Ver a escada completa');
-    if(ab) trAnima(box,true);
-  }catch(e){}
-}
-// enche a barra e os degraus (duplo quadro: o navegador desenha o 0 antes de animar). Sem movimento: CSS tira a transição.
-function trAnima(box,soEscada){
+// enche os degraus (duplo quadro: o navegador desenha o 0 antes de animar). Sem movimento: o CSS tira a transição.
+function trAnima(box){
   try{
     if(!box) return;
-    var enche=function(){ try{ box.querySelectorAll('.tr-deg .enc').forEach(function(e){ e.style.height=box.classList.contains('aberta')?e.getAttribute('data-h'):'0'; }); }catch(e){} };
+    var enche=function(){ try{ box.querySelectorAll('.tr-deg .enc').forEach(function(e){ e.style.height=e.getAttribute('data-h'); }); }catch(e){} };
     var raf=window.requestAnimationFrame||function(f){ return setTimeout(f,16); };
-    raf(function(){ raf(function(){ if(!soEscada) box.classList.add('vis'); enche(); }); });
+    raf(function(){ raf(enche); });
   }catch(e){}
 }
-// o miolo da janela. modo: 'eu' (logado) · 'cpf' (sem login, digitou o CPF) · 'pub' (só a escada) · 'erro'
+// o miolo. modo: 'eu' (logado) · 'cpf' (sem login, achou pelo CPF) · 'pub' (visitante) · 'erro' (o banco não respondeu a trilha dele)
 function trCorpoHtml(modo,origem){
-  var h='';
+  var h='<section class="tr tr2 aberta" aria-label="Brindes por compras">';
   if(modo==='eu'||modo==='cpf'){
-    var prox=vipProximo(), guard=vipGuardados(), D=trDegrausOrd(vipDegraus());
-    var prim=(typeof vipPrimeiro==='function'&&vipPrimeiro());
+    var prox=vipProximo(), D=trDegrausOrd(vipDegraus());
+    if(!D.length&&window.CONQ_PUB&&Array.isArray(window.CONQ_PUB.degraus)) D=trDegrausOrd(window.CONQ_PUB.degraus);   // o banco não mandou a escada: a pública, com o progresso dele
     var acum=prox?Math.max(0,vipNum(prox.valor)-vipNum(prox.falta)):(D.length?vipNum(D[D.length-1].valor):0);
-    var ped=trPedidoNaTela(origem), depois=acum+ped;
-    h+='<section class="tr" aria-label="Trilha de conquistas">';
-    if(!prox){
-      h+='<div class="tr-topo">🏆 Você chegou no topo da trilha. Obrigado pela parceria!</div>';
-    }else{
-      var falta=vipNum(prox.falta), un=vipNum(prox.brinde_un), min=vipNum(prox.min_un);
-      h+='<div class="tr-tit" role="heading" aria-level="3">🏆 Faltam <em>'+trBrl(falta)+'</em> para ganhar <em>+'+un+' TKTX</em></div>';
-      if(min>0) h+='<div class="tr-cond">📦 O brinde vem no pedido de '+min+' '+vipPomadasTxt(min)+' ou mais</div>';
-      if(ped>0){
-        var neste=null; try{ neste=(origem==='cp')?vipCpDeg():(origem==='fp'&&typeof vipFpDeg==='function'?vipFpDeg():null); }catch(e){ neste=null; }
-        var sub;
-        if(neste&&!prim) sub='Este pedido já leva <b>+'+vipNum(neste.brinde_un)+' TKTX de brinde</b> 🎉';
-        else if(depois>=vipNum(prox.valor)) sub=prim?('Com este pedido você bate a meta. '+vipEsc(vipPrimeiroTxt())):('Com este pedido você bate a meta. O brinde fica guardado até um pedido de <b>'+min+' pomadas ou mais</b>.');
-        else sub='Este pedido anda <b>'+trBrl(ped)+'</b> · depois dele faltam só <b>'+trBrl(vipNum(prox.valor)-depois)+'</b>';
-        h+='<div class="tr-sub">'+sub+'</div>';
-      }
-    }
-    if(D.length){
-      var k=-1; for(var i=0;i<D.length;i++){ if(prox&&String(D[i].id)===String(prox.id)){ k=i; break; } }
-      if(k<0){ for(var j=0;j<D.length;j++){ if(vipNum(D[j].valor)>acum){ k=j; break; } } }
-      if(k<0) k=D.length-1;
-      var marcos='';
-      [null].concat(D).forEach(function(d,i){
-        var v=d?vipNum(d.valor):0, est=d?String(d.estado||''):'';
-        var cls=(i===0||v<=acum||est==='retirado'||est==='guardado')?'ok':((d&&prox&&String(d.id)===String(prox.id))?'prox':'');
-        var val=(i===k||i===k+1)?'<span class="tr-valor">'+(i?vipBrl0(v):'R$ 0')+'</span>':'';
-        marcos+='<span class="tr-marco '+cls+'" style="left:'+trPos(D,i,k).toFixed(2)+'%">'+(d?'<span class="tr-premio">+'+vipNum(d.brinde_un)+'<small>TKTX</small></span>':'')+val+'</span>';
-      });
-      var alvo=prox?vipNum(prox.valor):vipNum(D[D.length-1].valor);
-      h+='<div class="tr-trilho" style="--a:'+trPct(D,acum,k).toFixed(2)+'%;--b:'+trPct(D,depois,k).toFixed(2)+'%" role="img" aria-label="Você já tem '+vipEsc(trBrl(acum))+' de '+vipEsc(vipBrl0(alvo))+(ped>0?'; com este pedido, '+vipEsc(trBrl(depois)):'')+'">'+
-        '<span class="tr-fundo"></span><span class="tr-ped"></span><span class="tr-ja"></span>'+marcos+'</div>';
-      h+='<div class="tr-leg"><span><i></i>Você já tem '+trBrl(acum)+' de '+vipBrl0(alvo)+'</span>'+(ped>0?'<span><i class="ped"></i>Este pedido +'+trBrl(ped)+'</span>':'')+'</div>';
-    }
-    if(guard.length) h+=vipBrindesHtml({onde:origem});   // os tickets "🎁 Seus brindes" (guardado / neste pedido / retirar / esperando reposição)
-    else if(prim) h+='<div class="tr-aviso">'+vipEsc(vipPrimeiroTxt())+'</div>';
-    if(D.length) h+=trAbreBt(false,'Ver a escada completa')+trEscadaHtml(D,acum,modo);
-    h+=trRegraHtml()+'</section>';
-    return h;
+    h+='<div class="tr-gasto" role="status">Você já comprou <b>'+trBrl(acum)+'</b></div>';   // TRILHA-2811b: o valor que conta na trilha
+    h+=trGrafHtml(D,acum,modo,prox);
+    if(modo==='cpf'&&!conqLogado()) h+=trCpfLinhaHtml(true);
+    return h+trRegraHtml()+'</section>';
   }
   var P=window.CONQ_PUB, lista=trDegrausOrd((P&&Array.isArray(P.degraus))?P.degraus:[]);
-  h+='<section class="tr" aria-label="Trilha de conquistas">';
   if(modo==='erro') h+='<div class="conq-aviso">Não consegui carregar a sua trilha agora. Atualize a página em instantes — nada se perdeu, o brinde não vence.</div>';
-  if(P&&P.ativa===false){
-    h+='<div class="conq-aviso">A trilha de conquistas está pausada agora.</div>';
-  }else if(!lista.length){
-    if(modo!=='erro') h+='<div class="conq-aviso">Não consegui carregar agora. Tenta de novo em instantes.</div>';
-  }else{
-    var tot=lista.reduce(function(a,d){ return a+vipNum(d.brinde_un); },0);
-    h+='<div class="tr-tit" role="heading" aria-level="3"'+(modo==='erro'?' style="margin-top:12px"':'')+'>🏆 Compre e ganhe TKTX: a cada degrau um brinde</div>'+
-      '<div class="tr-sub">São até <b>+'+tot+' TKTX</b> de brinde somando suas compras.</div>';
-    if(origem==='cp'&&!conqLogado()&&document.getElementById('cp-cpf'))
-      h+='<button type="button" class="tr-btn" onclick="conqIrCpf()">Já comprou? Digitar meu CPF ou CNPJ</button>';
-    h+=trAbreBt(false,'Ver a escada de brindes')+trEscadaHtml(lista,0,'pub');
-  }
-  h+=trRegraHtml()+'</section>';
-  return h;
+  if(P&&P.ativa===false) return h+'<div class="conq-aviso">A trilha de conquistas está pausada agora.</div></section>';
+  if(!lista.length) return h+(modo!=='erro'?'<div class="conq-aviso">Não consegui carregar agora. Tenta de novo em instantes.</div>':'')+'</section>';
+  h+=trGrafHtml(lista,0,'pub',null);
+  if(!conqLogado()&&modo==='pub') h+=trCpfLinhaHtml(false);
+  h+=trRegraHtml();
+  return h+'</section>';
 }
 function conqHtml(modo,origem){
-  var nome=(modo==='cpf'&&window.VIP)?String(window.VIP.primeiro_nome||''):'';
-  var h=conqTopo((modo==='eu'||modo==='cpf')?('🏆 '+(nome?vipEsc(nome)+', a sua trilha':'Sua trilha de conquistas')):'🏆 Trilha de conquistas');
+  var h=conqTopo('🏆 Brindes por compras');   // TRILHA-2811b: sem nome nem dado pessoal na janela
   h+='<div class="conq-corpo">'+trCorpoHtml(modo,origem)+'</div>';
-  h+='<div class="conq-pe"><button type="button" class="conq-b" onclick="conqFechar()">'+(origem==='home'?'Fechar':'Voltar pro pedido')+'</button></div>';
+  h+='<div class="conq-pe"><button type="button" class="conq-b" onclick="conqFechar()">Fechar</button></div>';
   return h;
+}
+// ── o CPF junto do gráfico (a janela NÃO fecha): "Coloque seu CPF e veja onde você está" ──
+// ja=true: já achou → "CPF ···.247-25 · trocar" (só os últimos dígitos; o resto do cadastro só vai para os campos do pedido)
+function trDocMascara(d){ d=String(d||'').replace(/\D/g,''); return d.length===14?('CNPJ ···/'+d.slice(8,12)+'-'+d.slice(12)):(d.length===11?('CPF ···.'+d.slice(6,9)+'-'+d.slice(9)):''); }
+function trCpfLinhaHtml(ja){
+  var doc=''; try{ var cf=document.getElementById('cp-cpf'); doc=cf?String(cf.value||''):''; }catch(e){}
+  var m=ja?trDocMascara(window.TR_DOC||doc):'';
+  return '<div class="tr-cpf" id="tr-cpf">'+
+    (m?'<div class="tr-cpf-ja" id="tr-cpf-ja"><span>'+vipEsc(m)+'</span><button type="button" class="tr-cpf-troca" onclick="trCpfTrocar()">trocar</button></div>':'')+
+    '<div class="tr-cpf-form" id="tr-cpf-form"'+(m?' hidden':'')+'><label for="tr-cpf-in">Coloque seu CPF e veja onde você está</label><div class="tr-cpf-lin">'+
+      '<input id="tr-cpf-in" type="text" inputmode="numeric" autocomplete="off" maxlength="18" placeholder="CPF ou CNPJ" value="'+(m?'':vipEsc(doc))+'" oninput="mascaraCpf(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();trCpfVer();}">'+
+      '<button type="button" class="tr-cpf-bt" id="tr-cpf-bt" onclick="trCpfVer()">Ver</button></div>'+
+    '<div class="tr-cpf-st" id="tr-cpf-st" role="status" aria-live="polite"></div></div></div>';
+}
+function trCpfTrocar(){
+  try{ var j=document.getElementById('tr-cpf-ja'), f=document.getElementById('tr-cpf-form'); if(j) j.hidden=true; if(f) f.hidden=false; var i=document.getElementById('tr-cpf-in'); if(i){ i.value=''; i.focus(); } }catch(e){}
+}
+async function trCpfVer(){
+  var i=document.getElementById('tr-cpf-in'), st=document.getElementById('tr-cpf-st'), bt=document.getElementById('tr-cpf-bt');
+  if(!i||!st) return;
+  var d=String(i.value||'').replace(/\D/g,'');
+  var ok=(d.length===11||d.length===14); try{ if(ok&&typeof validarDoc==='function') ok=!!validarDoc(d); }catch(e){}
+  if(!ok){ st.className='tr-cpf-st tr-cpf-erro'; st.textContent='Confira o CPF ou CNPJ: faltam números ou tem um dígito errado.'; try{ i.focus(); }catch(e){} return; }
+  st.className='tr-cpf-st'; st.textContent='Procurando suas compras…';
+  // o documento vai para o campo do pedido e dispara o MESMO preenchimento de sempre (oninput do cp-cpf → buscarClientePorCpf:
+  // cadastro e endereço pelo buscar_cadastro_cpf). Os dados aparecem só no pedido, nunca nesta janela. Sem cadastro: só o CPF muda.
+    try{ var cf=document.getElementById('cp-cpf'); if(cf){ cf.value=d; if(typeof mascaraCpf==='function') mascaraCpf(cf); cf.dispatchEvent(new Event('input',{bubbles:true})); } }catch(e){}
+  if(bt){ bt.disabled=true; bt.textContent='…'; }
+  window.VIP_ERRO=''; window.TRILHA_CPF_ULT='';   // pergunta de novo (o banco tem o próprio limite de tentativas)
+  var r=null; try{ r=await vipCpfBuscar(d); }catch(e){ window.VIP_ERRO=String((e&&e.message)||e); }
+  var ov=document.getElementById('conq-modal'); if(!ov) return;   // a pessoa fechou enquanto procurava
+  if(r&&vipFonte()==='cpf'&&vipNaTrilha()){
+    window.TR_DOC=d;
+    var sh=ov.querySelector('.conq-sh');
+    if(sh){ sh.innerHTML=conqHtml('cpf','cp'); try{ trAnima(sh.querySelector('.tr')); }catch(e){} try{ var g=sh.querySelector('.tr-gasto'); if(g){ g.setAttribute('tabindex','-1'); g.focus(); } }catch(e){} }
+    try{ if(typeof logAba==='function') logAba('conquista-cpf','janela'); }catch(e){}
+    return;
+  }
+  if(bt){ bt.disabled=false; }
+  if(window.VIP_ERRO){
+    st.className='tr-cpf-st tr-cpf-erro'; st.textContent='Não consegui consultar agora. Confira a internet e tente de novo.';
+    if(bt) bt.textContent='Tentar de novo';
+  }else{
+    st.className='tr-cpf-st'; st.textContent='Não achamos compras com esse CPF. Faça o 1º pedido para começar a somar.';
+    if(bt) bt.textContent='Ver';
+  }
 }
 async function conqAbrir(origem){
   origem=(origem==='fp')?'fp':(origem==='home'?'home':'cp');   // 🎁 16/10: o Início também abre a gaveta
