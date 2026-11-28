@@ -7,7 +7,7 @@
 <script>
 (function(){
   var lig=false;
-  try{ lig=(Date.now()>=Date.parse('2026-12-01T00:00:00-03:00')); }catch(e){}
+  try{ lig=(Date.now()>=Date.parse('2026-11-28T00:00:00-03:00')); }catch(e){}   // ANTECIPA-0112 (empresa 28/11: "já pode subir a versão da 1-12")
   try{
     var q=new URLSearchParams(location.search||'').get('t0112');
     if(q==='1'||q==='0'){ try{ sessionStorage.setItem('t0112_teste',q); }catch(e){} }
