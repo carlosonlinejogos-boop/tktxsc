@@ -2877,6 +2877,11 @@ html:has(input:focus,select:focus,textarea:focus) .cp-pay-card.cp-erro-card::aft
           .lp-models-0112 .lp-model-cta{font-size:13px;padding:8px 6px;}
           .lp-models-0112 .lp-model-tag-top{font-size:12px;padding:3px 9px;margin-bottom:10px;}
         }
+        /* VITRINE-OCULTOS-2711: com menos de 4 modelos à venda, a grade encolhe e fica centrada */
+        @media(min-width:1000px){
+          .lp-models-0112[data-n="2"]{grid-template-columns:repeat(2,1fr);max-width:560px;}
+          .lp-models-0112[data-n="3"]{grid-template-columns:repeat(3,1fr);max-width:820px;}
+        }
       </style>
       <script>/* VITRINE-0112: troca a vitrine na hora em que a página nasce (antes da leitura do banco e do modo 1 modelo) */
       (function(){ try{
@@ -10941,7 +10946,28 @@ function modeloOculto(id){
 }
 function modelosDisponiveis(){ return MODELOS.filter(function(m){ return !modeloOculto(m.id); }); }
 // tira o oculto das escolhas e redesenha os seletores que já estão na tela (o interruptor pode chegar depois do 1º desenho)
+// 🪟 VITRINE-OCULTOS-2711 (empresa 27/11: as Plástico 99% saíram do estoque): na vitrine de 01/12 o cartão de modelo escondido
+// some, e o título e o link do topo contam só os que ficaram. Com 0 ou 1 modelo não mexe (o modo de 1 modelo cuida da vitrine).
+function vitrine0112Ocultos(){
+  try{
+    if(!window.T0112) return;
+    var g=document.querySelector('#lp-modelos .lp-models-0112'); if(!g) return;
+    var cards=g.querySelectorAll('.lp-model[data-modelo]'), n=0, i, fora=[];
+    for(i=0;i<cards.length;i++){ fora[i]=!!((typeof modeloOculto==='function')&&modeloOculto(cards[i].getAttribute('data-modelo'))); if(!fora[i]) n++; }
+    if(n<2){ for(i=0;i<cards.length;i++) cards[i].style.display=''; g.removeAttribute('data-n'); return; }
+    for(i=0;i<cards.length;i++) cards[i].style.display=fora[i]?'none':'';
+    g.setAttribute('data-n',String(n));
+    var um=document.documentElement.classList.contains('um-modo');
+    var nomes={2:'Dois modelos',3:'Três modelos',4:'Quatro modelos'};
+    var tt=document.querySelector('#lp-modelos .lp-section-title'); if(tt&&nomes[n]&&!um) tt.textContent=nomes[n]+', um pedido só';
+    var lk=document.querySelector('a.lp-hero-modelos'); if(lk&&!um) lk.textContent='ou ver os '+n+' modelos →';
+    // a pergunta "diferença entre os 4 modelos" diz que o creme é o mesmo nos quatro: em 01/12 isso deixa de valer
+    var fq=document.querySelectorAll('details.lp-faq-item');
+    for(i=0;i<fq.length;i++){ var s=fq[i].querySelector('summary'); if(s&&/diferença entre os 4 modelos/i.test(s.textContent||'')) fq[i].style.display='none'; }
+  }catch(e){}
+}
 function ocultoRedesenhar(){
+  vitrine0112Ocultos();   // 🪟 VITRINE-OCULTOS-2711
   try{ if(window.T0112&&document.getElementById('pm-planos-abas')&&typeof preencherTabelaPlanos==='function') preencherTabelaPlanos(); }catch(e){}   // DESENHO-0112: aba "Linha 99%" sem modelo oculto
   if(!(window.MODELOS_OCULTOS||[]).length||typeof divisaoModelo==='undefined') return;
   // 🎯 UM-MODELO-1910: a /promo guarda o modelo à parte (PROMOA.modelo, link ?modelo=) — oculto vira o que a loja tem
@@ -14436,12 +14462,53 @@ async function pxmBuscar(){
 async function loadPixMercado(){
   var w=document.getElementById('pm-cont'); if(!w) return;
   w.innerHTML='<div class="es">🔄 Carregando...</div>';
+  PXM.saidas={};   // 🏦 PXM-SAIDAS-2711: 🔄 Atualizar busca as saídas de novo
   try{ PXM.peds=await pxmBuscar(); }
   catch(e){ w.innerHTML='<div class="es" style="color:#dc2626;">⚠️ Não carregou: '+pxmEsc((e&&e.message)||e)+'</div>'; return; }
   pxmRender();
 }
 function pxmConta(c){ PXM.conta=(c==='dc')?'dc':'mercado'; pxmRender(); }
 function pxmMes(m){ PXM.mes=String(m||''); pxmRender(); }
+// 🏦 PXM-SAIDAS-2711 (empresa 27/11: "todo final do mês ele abre a aba pra ver se o saldo bateu… colocar também os valores que
+// ele pagou, e a data"): embaixo dos pedidos do Mercado, o que SAIU do Mercado no mês (gastos pagos pelo Mercado Serafini) e o que
+// VOLTOU (devolução = linha negativa), com data e valor, e a sobra do mês. Lê o fin_mes (o mesmo da aba 💰 Mês).
+PXM.saidas={};
+function pxmSaidasDe(lista){
+  return (Array.isArray(lista)?lista:[]).filter(function(g){ return g&&g.quem_pagou==='Mercado Serafini'&&Number(g.valor); })
+    .sort(function(a,b){ return String(a.data).localeCompare(String(b.data))||(Number(a.id)-Number(b.id)); });
+}
+async function pxmCarregarSaidas(mes){
+  if(!mes) return;
+  if(PXM.saidas[mes]) return;   // pede uma vez por mês; deu erro, o 🔄 Atualizar zera e tenta de novo (nunca fica pedindo sozinho)
+  PXM.saidas[mes]={carregando:true};
+  var r=null; try{ r=await sb.rpc('fin_mes',{p_mes:mes+'-01'}); }catch(e){ r={data:null,error:e}; }
+  PXM.saidas[mes]=(r&&!r.error&&r.data&&typeof r.data==='object'&&r.data.gastos)?{lista:pxmSaidasDe(r.data.gastos.lista)}:{erro:true};
+  if(PXM.mes===mes&&PXM.conta==='mercado') pxmRender();
+}
+function pxmSaidasHtml(mes,entrou){
+  var c=PXM.saidas[mes]||{}, tit='<div style="margin-top:18px;padding-top:12px;border-top:1.5px solid #e5e7eb;font-size:14px;font-weight:700;color:#0f172a;">💸 Saiu e voltou do Mercado em '+pxmMesNome(mes)+'</div>';
+  if(c.erro) return tit+'<div class="es" style="color:#dc2626;">⚠️ Não carregou as saídas. Toque em 🔄 Atualizar.</div>';
+  if(!c.lista) return tit+'<div class="es">🔄 Carregando as saídas...</div>';
+  var saiu=0, voltou=0, h=tit;
+  if(!c.lista.length) h+='<div class="es">Nenhuma saída do Mercado lançada em '+pxmMesNome(mes)+'.</div>';
+  h+=c.lista.map(function(g){
+    var v=Number(g.valor)||0, a=String(g.data||'').split('-'), dia=(a[2]||'??')+'/'+(a[1]||'??');
+    if(v<0) voltou+=-v; else saiu+=v;
+    return '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 0;border-bottom:0.5px solid #f1f5f9;font-size:13px;">'+
+      '<span style="color:#64748b;min-width:44px;">'+dia+'</span>'+
+      '<span style="flex:1;min-width:120px;color:#0f172a;">'+pxmEsc(g.descricao||'—')+(v<0?' <span style="font-size:12px;color:#15803d;">↩️ devolução</span>':'')+'</span>'+
+      '<b style="white-space:nowrap;color:'+(v<0?'#15803d':'#dc2626')+';">'+(v<0?'+ ':'− ')+pxmBrl(Math.abs(v))+'</b>'+
+    '</div>';
+  }).join('');
+  saiu=Math.round(saiu*100)/100; voltou=Math.round(voltou*100)/100;
+  var sobra=Math.round(((Number(entrou)||0)-saiu+voltou)*100)/100;
+  h+='<div style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;font-size:13px;color:#334155;">'+
+    '<span>Pix que entrou <b style="color:#0f172a;">'+pxmBrl(entrou)+'</b></span>'+
+    '<span>Saiu <b style="color:#dc2626;">'+pxmBrl(saiu)+'</b></span>'+
+    (voltou?'<span>Voltou <b style="color:#15803d;">'+pxmBrl(voltou)+'</b></span>':'')+
+    '<span>Sobra do mês <b style="color:'+(sobra<0?'#dc2626':'#0f172a')+';">'+pxmBrl(sobra)+'</b></span></div>';
+  return h;
+}
 function pxmRender(){
   var w=document.getElementById('pm-cont'); if(!w) return;
   var meses={}, hoje=pxmMesDe({criado_em:new Date().toISOString()});
@@ -14459,7 +14526,7 @@ function pxmRender(){
     '<select id="pm-mes" onchange="pxmMes(this.value)" style="min-height:44px;padding:8px 10px;border-radius:8px;border:0.5px solid #e5e7eb;background:#f8fafc;font-size:13px;color:#0f172a;font-family:\'DM Sans\';">'+
     lista.map(function(m){ return '<option value="'+m+'"'+(m===PXM.mes?' selected':'')+'>'+pxmMesNome(m)+'</option>'; }).join('')+'</select></div>'+
     '<div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;">'+botao('mercado')+botao('dc')+'</div>';
-  if(!cur.lista.length){ w.innerHTML=h+'<div class="es">Nenhum Pix '+(PXM.conta==='mercado'?'no Mercado':'na DC Serviços')+' em '+pxmMesNome(PXM.mes)+'.</div>'; return; }
+  if(!cur.lista.length){ w.innerHTML=h+'<div class="es">Nenhum Pix '+(PXM.conta==='mercado'?'no Mercado':'na DC Serviços')+' em '+pxmMesNome(PXM.mes)+'.</div>'+(PXM.conta==='mercado'?pxmSaidasHtml(PXM.mes,0):''); if(PXM.conta==='mercado') pxmCarregarSaidas(PXM.mes); return; }   // 🏦 PXM-SAIDAS-2711
   h+=cur.lista.map(function(p){
     var d=pxmData(p), dia=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
     var marca=(p.pix_conta==='mercado'||p.pix_conta==='dc')?' <span style="font-size:12px;color:#b45309;">✋ trocado</span>':'';
@@ -14472,6 +14539,7 @@ function pxmRender(){
       '<button onclick="pxmTrocar('+Number(p.id)+')" aria-label="Passar o pedido '+Number(p.id)+' para o Pix '+NOME[outra]+'" style="min-height:44px;padding:6px 10px;border-radius:8px;border:0.5px solid #e5e7eb;background:#f8fafc;color:#475569;font-size:12px;cursor:pointer;font-family:\'DM Sans\';white-space:nowrap;">↔️ '+(outra==='dc'?'DC':'Mercado')+'</button>'+
     '</div>';
   }).join('');
+  if(PXM.conta==='mercado'){ h+=pxmSaidasHtml(PXM.mes,cur.total); pxmCarregarSaidas(PXM.mes); }   // 🏦 PXM-SAIDAS-2711
   w.innerHTML=h;
 }
 async function pxmTrocar(id){
@@ -36427,7 +36495,7 @@ function fpAtualizar(){
     // 🎁 Brindes resgatados (grátis)
     const brindeUsarR=Math.min(Number(fp.brindeUsar||0),Number(fp.brindeSaldo||0));
     if(brindeUsarR>0){
-      h+='<div style="display:flex;justify-content:space-between;color:#16a34a;font-weight:600;"><span>🎁 Brinde × '+brindeUsarR+' ('+(modelosDisponiveis().length<pmNModelos()/*MODELOS-0112*/?modeloPorId(modeloDisponivelOu(fp.brindeModelo||MODELO_SUGERIDO)).curto:(fp.brindeModelo==='numb'?'Numb':'Gold'))+')</span><span>GRÁTIS</span></div>';
+      h+='<div style="display:flex;justify-content:space-between;color:#16a34a;font-weight:600;"><span>🎁 Brinde × '+brindeUsarR+' ('+(brindeModeloFixo()?modeloPorId('gold').curto/*🎁 BRINDE-75-2711*/:modelosDisponiveis().length<pmNModelos()/*MODELOS-0112*/?modeloPorId(modeloDisponivelOu(fp.brindeModelo||MODELO_SUGERIDO)).curto:(fp.brindeModelo==='numb'?'Numb':'Gold'))+')</span><span>GRÁTIS</span></div>';
     }
     // 💎 20/09: brinde de fidelidade (soma com o de indicação — são dois direitos diferentes)
     try{ if(typeof vipFpVale==='function'&&vipFpVale()) h+='<div style="display:flex;justify-content:space-between;color:#15803d;font-weight:700;"><span>🎁 Brinde da trilha × '+vipFpUnN()+'</span><span>GRÁTIS</span></div>'; }catch(e){}
@@ -36765,6 +36833,9 @@ function fpSetSprayQtd(v){
 }
 
 // === 🎁 RESGATE DE BRINDES (Fazer Pedido) ===
+// 🎁 BRINDE-75-2711 (empresa 27/11: "os brindes agora sempre vão as 75% Gold"): o brinde resgatado no site sai sempre em
+// Gold 75% (id 'gold'). Sem o Gold à venda (escondido ou sem estoque) devolve null e vale a regra antiga (o modelo que a loja tem).
+function brindeModeloFixo(){ try{ var d=(typeof modelosDisponiveis==='function')?modelosDisponiveis():[]; for(var i=0;i<d.length;i++){ if(d[i]&&d[i].id==='gold') return 'gold'; } }catch(e){} return null; }
 function fpRenderBrindeBloco(){
   const bloco=document.getElementById('fp-brinde-bloco');
   if(!bloco||!window.FP) return;
@@ -36779,7 +36850,7 @@ function fpRenderBrindeBloco(){
     return;
   }
   let usar=Math.min(Number(window.FP.brindeUsar||0),saldo); if(usar<0)usar=0;
-  const modelo=modeloDisponivelOu(window.FP.brindeModelo||MODELO_SUGERIDO);   // 🎯 UM-MODELO-1910: oculto → o que a loja tem
+  const modelo=brindeModeloFixo()||modeloDisponivelOu(window.FP.brindeModelo||MODELO_SUGERIDO);   // 🎯 UM-MODELO-1910: oculto → o que a loja tem · 🎁 BRINDE-75-2711
   if(modelo!==(window.FP.brindeModelo||MODELO_SUGERIDO)) window.FP.brindeModelo=modelo;
   let h='';
   h+='<div style="font-size:13px;color:#0f172a;margin-bottom:10px;line-height:1.5;">Você tem <b style="color:#16a34a;">'+saldo+' pomada'+(saldo!==1?'s':'')+' de brinde</b> 🎁 (indicações e prêmios da rifa). Usar neste pedido? <b>(grátis)</b></div>';
@@ -36794,7 +36865,7 @@ function fpRenderBrindeBloco(){
   h+='</div>';
   if(usar>0){
     h+='<div style="margin-top:12px;">';
-    if(!modoUmModelo()){   // 🎯 UM-MODELO-1910: com 1 modelo não há o que escolher
+    if(!modoUmModelo()&&!brindeModeloFixo()){   // 🎯 UM-MODELO-1910: com 1 modelo não há o que escolher · 🎁 BRINDE-75-2711: brinde fixo também não
     h+='<div style="font-size:11px;color:#64748b;margin-bottom:6px;">Modelo das pomadas de brinde:</div>';
         h+='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;">';
     // 🎨 12/08: os 4 modelos (antes só Gold99%/Numb — a era das 2 embalagens) · 🎯 19/10: só os à venda
@@ -36828,7 +36899,7 @@ function fpSetBrinde(v){
 }
 function fpBrindeModelo(m){
   if(!window.FP) return;
-  window.FP.brindeModelo=modeloDisponivelOu((['gold','black','numbgold','numb','gold99'/*MODELOS-0112*/].indexOf(m)>=0)?m:MODELO_SUGERIDO);   // 🎯 UM-MODELO-1910
+  window.FP.brindeModelo=brindeModeloFixo()||modeloDisponivelOu((['gold','black','numbgold','numb','gold99'/*MODELOS-0112*/].indexOf(m)>=0)?m:MODELO_SUGERIDO);   // 🎯 UM-MODELO-1910 · 🎁 BRINDE-75-2711
   fpRenderBrindeBloco();
   fpAtualizar();
 }
@@ -36972,7 +37043,7 @@ async function fpFinalizar(){
     // 🎁 Brindes resgatados (entram como brinde grátis no pedido, conforme o modelo escolhido)
     const brindeUsarF=Math.min(Number(fp.brindeUsar||0),Number(fp.brindeSaldo||0));
     // 🎨 12/08: o brinde agora pode ser qualquer um dos 4 modelos
-    const _bMod=modeloDisponivelOu((['gold','black','numbgold','numb','gold99'/*MODELOS-0112*/].indexOf(fp.brindeModelo)>=0)?fp.brindeModelo:MODELO_SUGERIDO);   // 🎯 UM-MODELO-1910
+    const _bMod=brindeModeloFixo()||modeloDisponivelOu((['gold','black','numbgold','numb','gold99'/*MODELOS-0112*/].indexOf(fp.brindeModelo)>=0)?fp.brindeModelo:MODELO_SUGERIDO);   // 🎯 UM-MODELO-1910 · 🎁 BRINDE-75-2711
     const _bPor={gold:0,black:0,numbgold:0,numb:0,gold99:0}/*MODELOS-0112*/; _bPor[_bMod]=brindeUsarF;
     const brindeGoldF=_bPor.gold;
     const brindeNumbF=_bPor.numb;
@@ -37158,7 +37229,7 @@ async function fpFinalizar(){
     }
     // 🎁 Brindes resgatados (grátis)
     if(brindeUsarF>0){
-      msg+='🎁 *Brinde resgatado:* '+brindeUsarF+'x '+((typeof modeloPorId==='function')?modeloPorId(fp.brindeModelo||MODELO_SUGERIDO).curto:'')+' _(GRÁTIS · por indicação)_\n\n';
+      msg+='🎁 *Brinde resgatado:* '+brindeUsarF+'x '+((typeof modeloPorId==='function')?modeloPorId(brindeModeloFixo()||fp.brindeModelo||MODELO_SUGERIDO).curto:'')+' _(GRÁTIS · por indicação)_\n\n';
     }
     if(_vipPosUn>0&&typeof vipLinhaMsg==='function') msg+=vipLinhaMsg(_vipPosUn);   // 🎁 16/10: a mesma linha do /comprar
     if(valorPlanoF>0){
